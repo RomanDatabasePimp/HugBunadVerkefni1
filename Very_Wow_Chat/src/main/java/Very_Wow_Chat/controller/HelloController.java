@@ -1,4 +1,4 @@
-package hugbunadar_verkefni_hopur_1_veryWowchat.Very_Wow_Chat;
+package Very_Wow_Chat.controller;
 
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import Very_Wow_Chat.service.HelloReturner;
 
 @RestController
 public class HelloController {

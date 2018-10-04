@@ -1,4 +1,4 @@
-package hugbunadar_verkefni_hopur_1_veryWowchat.Very_Wow_Chat;
+package Very_Wow_Chat.service;
 
 public class HelloReturner {
 	

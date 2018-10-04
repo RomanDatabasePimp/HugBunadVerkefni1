@@ -2,19 +2,19 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
+
   <groupId>hugbunadar_verkefni_hopur_1_veryWowchat</groupId>
   <artifactId>Very_Wow_Chat</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
   
-  
 
-  <name>Very_Wow_Chat</name>
-  <url>http://maven.apache.org</url>
+	<name>Very_Wow_Chat</name>
+	<url>http://maven.apache.org</url>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
   
   <parent>
     <groupId>org.springframework.boot</groupId>
@@ -35,5 +35,6 @@
       <version>9.1-901-1.jdbc4</version>
     </dependency>
   </dependencies>
+
 </project>
 
