@@ -6,6 +6,8 @@
   <artifactId>Very_Wow_Chat</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
+  
+  
 
   <name>Very_Wow_Chat</name>
   <url>http://maven.apache.org</url>
@@ -19,7 +21,8 @@
     <artifactId>spring-boot-starter-parent</artifactId>
     <version>2.0.3.RELEASE</version>
   </parent>
-    
+  
+  
   <dependencies>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -33,3 +36,4 @@
     </dependency>
   </dependencies>
 </project>
+
