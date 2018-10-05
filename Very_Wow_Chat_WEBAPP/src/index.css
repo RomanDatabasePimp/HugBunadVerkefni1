@@ -1,0 +1,21 @@
+/* Núllstilla allt */
+* {
+  margin: 0;
+  padding: 0;
+}
+  
+html {
+  box-sizing: border-box;
+}
+  
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+  
+body {
+  /* kemur í veg fyrir lárétt hopp þegar síða síkkar og fær scrollbar */
+  overflow-y: scroll;
+    
+  font-size: 16px;
+  font-family: 'Open sans', sans-serif;
+}
