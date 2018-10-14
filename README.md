@@ -40,3 +40,14 @@ To create the branch upstream and push the local changes,
 ```bash
 git push --set-upstream origin dh1
 ```
+
+### Pull changes off of main branch
+
+On your local machine
+
+```bash
+git pull origin master
+```
+
+TODO: figure out how to merge local branches
+
