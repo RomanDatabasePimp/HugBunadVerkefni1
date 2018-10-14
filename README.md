@@ -4,8 +4,6 @@ Application: Very Wow Chat
 
 ## Git
 
-Setup
-
 ### Initial setup
 
 Configure your user name and email.
