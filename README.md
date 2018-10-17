@@ -49,3 +49,9 @@ git pull origin master
 
 TODO: figure out how to merge local branches
 
+## Info
+
+### Roman's server
+
+* 85.220.46.169:8443
+* http://85.220.46.169:8443/hello
