@@ -99,8 +99,29 @@ public class UserService {
 
 	@Transactional(readOnly = true)
     public Map<String, Object> getUserFriends(String userName) {
-        Collection<User> friends = this.userRepository.getUserFriends(userName);
-        return toD3Format(friends);
+		User user = this.userRepository.findByUserName(userName);
+
+		List<Map<String, Object>> friends = new ArrayList<>();
+		
+		for (Friendship friendship : user.getFriendships()) {
+			User f = friendship.getOtherUser(user);
+
+			Map<String, Object> friend = map(
+				new String[] {"userName", "displayName", "created", "friendsSince"}, 
+				new Object[] {f.getUserName(), f.getDisplayName(), f.getCreated(), friendship.getDate()}
+			);
+			
+			int source = friends.indexOf(friend);
+			if (source == -1) {
+				friends.add(friend);
+			}
+		}
+		
+		return map(
+			new String[] {"friends"},
+			new Object[] {friends}
+		);
+
     }
 	
 	
