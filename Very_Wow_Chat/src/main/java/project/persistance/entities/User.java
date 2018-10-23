@@ -23,6 +23,7 @@ public class User {
 	private String userName;
 	private String password;
 	private String displayName;
+	private String email;
 	private Long created;
 	
 	// The User's friends
@@ -69,6 +70,10 @@ public class User {
 		return displayName;
 	}
 
+	public String getEmail() {
+		return email;
+	}
+
 	public Long getCreated() {
 		return created;
 	}
@@ -83,6 +88,22 @@ public class User {
 
 	public Set<User> getFriendRequestors() {
 		return friendRequestors;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	
