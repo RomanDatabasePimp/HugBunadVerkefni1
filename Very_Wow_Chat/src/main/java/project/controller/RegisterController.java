@@ -27,7 +27,5 @@ public class RegisterController {
   public ResponseEntity<String> register(@RequestBody RegisterFormReciver payload) throws Exception {
 	  System.out.println(payload.validateEmail());
 	return null;
-	
-	  
   }
 }

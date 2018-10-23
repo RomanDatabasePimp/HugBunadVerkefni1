@@ -47,10 +47,11 @@ public class User {
 	 * @param password		user's password, used to authenticate user
 	 * @param displayName	user's display name, seen by other users
 	 */
-	public User(String userName, String password, String displayName) {
+	public User(String userName, String password, String displayName, String email) {
 		this.userName = userName;
 		this.password = password;
 		this.displayName = displayName;
+		this.email = email;
 		this.created = (new Date()).getTime(); // current time
 	}
 
