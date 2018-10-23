@@ -2,7 +2,6 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  
   <groupId>hugbunadar_verkefni_hopur_1_veryWowchat</groupId>
   <artifactId>Very_Wow_Chat</artifactId>
   <version>0.0.1-SNAPSHOT</version>
@@ -10,72 +9,97 @@
 
   <name>Very_Wow_Chat</name>
   
+  <!--VERY IMPORTANT TO HAVE THE PARRENT !!!!!!!
+      this helps Spring boot get all the Spring boot starter dependencies
+      along with some other configs are are needed !!-->
   <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.0.5.RELEASE</version>
-    </parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>2.0.5.RELEASE</version>
+  </parent>
   
+  <!-- It's very stupid but there are some compile errors that tell you this
+       is a java 1.8 or higher feature, so make it so that this app can only
+       be used with java 1.8 or higher -->
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.version>1.8</java.version>
   </properties>
- 
-    <dependencies>
-            <dependency>
+  
+ <!-- Guys Put all ur shit here you can use https://mvnrepository.com/
+      to find stuff that you need but try also looking if the stuff you need
+      is supported by spring-boot themselfs and not some random guys -->
+  <dependencies>
+  <!-- Redis will be used to store user info in temporary mode before user validates it  -->
+  <dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-redis</artifactId>
+  </dependency>
+  <dependency>
+    <groupId>redis.clients</groupId>
+    <artifactId>jedis</artifactId>
+    <type>jar</type>
+</dependency>
+  
+    <!-- This is a security pack used to implement various security features -->
+
+    <dependency>
+    <groupId>commons-validator</groupId>
+    <artifactId>commons-validator</artifactId>
+    <version>1.4.1</version>
+</dependency>
+    <!-- Neo4j stuff thats support by spring boot you might see
+         that Version is not needed but sometimes vilhelm get compile errors
+         if he dosent add version so please dont remove just set to ignore  -->
+    <dependency>
+	  <groupId>org.springframework.boot</groupId>
+	  <artifactId>spring-boot-starter-data-neo4j</artifactId>
+	  <version>2.0.6.RELEASE</version><!--$NO-MVN-MAN-VER$-->
+	</dependency>
+	
+	<!-- This one is responsible for fetching all the Restfull 
+	     stuff that we need to make a restfull app -->
+    <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-websocket</artifactId>
-        </dependency>
+    
+    <!-- We use websockets to make our chat app this is a spring supported websockets -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-websocket</artifactId>
+    </dependency>
 
+   <dependency>
+    <groupId>org.json</groupId>
+    <artifactId>json</artifactId>
+    <version>20180130</version>
+</dependency>
         <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>webjars-locator-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>sockjs-client</artifactId>
-            <version>1.0.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>stomp-websocket</artifactId>
-            <version>2.3.3</version>
-        </dependency>
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>bootstrap</artifactId>
-            <version>3.3.7</version>
-        </dependency>
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>jquery</artifactId>
-            <version>3.1.0</version>
-        </dependency>
-
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>24.0-jre</version>
+    </dependency>
+        <!-- While the project is fresh we might use smth from here 
+             if not late we will drop it -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-        
-        <dependency>
-			<groupId>org.json</groupId>
-			<artifactId>json</artifactId>
-			<version>20171018</version>
-		</dependency>
+
     </dependencies>
 
+    <!-- I honestly dont know what this does when i was setting up 
+        pom.xml dependencies i ran into allot of errors and shit 
+        and online it was told to try to add this and it worked 
+        SO NO QUESTIONS !!! -->
     <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
+      <plugins>
+        <plugin>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-maven-plugin</artifactId>
+        </plugin>
+       </plugins>
     </build>
-  
 </project>
