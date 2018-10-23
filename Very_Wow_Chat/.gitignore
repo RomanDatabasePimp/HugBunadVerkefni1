@@ -13,7 +13,7 @@ tmp/
 *.bak
 *.swp
 *~.nib
-application.properties
+*/application.properties
 .settings/
 .loadpath
 .recommenders

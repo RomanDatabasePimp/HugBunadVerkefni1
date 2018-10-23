@@ -92,8 +92,8 @@ public class UserService {
 		User user = this.userRepository.findByUserName(userName);
 		
         return map(
-			new String[] {"userName", "displayName", "created"},
-			new Object[] {user.getUserName(), user.getDisplayName(), user.getCreated()}
+			new String[] {"userName", "displayName", "email", "created"},
+			new Object[] {user.getUserName(), user.getDisplayName(), user.getEmail(), user.getCreated()}
     	);
     }
 
