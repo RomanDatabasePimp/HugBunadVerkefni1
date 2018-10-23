@@ -5,8 +5,8 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.util.HtmlUtils;
 
-import project.services.Greeting;
-import project.services.HelloMessage;
+import project.persistance.entities.Greeting;
+import project.persistance.entities.HelloMessage;
 
 @Controller
 public class GreetingController {

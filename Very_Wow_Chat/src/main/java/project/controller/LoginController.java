@@ -5,14 +5,13 @@ import java.util.ArrayList;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import project.persistance.entities.LoginFormReciver;
 import project.services.HttpReturner;
-import project.services.LoginFormReciver;
 
 /* This class handles http POST request on url/login with a sent json obj  */
 /*  https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/HttpStatus.html */
@@ -36,7 +35,7 @@ public class LoginController {
 	}
 	/* If username is not found in the services then 
 	 * We responde with a 404 error along with a json error */
-    if(!UserNameEx(payload.getUsername())) {
+    if(UserNameEx(payload.getUsername())) {
       errors.add("Username not found");
       this.clientResponse.createErrors(errors);
       return new ResponseEntity<>(this.clientResponse.getErrors(), HttpStatus.NOT_FOUND);
@@ -48,6 +47,7 @@ public class LoginController {
       this.clientResponse.createErrors(errors);
       return new ResponseEntity<>(this.clientResponse.getErrors(), HttpStatus.UNAUTHORIZED);	
     }
+
 	return null;
 	
   }

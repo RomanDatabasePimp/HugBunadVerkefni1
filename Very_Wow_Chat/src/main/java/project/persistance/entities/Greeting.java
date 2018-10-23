@@ -1,4 +1,4 @@
-package project.services;
+package project.persistance.entities;
 
 public class Greeting {
 

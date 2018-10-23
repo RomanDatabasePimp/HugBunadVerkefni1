@@ -1,4 +1,4 @@
-package project.services;
+package project.persistance.entities;
 
 /* Since java is a little bitch we need to make a class
  * that will serve as out json obj when reciving Json data from the client */
