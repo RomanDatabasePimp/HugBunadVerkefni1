@@ -88,8 +88,13 @@ public class UserService {
 	}
 	
 	@Transactional(readOnly = true)
-    public User findByUserName(String userName) {
-        return this.userRepository.findByUserName(userName);
+    public Map<String, Object> findByUserName(String userName) {
+		User user = this.userRepository.findByUserName(userName);
+		
+        return map(
+			new String[] {"userName", "displayName", "created"},
+			new Object[] {user.getUserName(), user.getDisplayName(), user.getCreated()}
+    	);
     }
 
 	@Transactional(readOnly = true)

@@ -23,7 +23,7 @@ public class User {
 	private String userName;
 	private String password;
 	private String displayName;
-	private Date created;
+	private Long created;
 	
 	// The User's friends
 	@Relationship(type="FRIENDS", direction=Relationship.UNDIRECTED)
@@ -50,7 +50,7 @@ public class User {
 		this.userName = userName;
 		this.password = password;
 		this.displayName = displayName;
-		this.created = new Date(); // current time
+		this.created = (new Date()).getTime(); // current time
 	}
 
 	public Long getId() {
@@ -69,7 +69,7 @@ public class User {
 		return displayName;
 	}
 
-	public Date getCreated() {
+	public Long getCreated() {
 		return created;
 	}
 

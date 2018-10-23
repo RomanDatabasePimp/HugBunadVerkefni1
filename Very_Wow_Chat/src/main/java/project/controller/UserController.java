@@ -23,8 +23,16 @@ public class UserController {
 		this.userService = userService;
 	}
 
+	@RequestMapping(path = "/{userName}")
+    public Map<String, Object> getUser(@PathVariable String userName) {
+		System.out.println(userName);
+		return userService.findByUserName(userName);
+	}
+		
+	
 	@RequestMapping(path = "/{userName}/friends")
     public Map<String, Object> getFriends(@PathVariable String userName) {
+		
 		return userService.getUserFriends(userName);
 		//Collection<User> friends = this.userService.getUserFriends(userName);
 		

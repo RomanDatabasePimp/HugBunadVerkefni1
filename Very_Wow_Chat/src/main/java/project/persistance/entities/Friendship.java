@@ -19,13 +19,14 @@ public class Friendship {
     @EndNode
     private User user2;
     
-    private Date date;
+    private Long date;
     
     public Friendship() {}
     
     public Friendship(User user1, User user2) {
 		this.user1 = user1;
 		this.user2 = user2;
+		this.date = (new Date()).getTime(); // current time
     }
 
 	public Long getId() {
@@ -40,7 +41,7 @@ public class Friendship {
 		return user2;
 	}
 
-	public Date getDate() {
+	public Long getDate() {
 		return date;
 	}
     
