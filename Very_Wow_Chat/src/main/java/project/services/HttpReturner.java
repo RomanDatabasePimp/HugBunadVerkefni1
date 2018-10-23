@@ -1,7 +1,6 @@
 package project.services;
 
 import java.util.ArrayList;
-
 import org.json.JSONObject;
 
 /* Http Returner is responsible ofr creating and returning 

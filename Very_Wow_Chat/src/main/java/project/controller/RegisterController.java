@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import project.persistance.entities.LoginFormReciver;
 import project.services.HttpReturner;
-import project.services.LoginFormReciver;
 import project.services.RegisterFormReciver;
 
 /* This class handles http POST request on url/register with a sent json obj  */
@@ -25,6 +25,7 @@ public class RegisterController {
    * After : Validates the Client POST request and responds with an appropriate status code along with data */
   @RequestMapping(value="/register", method = RequestMethod.POST, headers = "Accept=application/json")
   public ResponseEntity<String> register(@RequestBody RegisterFormReciver payload) throws Exception {
+	  System.out.println(payload.validateEmail());
 	return null;
 	
 	  
