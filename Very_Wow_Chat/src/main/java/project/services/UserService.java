@@ -24,47 +24,6 @@ public class UserService {
 	
 	private final UserRepository userRepository;
 	
-	private Map<String, Object> toD3Format(Collection<User> users) {
-		List<Map<String, Object>> nodes = new ArrayList<>();
-		List<Map<String, Object>> rels = new ArrayList<>();
-		int i = 0;
-		Iterator<User> result = users.iterator();
-		while (result.hasNext()) {
-			User user = result.next();
-			nodes.add(map(
-				new String[] {"label", "userName", "displayName", "created"}, 
-				new Object[] {"User", user.getUserName(), user.getDisplayName(), user.getCreated()}
-			));
-			
-			int target = i;
-			i++;
-			for (Friendship friendship : user.getFriendships()) {
-				User f = friendship.getOtherUser(user);
-
-				Map<String, Object> friend = map(
-					new String[] {"label", "userName", "displayName", "created", "friendsSince"}, 
-					new Object[] {"Friend", f.getUserName(), f.getDisplayName(), f.getCreated(), friendship.getDate()}
-				);
-				
-				int source = nodes.indexOf(friend);
-				if (source == -1) {
-					nodes.add(friend);
-					source = i++;
-				}
-				Map<String, Object> rel = new HashMap<String, Object>();
-				
-				rels.add(map(
-						new String[] {"source", "target"},
-						new Object[] {source, target}
-				));
-			}
-		}
-		return map(
-			new String[] {"nodes", "links"},
-			new Object[] {nodes, rels}
-		);
-	}
-	
 	/**
 	 * Help function to create maps
 	 * key i matches value i
@@ -72,7 +31,7 @@ public class UserService {
 	 * @param values	object value
 	 * @return			mapped key[i] to value[i] for i=0...n
 	 */
-	private Map<String, Object> map(String[] keys, Object[] values){
+	public Map<String, Object> map(String[] keys, Object[] values){
 		if(keys.length != values.length) {
 			return null;
 		}
@@ -82,13 +41,54 @@ public class UserService {
 		}
 		return result;
 	}
+
+	/**
+	 * Helper function that returns an error message denoting that the user was not found
+	 * @return map object denoting an error message
+	 */
+	public Map<String, Object> userNotFound(){
+		return map(
+			new String[] {"error"}, 
+			new String[] {"User not found."}
+		);
+	}
 	
 	public UserService(UserRepository userRepository) {
 		this.userRepository = userRepository;
 	}
 	
+	/**
+	 * Check if a user exists with a given username
+	 * @param userName	a user's userName
+	 * @return true if userName is in use, else false
+	 */
+	public boolean userExists(String userName) {
+		User user = this.userRepository.findByUserName(userName);
+		return user != null;
+	}
+	
+	public Map<String, Object> createUser(User newUser) {
+		User user = userRepository.save(newUser);
+		return map(
+			new String[] {"userName", "displayName", "email", "created"},
+			new Object[] {user.getUserName(), user.getDisplayName(), user.getEmail(), user.getCreated()}
+    	);
+	}
+	
+	/**
+	 * returns a user if the userName is in use
+	 * else, returns and error message
+	 * @param userName
+	 * @return Map object containing user or error message
+	 * @throws exception if userName doesn't belong to any user
+	 */
 	@Transactional(readOnly = true)
-    public Map<String, Object> findByUserName(String userName) {
+    public Map<String, Object> findByUserName(String userName) throws Exception{
+		// throw error if user doesn't exist
+		if(!userExists(userName)) {
+			throw new Exception("User not found");
+		}
+		
 		User user = this.userRepository.findByUserName(userName);
 		
         return map(
@@ -98,7 +98,12 @@ public class UserService {
     }
 
 	@Transactional(readOnly = true)
-    public Map<String, Object> getUserFriends(String userName) {
+    public Map<String, Object> getUserFriends(String userName) throws Exception{
+		// throw error if user doesn't exist
+		if(!userExists(userName)) {
+			throw new Exception("User not found");
+		}
+		
 		User user = this.userRepository.findByUserName(userName);
 
 		List<Map<String, Object>> friends = new ArrayList<>();
