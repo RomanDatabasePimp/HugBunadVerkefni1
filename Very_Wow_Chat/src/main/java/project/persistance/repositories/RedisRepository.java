@@ -1,14 +1,14 @@
-package project.services;
+package project.persistance.repositories;
 
 import org.json.JSONObject;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 
 /* Class creates a connection to the redis server and oversees all the 
  * of the sending and reciving of data between the Spring Server and Redis server */
-public class RedisServices {
+public class RedisRepository {
   private final JedisConnectionFactory redisConn; // define our connection
   
-public RedisServices() {
+public RedisRepository() {
 	/* The way our server works is that only the Spring-boot api is open
 	 * to the internet everything else is on the local network */
     this.redisConn = new JedisConnectionFactory();

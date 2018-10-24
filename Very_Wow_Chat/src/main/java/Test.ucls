@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.2.2" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
+  associations="true" dependencies="false" nesting-relationships="true" router="FAN">  
+  <class id="1" language="java" name="project.controller.RegisterController" project="Very_Wow_Chat" 
+    file="/Very_Wow_Chat/src/main/java/project/controller/RegisterController.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="106" width="343" x="5741" y="442"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="2" language="java" name="project.services.HttpReturner" project="Very_Wow_Chat" 
+    file="/Very_Wow_Chat/src/main/java/project/services/HttpReturner.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="178" width="233" x="5741" y="822"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="3" language="java" name="project.services.UserService" project="Very_Wow_Chat" 
+    file="/Very_Wow_Chat/src/main/java/project/services/UserService.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="214" width="286" x="5193" y="822"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="4" language="java" name="project.persistance.entities.JwtUserDetails" project="Very_Wow_Chat" 
+    file="/Very_Wow_Chat/src/main/java/project/persistance/entities/JwtUserDetails.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="340" width="359" x="263" y="442"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="5" language="java" name="project.persistance.entities.Friendship" project="Very_Wow_Chat" 
+    file="/Very_Wow_Chat/src/main/java/project/persistance/entities/Friendship.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="4063" y="565"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="6" language="java" name="project.persistance.entities.HelloMessage" project="Very_Wow_Chat" 
+    file="/Very_Wow_Chat/src/main/java/project/persistance/entities/HelloMessage.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="160" width="158" x="662" y="442"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="7" language="java" name="project.persistance.entities.UserRegistrationFormReceiver" project="Very_Wow_Chat" 
+    file="/Very_Wow_Chat/src/main/java/project/persistance/entities/UserRegistrationFormReceiver.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="232" width="357" x="860" y="442"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="8" language="java" name="project.security.JwtAuthenticationProvider" project="Very_Wow_Chat" 
+    file="/Very_Wow_Chat/src/main/java/project/security/JwtAuthenticationProvider.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="142" width="546" x="6014" y="822"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="9" language="java" name="project.security.JwtAuthenticationEntryPoint" project="Very_Wow_Chat" 
+    file="/Very_Wow_Chat/src/main/java/project/security/JwtAuthenticationEntryPoint.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="106" width="505" x="6600" y="822"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="10" language="java" name="project.controller.TokenController" project="Very_Wow_Chat" 
+    file="/Very_Wow_Chat/src/main/java/project/controller/TokenController.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="106" width="199" x="7114" y="442"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="11" language="java" name="project.controller.UserController" project="Very_Wow_Chat" 
+    file="/Very_Wow_Chat/src/main/java/project/controller/UserController.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="142" width="508" x="5193" y="442"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="12" language="java" name="project.persistance.repositories.RedisRepository" project="Very_Wow_Chat" 
+    file="/Very_Wow_Chat/src/main/java/project/persistance/repositories/RedisRepository.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="160" width="231" x="1257" y="442"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="13" language="java" name="project.security.JwtValidator" project="Very_Wow_Chat" 
+    file="/Very_Wow_Chat/src/main/java/project/security/JwtValidator.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="124" width="161" x="6014" y="1330"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="14" language="java" name="project.security.JwtGenerator" project="Very_Wow_Chat" 
+    file="/Very_Wow_Chat/src/main/java/project/security/JwtGenerator.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="106" width="168" x="7145" y="822"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="15" language="java" name="project.controller.LoginController" project="Very_Wow_Chat" 
+    file="/Very_Wow_Chat/src/main/java/project/controller/LoginController.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="142" width="310" x="6124" y="442"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="16" language="java" name="project.services.RegisterFormReciver" project="Very_Wow_Chat" 
+    file="/Very_Wow_Chat/src/main/java/project/services/RegisterFormReciver.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="304" width="302" x="1981" y="442"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="17" language="java" name="project.persistance.entities.JwtAuthenticationToken" project="Very_Wow_Chat" 
+    file="/Very_Wow_Chat/src/main/java/project/persistance/entities/JwtAuthenticationToken.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="178" width="204" x="2705" y="442"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="18" language="java" name="project.persistance.repositories.UserRepository" project="Very_Wow_Chat" 
+    file="/Very_Wow_Chat/src/main/java/project/persistance/repositories/UserRepository.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="106" width="196" x="5193" y="1330"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="19" language="java" name="project.configuration.SecurityConfig" project="Very_Wow_Chat" 
+    file="/Very_Wow_Chat/src/main/java/project/configuration/SecurityConfig.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="142" width="347" x="6474" y="442"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="20" language="java" name="project.persistance.entities.LoginFormReciver" project="Very_Wow_Chat" 
+    file="/Very_Wow_Chat/src/main/java/project/persistance/entities/LoginFormReciver.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="160" width="209" x="2949" y="442"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="21" language="java" name="project.security.JwtSuccessHandler" project="Very_Wow_Chat" 
+    file="/Very_Wow_Chat/src/main/java/project/security/JwtSuccessHandler.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="3835" y="790"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="22" language="java" name="project.persistance.entities.JwtUser" project="Very_Wow_Chat" 
+    file="/Very_Wow_Chat/src/main/java/project/persistance/entities/JwtUser.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="4894" y="512"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="23" language="java" name="project.persistance.entities.User" project="Very_Wow_Chat" 
+    file="/Very_Wow_Chat/src/main/java/project/persistance/entities/User.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="3366" y="350"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="24" language="java" name="project.Application" project="Very_Wow_Chat" 
+    file="/Very_Wow_Chat/src/main/java/project/Application.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="5200" y="226"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="25" language="java" name="project.security.JwtAuthenticationTokenFilter" project="Very_Wow_Chat" 
+    file="/Very_Wow_Chat/src/main/java/project/security/JwtAuthenticationTokenFilter.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="4825" y="234"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="26" language="java" name="project.persistance.entities.FriendRequest" project="Very_Wow_Chat" 
+    file="/Very_Wow_Chat/src/main/java/project/persistance/entities/FriendRequest.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="4161" y="249"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <association id="27">    
+    <end type="SOURCE" refId="15" navigable="false">      
+      <attribute id="28" name="clientResponse"/>      
+      <multiplicity id="29" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="30">    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="31" name="jwtGenerator"/>      
+      <multiplicity id="32" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="14" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="33">    
+    <end type="SOURCE" refId="23" navigable="false">      
+      <attribute id="34" name="friendships"/>      
+      <multiplicity id="35" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="36">    
+    <end type="SOURCE" refId="26" navigable="false">      
+      <attribute id="37" name="requestee"/>      
+      <multiplicity id="38" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="23" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="39">    
+    <end type="SOURCE" refId="19" navigable="false">      
+      <attribute id="40" name="entryPoint"/>      
+      <multiplicity id="41" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="9" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="42">    
+    <end type="SOURCE" refId="26" navigable="false">      
+      <attribute id="43" name="requestor"/>      
+      <multiplicity id="44" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="23" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="45">    
+    <end type="SOURCE" refId="23" navigable="false">      
+      <attribute id="46" name="friendRequestors"/>      
+      <multiplicity id="47" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="23" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="48">    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="49" name="user1"/>      
+      <multiplicity id="50" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="23" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="51">    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="52" name="user2"/>      
+      <multiplicity id="53" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="23" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="54">    
+    <end type="SOURCE" refId="23" navigable="false">      
+      <attribute id="55" name="friendRequestees"/>      
+      <multiplicity id="56" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="23" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="57">    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="58" name="validator"/>      
+      <multiplicity id="59" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="13" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="60">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="61" name="clientResponse"/>      
+      <multiplicity id="62" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="63">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="64" name="userRepository"/>      
+      <multiplicity id="65" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="18" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="66">    
+    <end type="SOURCE" refId="11" navigable="false">      
+      <attribute id="67" name="userService"/>      
+      <multiplicity id="68" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="69">    
+    <end type="SOURCE" refId="19" navigable="false">      
+      <attribute id="70" name="authenticationProvider"/>      
+      <multiplicity id="71" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="8" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    sort-features="false" accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true" static="true"/>    
+    <operations public="true" package="true" protected="true" private="true" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>
