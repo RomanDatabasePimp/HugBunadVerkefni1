@@ -30,64 +30,72 @@
       to find stuff that you need but try also looking if the stuff you need
       is supported by spring-boot themselfs and not some random guys -->
   <dependencies>
+  <!-- ++++++++++++++++++++++++++++++DEPENDENCIES START+++++++++++++++++++++++++++++++++ -->
+  
+   <!-- !!!!!!!!!!!!!!IMPORTANT!!!!!!!!!!!!!!!!!!!!!!!!
+     This one is responsible for fetching ALL the Restfull 
+     stuff that we need to make a restfull app -->
+  <dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+  </dependency>
+  
   <!-- Redis will be used to store user info in temporary mode before user validates it  -->
   <dependency>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-data-redis</artifactId>
   </dependency>
+  <!-- This is also for redis  -->
   <dependency>
     <groupId>redis.clients</groupId>
     <artifactId>jedis</artifactId>
     <type>jar</type>
-</dependency>
+  </dependency>
   
-    <!-- This is a security pack used to implement various security features -->
+  <!-- This is a security pack used to implement various security features
+       and is the core of our security configs file if you are experiancing somekind of denied
+       errors double check that this dependency is installed in Maven Dependencies --> 
+  <dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-security</artifactId>
+  </dependency>
+  
+  
 
-    <dependency>
+  
+  <!-- This is use for client data validation f.x like email validator etc... -->
+  <dependency>
     <groupId>commons-validator</groupId>
     <artifactId>commons-validator</artifactId>
     <version>1.4.1</version>
-</dependency>
-    <!-- Neo4j stuff thats support by spring boot you might see
-         that Version is not needed but sometimes vilhelm get compile errors
-         if he dosent add version so please dont remove just set to ignore  -->
-    <dependency>
-	  <groupId>org.springframework.boot</groupId>
-	  <artifactId>spring-boot-starter-data-neo4j</artifactId>
-	  <version>2.0.6.RELEASE</version><!--$NO-MVN-MAN-VER$-->
-	</dependency>
-	
-	<!-- This one is responsible for fetching all the Restfull 
-	     stuff that we need to make a restfull app -->
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-web</artifactId>
-    </dependency>
-    
-    <!-- We use websockets to make our chat app this is a spring supported websockets -->
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-websocket</artifactId>
-    </dependency>
+  </dependency>
+  
+  <!-- Neo4j stuff thats support by spring boot you might see
+       that Version is not needed but sometimes vilhelm get compile errors
+       if he dosent add version so please dont remove just set to ignore  -->
+  <dependency>
+    <groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-data-neo4j</artifactId>
+	<version>2.0.6.RELEASE</version><!--$NO-MVN-MAN-VER$-->
+  </dependency>
 
-   <dependency>
+  <!-- just a dependency that saves us the hassle of making json object
+       Like Eric cartman from southpark says: noone gets fucked harder than i do
+       no legit notum þennan pakka eins og herion fiklar DONT DELETE -->	
+  <dependency>
     <groupId>org.json</groupId>
     <artifactId>json</artifactId>
     <version>20180130</version>
-</dependency>
-        <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-      <version>24.0-jre</version>
-    </dependency>
-        <!-- While the project is fresh we might use smth from here 
-             if not late we will drop it -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
+  </dependency>
+  
+  <!-- We use websockets to make our chat app this is a spring supported websockets -->
+  <dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-websocket</artifactId>
+  </dependency>
 
+
+<!-- ++++++++++++++++++++++++++++++DEPENDENCIES END+++++++++++++++++++++++++++++++++ -->
     </dependencies>
 
     <!-- I honestly dont know what this does when i was setting up 
