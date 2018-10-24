@@ -23,6 +23,7 @@ public class User {
 	private String userName;
 	private String password;
 	private String displayName;
+	private String email;
 	private Long created;
 	
 	// The User's friends
@@ -46,10 +47,11 @@ public class User {
 	 * @param password		user's password, used to authenticate user
 	 * @param displayName	user's display name, seen by other users
 	 */
-	public User(String userName, String password, String displayName) {
+	public User(String userName, String password, String displayName, String email) {
 		this.userName = userName;
 		this.password = password;
 		this.displayName = displayName;
+		this.email = email;
 		this.created = (new Date()).getTime(); // current time
 	}
 
@@ -69,6 +71,10 @@ public class User {
 		return displayName;
 	}
 
+	public String getEmail() {
+		return email;
+	}
+
 	public Long getCreated() {
 		return created;
 	}
@@ -83,6 +89,22 @@ public class User {
 
 	public Set<User> getFriendRequestors() {
 		return friendRequestors;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	
