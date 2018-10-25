@@ -1,7 +1,6 @@
 package project.services;
 
 import project.persistance.entities.User;
-import project.persistance.entities.Friendship;
 import project.persistance.repositories.UserRepository;
 
 import org.slf4j.Logger;
@@ -108,12 +107,11 @@ public class UserService {
 
 		List<Map<String, Object>> friends = new ArrayList<>();
 		
-		for (Friendship friendship : user.getFriendships()) {
-			User f = friendship.getOtherUser(user);
+		for (User f : user.getFriends()) {
 
 			Map<String, Object> friend = map(
-				new String[] {"userName", "displayName", "created", "friendsSince"}, 
-				new Object[] {f.getUserName(), f.getDisplayName(), f.getCreated(), friendship.getDate()}
+				new String[] {"userName", "displayName", "created"}, 
+				new Object[] {f.getUserName(), f.getDisplayName(), f.getCreated()}
 			);
 			
 			int source = friends.indexOf(friend);
