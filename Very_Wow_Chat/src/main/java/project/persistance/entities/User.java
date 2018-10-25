@@ -28,15 +28,15 @@ public class User {
 	
 	// The User's friends
 	@Relationship(type="FRIENDS", direction=Relationship.UNDIRECTED)
-	private Set<Friendship> friendships;
+	private List<User> friends;
 	
 	// Users who have received a friend request from the User
 	@Relationship(type="FRIEND_REQUEST", direction=Relationship.OUTGOING)
-	private Set<User> friendRequestees;
+	private List<User> friendRequestees;
 	
 	// Users who have sent a friend request to the User
 	@Relationship(type="FRIEND_REQUEST", direction=Relationship.INCOMING)
-	private Set<User> friendRequestors;
+	private List<User> friendRequestors;
 	
 	// Empty constructor required as of Neo4j API 2.0.5
 	private User() {};
@@ -79,15 +79,15 @@ public class User {
 		return created;
 	}
 
-	public Set<Friendship> getFriendships() {
-		return friendships;
+	public List<User> getFriends() {
+		return friends;
 	}
 
-	public Set<User> getFriendRequestees() {
+	public List<User> getFriendRequestees() {
 		return friendRequestees;
 	}
 
-	public Set<User> getFriendRequestors() {
+	public List<User> getFriendRequestors() {
 		return friendRequestors;
 	}
 

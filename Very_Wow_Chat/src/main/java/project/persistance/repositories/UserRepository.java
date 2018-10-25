@@ -3,7 +3,6 @@ package project.persistance.repositories;
 import java.util.Collection;
 
 import project.persistance.entities.User;
-import project.persistance.entities.Friendship;
 
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.repository.query.Param;
