@@ -2,31 +2,44 @@ package project.persistance.entities;
 
 public class UserRegistrationFormReceiver {
 
-	private String userName;
-	private String password;
-	private String displayName;
-	private String email;
+	private final String userName;
+	private final String displayName;
+	private final String password;
+	private final String passwordReap;
+	private final String email;
 	
-	public UserRegistrationFormReceiver(String userName, String password, String displayName, String email) {
+	public UserRegistrationFormReceiver(String userName,String displayName, String password,String passwordReap ,String email) {
 		this.userName = userName;
-		this.password = password;
 		this.displayName = displayName;
+		this.password = password;
+		this.passwordReap = passwordReap;
 		this.email = email;
+	}
+	
+	public boolean allInfoExists() {
+		if(this.userName == null || this.displayName == null || this.password == null
+		   || this.passwordReap == null || this.email == null) { return false; }
+		return true;
 	}
 
 	public String getUserName() {
 		return userName;
 	}
 
+	public String getDisplayName() {
+		return displayName;
+	}
+
 	public String getPassword() {
 		return password;
 	}
 
-	public String getDisplayName() {
-		return displayName;
+	public String getPasswordReap() {
+		return passwordReap;
 	}
 
 	public String getEmail() {
 		return email;
 	}
+
 }
