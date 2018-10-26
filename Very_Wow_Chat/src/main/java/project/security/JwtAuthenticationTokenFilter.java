@@ -14,7 +14,7 @@ import java.io.IOException;
 
 public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessingFilter {
 
-  public JwtAuthenticationTokenFilter() { super("/user/**"); }
+  public JwtAuthenticationTokenFilter() { super("/dsfdsfdsfd"); }
 
   /* THis is where the jtw tokens will be decoded and authenticated */
   @Override
