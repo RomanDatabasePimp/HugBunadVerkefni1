@@ -1,5 +1,6 @@
 var stompClient = null;
 
+
 function setConnected(connected) {
     $("#connect").prop("disabled", connected);
     $("#disconnect").prop("disabled", !connected);
@@ -13,14 +14,16 @@ function setConnected(connected) {
 }
 
 function connect() {
-    var socket = new SockJS('/gs-guide-websocket');
+    var socket = new SockJS("/landon-stomp-chat");
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         setConnected(true);
         console.log('Connected: ' + frame);
-        stompClient.subscribe('/topic/greetings', function (greeting) {
+        stompClient.subscribe('/topic/guestchats', function (greeting) {
             showGreeting(JSON.parse(greeting.body).content);
         });
+    }, function () {
+    		console.log("ERROR!", arguments);
     });
 }
 
@@ -33,7 +36,7 @@ function disconnect() {
 }
 
 function sendName() {
-    stompClient.send("/app/hello", {}, JSON.stringify({'name': $("#name").val()}));
+    stompClient.send("app/test", {}, JSON.stringify({'name': $("#name").val()}));
 }
 
 function showGreeting(message) {

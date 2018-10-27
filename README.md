@@ -2,6 +2,14 @@
 
 Application: Very Wow Chat
 
+## Setup
+
+Prerequisites
+
+* neo4j: <https://neo4j.com>
+
+
+
 ## Git
 
 ### Initial setup

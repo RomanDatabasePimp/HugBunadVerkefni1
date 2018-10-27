@@ -16,9 +16,15 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         config.setApplicationDestinationPrefixes("/app");
     }
 
+    /**
+     * Now, all WebSocket are directed to "/ws"
+     * 
+     * If, say, you add the endpoint "/abc" then the client would 
+     * access at ws://hostname/abc
+     */
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/gs-guide-websocket").withSockJS();
+        registry.addEndpoint("/landon-stomp-chat").setAllowedOrigins("*").withSockJS();
     }
 
 }

@@ -14,18 +14,17 @@ import project.services.RegisterFormReciver;
 /*  https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/HttpStatus.html */
 @RestController
 public class RegisterController {
-  private HttpReturner clientResponse = new HttpReturner();  // responsible for creating json response objects
-  
-  /* Usage : url/register
-   *  For  : POST request
-   *         Should contain a json obj of a form {"username":"shitufkc",
-   *                                              "password":"123123",
-   *                                              "passwordReapeat":"123123",
-   *                                              "email":"shitufck@gmail.com"}
-   * After : Validates the Client POST request and responds with an appropriate status code along with data */
-  @RequestMapping(value="/register", method = RequestMethod.POST, headers = "Accept=application/json")
-  public ResponseEntity<String> register(@RequestBody RegisterFormReciver payload) throws Exception {
-	  System.out.println(payload.validateEmail());
-	return null;
-  }
+	private HttpReturner clientResponse = new HttpReturner(); // responsible for creating json response objects
+
+	/*
+	 * Usage : url/register For : POST request Should contain a json obj of a form
+	 * {"username":"shitufkc", "password":"123123", "passwordReapeat":"123123",
+	 * "email":"shitufck@gmail.com"} After : Validates the Client POST request and
+	 * responds with an appropriate status code along with data
+	 */
+	@RequestMapping(value = "/register", method = RequestMethod.POST, headers = "Accept=application/json")
+	public ResponseEntity<String> register(@RequestBody RegisterFormReciver payload) throws Exception {
+		System.out.println(payload.validateEmail());
+		return null;
+	}
 }
