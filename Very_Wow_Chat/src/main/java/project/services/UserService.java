@@ -29,7 +29,7 @@ public class UserService {
 	 * @param userName	a user's userName
 	 * @return true if userName is in use, else false
 	 */
-	private boolean userExists(String userName) {
+	public boolean userExists(String userName) {
 		User user = this.userRepository.findByUserName(userName);
 		return user != null;
 	}
