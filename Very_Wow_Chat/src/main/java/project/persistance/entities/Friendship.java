@@ -9,15 +9,16 @@ import org.neo4j.ogm.annotation.EndNode;
 import java.util.Date;
 
 @RelationshipEntity(type = "FRIEND_REQUEST")
-public class FriendRequest {
+
+public class Friendship {
 	
 	@Id @GeneratedValue private Long id;
 	
     @StartNode
-    private User requestor;
+    private User user1;
 
     @EndNode
-    private User requestee;
+    private User user2;
     
     private Date date;
 
@@ -29,20 +30,20 @@ public class FriendRequest {
 		this.id = id;
 	}
 
-	public User getRequestor() {
-		return requestor;
+	public User getUser1() {
+		return user1;
 	}
 
-	public void setRequestor(User requestor) {
-		this.requestor = requestor;
+	public void setUser1(User user1) {
+		this.user1 = user1;
 	}
 
-	public User getRequestee() {
-		return requestee;
+	public User getUser2() {
+		return user2;
 	}
 
-	public void setRequestee(User requestee) {
-		this.requestee = requestee;
+	public void setUser2(User user2) {
+		this.user2 = user2;
 	}
 
 	public Date getDate() {

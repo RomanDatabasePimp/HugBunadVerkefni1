@@ -1,18 +1,12 @@
 package project.persistance.entities;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.neo4j.ogm.annotation.GeneratedValue;
 import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 @NodeEntity
@@ -20,16 +14,16 @@ public class User {
 
 	@Id @GeneratedValue private Long id;
 
-	private String userName;
+	private String username;
 	private String password;
 	private String displayName;
 	private String email;
 	private Long created;
-	
+
 	// The User's friends
 	@Relationship(type="FRIENDS", direction=Relationship.UNDIRECTED)
 	private List<User> friends;
-	
+
 	// Users who have received a friend request from the User
 	@Relationship(type="FRIEND_REQUEST", direction=Relationship.OUTGOING)
 	private List<User> friendRequestees;
@@ -37,7 +31,44 @@ public class User {
 	// Users who have sent a friend request to the User
 	@Relationship(type="FRIEND_REQUEST", direction=Relationship.INCOMING)
 	private List<User> friendRequestors;
+//
+//	// chatrooms the user is a member of
+//	@Relationship(type="MEMBER_OF", direction=Relationship.OUTGOING)
+//	private List<Chatroom> memberOfChatrooms;
+//	
+//	// chatrooms the user is a member of
+//	@Relationship(type="ADMIN_OF", direction=Relationship.OUTGOING)
+//	private List<Chatroom> adminOfChatrooms;
+//	
+//	// chatooms the user has requested to join
+//	@Relationship(type="REQUESTS_TO_JOIN", direction=Relationship.OUTGOING)
+//	private List<Chatroom> chatroomRequests;
+//
+//	// chatooms the user has received an invite to join from
+//	@Relationship(type="INVITES", direction=Relationship.INCOMING)
+//	private List<Chatroom> chatroomInvites;
+//
+//	// chatooms the user has received an invite to become an administrator
+//	@Relationship(type="ADMIN_INVITES", direction=Relationship.INCOMING)
+//	private List<Chatroom> chatroomAdminInvites;
+//	
+//	
+//
+//	
 	
+//	// chatooms the user has received an invite to become an administrator
+//	@Relationship(type="FRIENDS", direction=Relationship.UNDIRECTED)
+//	private List<Friendship> friendships;
+//	
+//	public List<Friendship> getFriendships() {
+//		return friendships;
+//	}
+//	public void setFriendships(List<Friendship> friendships) {
+//		this.friendships = friendships;
+//	}
+//
+
+
 	// Empty constructor required as of Neo4j API 2.0.5
 	private User() {};
 
@@ -47,153 +78,174 @@ public class User {
 	 * @param password		user's password, used to authenticate user
 	 * @param displayName	user's display name, seen by other users
 	 */
-	public User(String userName, String password, String displayName, String email) {
-		this.userName = userName;
+	public User(String username, String password, String displayName, String email) {
+		this.username = username;
 		this.password = password;
 		this.displayName = displayName;
 		this.email = email;
+		
 		this.created = (new Date()).getTime(); // current time
 	}
 
+//	public void sendFriendRequest(User requestee) {
+//		if(this.friendRequestees == null) {
+//			this.friendRequestees = new ArrayList<>();
+//		}
+//		if(requestee.friendRequestors == null) {
+//			requestee.friendRequestors = new ArrayList<>();
+//		}
+//		
+//		System.out.println("before");
+//		System.out.println(this.friendRequestees.size());
+//		System.out.println(requestee.friendRequestors.size());
+//		
+//		this.friendRequestees.add(requestee);
+//		requestee.friendRequestors.add(this);
+//
+//		System.out.println("after");
+//		System.out.println(this.friendRequestees.size());
+//		System.out.println(requestee.friendRequestors.size());
+//	}
+//	public void deleteFriendRequest(User user) {
+//		this.friendRequestees.remove(user);
+//		user.friendRequestors.remove(this);
+//	}
+//
 	public Long getId() {
 		return id;
 	}
 
-	public String getUserName() {
-		return userName;
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public String getPassword() {
 		return password;
 	}
 
-	public String getDisplayName() {
-		return displayName;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public Long getCreated() {
-		return created;
-	}
-
-	public List<User> getFriends() {
-		return friends;
-	}
-
-	public List<User> getFriendRequestees() {
-		return friendRequestees;
-	}
-
-	public List<User> getFriendRequestors() {
-		return friendRequestors;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getDisplayName() {
+		return displayName;
 	}
 
 	public void setDisplayName(String displayName) {
 		this.displayName = displayName;
 	}
 
+	public String getEmail() {
+		return email;
+	}
+
 	public void setEmail(String email) {
 		this.email = email;
 	}
 
-	
-	
-	
-	
-//	/**
-//	 * Send a friend request to another user
-//	 * @param requestee		User to receive friend request
-//	 */
-//	public void sendFriendRequest(User requestee) throws Exception{
-//		if(this.friendRequestees == null) {
-//			this.friendRequestees = new HashSet<User>();
-//		}
-//		// check if requestee is already a friend
-//		if(this.friends.contains(requestee)) {
-//			throw new Exception("Requestee is already a friend.");
-//		}
-//		// check if requestee has already received a friend request
-//		if(this.friendRequestees.contains(requestee)) {
-//			throw new Exception("Requestee already has a pending friend request.");
-//		}
-//		// create friend relation
-//		this.friendRequestees.add(requestee);
-//		requestee.friendRequestors.add(this);
-//	}
-//	
-//	/**
-//	 * Accept a friend request from another user
-//	 * @param requestee 	User whose friend request is to be accepted
-//	 * @throws Exception	if no friend request exists from requestee
-//	 */
-//	public void acceptFriendRequest(User requestor) throws Exception{
-//		if(this.friendRequestors == null) {
-//			this.friendRequestors = new HashSet<User>();
-//		}
-//		// check if requestee has sent a friend request to accept
-//		if(!this.friendRequestors.contains(requestor)) {
-//			throw new Exception("Requestor has not sent a friend request.");
-//		}
-//		// delete FRIEND_REQUEST relation
-//		this.friendRequestors.remove(requestor);
-//		requestor.friendRequestees.remove(this);
-//		// add FRIENDS relation
-//		this.addFriend(requestor);
-//	}
-//	
-//	/**
-//	 * 
-//	 * @param friend		User to be befriended
-//	 * @throws Exception	if friend is already a friend
-//	 */
-//	private void addFriend(User friend) throws Exception{
-//		if(this.friends == null) {
-//			this.friends = new HashSet<User>();
-//		}
-//		if(this.friends.contains(friend)) {
-//			throw new Exception("Already friends.");
-//		}
-//		this.friends.add(friend);
-//		friend.friends.add(this);
+	public Long getCreated() {
+		return created;
+	}
+
+	public void setCreated(Long created) {
+		this.created = created;
+	}
+
+	public List<User> getFriends() {
+		if(friends == null) {
+			friends = new ArrayList<>();
+		}
+		return friends;
+	}
+
+	public void setFriends(List<User> friends) {
+		this.friends = friends;
+	}
+
+	public List<User> getFriendRequestees() {
+		if(friendRequestees == null) {
+			friendRequestees = new ArrayList<>();
+		}
+		return friendRequestees;
+	}
+
+//	public void setFriendRequestees(List<User> friendRequestees) {
+//		this.friendRequestees = friendRequestees;
 //	}
 //
-//	/**
-//	 * Decline a friend request from another user
-//	 * @param requestor		User whose friend request is to be declined
-//	 */
-//	public void declineFriendRequest(User requestor) throws Exception{
-//		if(this.friendRequestors == null) {
-//			this.friendRequestors = new HashSet<User>();
-//		}
-//		// check if requestor has sent a friend request
-//		if(!this.friendRequestors.contains(requestor)) {
-//			throw new Exception("Requestor has not sent a friend request!");
-//		}
-//		// delete FRIEND_REQUEST relation
-//		this.friendRequestors.remove(requestor);
-//		requestor.friendRequestees.remove(this);
+	public List<User> getFriendRequestors() {
+		if(friendRequestors == null) {
+			friendRequestors = new ArrayList<>();
+		}
+		return friendRequestors;
+	}
+//
+//	public void setFriendRequestors(List<User> friendRequestors) {
+//		this.friendRequestors = friendRequestors;
 //	}
-//	
-//	/**
-//	 * Remove a friend from friends list
-//	 * @param friend	friend to me removed from friends list
-//	 */
-//	public void removeFriend(User friend) throws Exception{
-//		if(this.friends == null || !this.friends.contains(friend)) {
-//			throw new Exception("Removee is not a friend!");
+//
+//	public List<Chatroom> getMemberOfChatrooms() {
+//		if(memberOfChatrooms == null) {
+//			memberOfChatrooms = new ArrayList<>();
 //		}
-//		this.friends.remove(friend);
-//		friend.friends.remove(this);
+//		return memberOfChatrooms;
 //	}
+//
+//	public void setMemberOfChatrooms(List<Chatroom> memberOfChatrooms) {
+//		this.memberOfChatrooms = memberOfChatrooms;
+//	}
+//
+//	public List<Chatroom> getAdminOfChatrooms() {
+//		if(adminOfChatrooms == null) {
+//			adminOfChatrooms = new ArrayList<>();
+//		}
+//		return adminOfChatrooms;
+//	}
+//
+//	public void setAdminOfChatrooms(List<Chatroom> adminOfChatrooms) {
+//		this.adminOfChatrooms = adminOfChatrooms;
+//	}
+//
+//	public List<Chatroom> getChatroomRequests() {
+//		if(chatroomRequests == null) {
+//			chatroomRequests = new ArrayList<>();
+//		}
+//		return chatroomRequests;
+//	}
+//
+//	public void setChatroomRequests(List<Chatroom> chatroomRequests) {
+//		this.chatroomRequests = chatroomRequests;
+//	}
+//
+//	public List<Chatroom> getChatroomInvites() {
+//		if(chatroomInvites == null) {
+//			chatroomInvites = new ArrayList<>();
+//		}
+//		return chatroomInvites;
+//	}
+//
+//	public void setChatroomInvites(List<Chatroom> chatroomInvites) {
+//		this.chatroomInvites = chatroomInvites;
+//	}
+//
+//	public List<Chatroom> getChatroomAdminInvites() {
+//		if(chatroomAdminInvites == null) {
+//			chatroomAdminInvites = new ArrayList<>();
+//		}
+//		return chatroomAdminInvites;
+//	}
+//
+//	public void setChatroomAdminInvites(List<Chatroom> chatroomAdminInvites) {
+//		this.chatroomAdminInvites = chatroomAdminInvites;
+//	}
+
+	
 }
