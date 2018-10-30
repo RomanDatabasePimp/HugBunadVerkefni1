@@ -56,17 +56,17 @@ public class RegisterController {
     /* before starting authenticating we check if the client can have this username
        i decided if the username is taken there is no reason to validate rest of the data */
     if(authenticator.userNameExists(payload.getUserName())) {
-      clientResponse.addToErrorArray("errors", "username", "Username already exists");
+      clientResponse.addToErrorArray("errors", "error", "Username already exists");
       return new ResponseEntity<>(clientResponse.getErrorResponse(), HttpStatus.BAD_REQUEST);
     }
     
     // now that we know we have all the data we need and we know the username is legit we can start validating the data
     //We start calling out validator to validate the information and if there is a problem we take note of it
     if(!authenticator.passwordsMach(payload.getPassword(), payload.getPasswordReap())) {
-      clientResponse.addToErrorArray("errors", "password", "Both passwords must match");
+      clientResponse.addToErrorArray("errors", "error", "Both passwords must match");
     }
     if(!authenticator.validatePass(payload.getPassword())) {
-      clientResponse.addToErrorArray("errors", "password", "Password must be  atleast 8 characters long"
+      clientResponse.addToErrorArray("errors", "error", "Password must be  atleast 8 characters long"
       		+ "have 1 digit,lower,uppercase,specialcase letter and cannot contain spaces/tabs");
     }
     
@@ -95,8 +95,7 @@ public class RegisterController {
     mailMan.send(); // send the email to the user 
     
     /* Responde finnally with a happy message that the user needs to validate his account before he can use it*/
-    clientResponse.addSingleSucc("success","Registration successful, a  validation link has been send to :"+payload.getEmail());
-    return new ResponseEntity<>(clientResponse.getSuccessResponse(), HttpStatus.CREATED);
+    return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
   }
   
   /* Usage : url/validation/{key}
@@ -124,9 +123,7 @@ public class RegisterController {
     // create the user in our neo4j databse
     this.userService.createUser(newuser);
     
-    // Return a happy message to the client telling him he can log in now
-    clientResponse.addSingleSucc("success","Validation succesful welcome to VeryWowChat go ahead login");
-    return new ResponseEntity<>(clientResponse.getSuccessResponse(), HttpStatus.CREATED);
+    return new ResponseEntity<>(clientResponse.getSuccessResponse(), HttpStatus.NO_CONTENT);
   }
   
 }
