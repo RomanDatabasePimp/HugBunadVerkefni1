@@ -15,7 +15,8 @@ import java.util.NoSuchElementException;
 
 @Service
 public class UserService {
-	
+
+	// logs all neo4j calls
 	private final static Logger LOG = LoggerFactory.getLogger(UserService.class);
 	
 	private final UserRepository userRepository;
@@ -26,14 +27,30 @@ public class UserService {
 	
 	/**
 	 * Check if a user exists with a given username
-	 * @param userName	a user's userName
+	 * @param username	a user's userName
 	 * @return true if userName is in use, else false
 	 */
 	public boolean userExists(String username) {
 		User user = this.userRepository.findByUsername(username);
 		return user != null;
 	}
-	
+
+
+	/**
+	 * save a user, used to apply updates
+	 * @param user the user to be updated
+	 * @return
+	 */
+	public User saveUser(User user){
+		// save the user in database
+		return userRepository.save(user);
+	}
+	/**
+	 * create a a user
+	 * @param newUser
+	 * @return the new user
+	 * @throws IllegalArgumentException if username is taken
+	 */
 	public User createUser(User newUser) throws IllegalArgumentException{
 		// throw error if username is taken
 		if(userExists(newUser.getUsername())) {
@@ -61,6 +78,15 @@ public class UserService {
 		
 		return user;
     }
+	
+	/**
+	 * delete a user and all its relations
+	 * @param user: user to be deleted
+	 */
+	@Transactional(readOnly = false)
+	public void deleteUser(User user) {
+		userRepository.delete(user);
+	}
 
 	
 	/**
@@ -69,6 +95,7 @@ public class UserService {
 	 * @param requestee user receiving the request
 	 * @throws IllegalArgumentException
 	 */
+	@Transactional(readOnly = false)
 	public void addFriend(User requestor, User requestee) throws IllegalArgumentException{
 		System.out.println("send request");
 		System.out.println(requestor.getUsername() + " -[request]-> " + requestee.getUsername());
@@ -103,6 +130,7 @@ public class UserService {
 	 * @param requestor: the original requestor of the request
 	 * @param requestee: the original requestee of the request
 	 */
+	@Transactional(readOnly = false)
 	public void deleteFriendRequest(User requestor, User requestee) throws NoSuchElementException {
 		if(!friendRequestSent(requestor, requestee)) {
 			throw new IllegalArgumentException("There is no friend request to delete");
@@ -123,6 +151,7 @@ public class UserService {
 	 * @param use1
 	 * @param user2
 	 */
+	@Transactional(readOnly = false)
 	public void deleteFriendship(User user1, User user2) throws NoSuchElementException {
 		if(!areFriends(user1, user2)) {
 			throw new IllegalArgumentException("There is no friend relation to delete");
@@ -144,6 +173,7 @@ public class UserService {
 	 * @param user2
 	 * @return: true if they are friends, else returns false
 	 */
+	@Transactional(readOnly = false)
 	public Boolean areFriends(User user1, User user2) {
 		List<User> user1Friends = user1.getFriends();
 		List<User> user2Friends = user2.getFriends();
@@ -160,13 +190,7 @@ public class UserService {
 	 * @throws IllegalArgumentException if a request is already pending
 	 */
 	private void sendFriendRequest(User requestor, User requestee) throws IllegalArgumentException{
-		System.out.println(requestor.getUsername() + " -> " + requestee.getUsername());
-		
-		// ekki í sync; þarf að nota user.get til að skrifa
-		// en repository.get til að lesa
-//		List<User> requestorRequestees = getFriendRequestees(requestor);
-//		List<User> requesteeRequestors = getFriendRequestors(requestee);
-
+		// get the requestors and requestees
 		List<User> requestorRequestees = requestor.getFriendRequestees();
 		List<User> requesteeRequestors = requestee.getFriendRequestors();
 		
@@ -190,6 +214,7 @@ public class UserService {
 	 * @param requestee user receiving the request
 	 * @return true if a friend request is pending, else returns false
 	 */
+	@Transactional(readOnly = false)
 	public Boolean friendRequestSent(User requestor, User requestee) {
 		List<User> requestorRequestees = requestor.getFriendRequestees();
 		List<User> requesteeRequestors = requestee.getFriendRequestors();
