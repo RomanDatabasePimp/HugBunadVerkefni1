@@ -38,6 +38,18 @@ public class HttpResponseBody {
   /*------------------------------ERROR SETTERS START----------------------------*/
   /*-----------------------------------------------------------------------------*/
   
+  /* Usage : addErrorForForm(FieldVal,Message)
+   *  For  : FieldVal - String input field type (username , password ,email etc..)
+   *         Message  - String error msg for the field  
+   *  After: creates a errors obj that holds many error msg each beeing {field:Fieldtype, message:message} */
+  public void addErrorForForm(String fieldVal, String message) {
+    JSONObject newobj = new JSONObject();
+    newobj.put("field", fieldVal);
+    newobj.put("message", message);
+    this.many_in_one_erros.append("errors", newobj);
+  }
+  
+  
   /* Usage : addToErrorArray(arrayKey,key,value)
    *  For  : arrayKey(STRING) - ID of the array you want to add this into
    *         key(STRING)      - key of the json obj that will be created
