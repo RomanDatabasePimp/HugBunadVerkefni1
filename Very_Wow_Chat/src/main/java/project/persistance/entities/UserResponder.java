@@ -22,12 +22,18 @@ public class UserResponder {
 		this.created = user.getCreated();
 	}
 	
-	public UserResponder(String username, String password, String displayName, String email, Long created) {
+	/**
+	 * constructor notað af spring controller til að vinna með json objects
+	 * @param username
+	 * @param password
+	 * @param displayName
+	 * @param email
+	 */
+	public UserResponder(String username, String password, String displayName, String email) {
 		this.username = username;
 		this.password = password;
 		this.displayName = displayName;
 		this.email = email;
-		this.created = created;
 	}
 	
 	// getters

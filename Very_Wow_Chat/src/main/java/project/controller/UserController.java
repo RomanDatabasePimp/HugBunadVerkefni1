@@ -10,21 +10,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import project.services.UserService;
 import project.persistance.entities.User;
 import project.persistance.entities.UserResponder;
-import project.persistance.entities.Friendship;
 import project.persistance.entities.ErrorResponder;
 
 /**
  * 
  * @author Vilhelml
- * @since 29.10.2018
  */
 @RestController
 @RequestMapping("/user")
@@ -41,20 +37,67 @@ public class UserController {
 	 * creates a user
 	*/
 	@RequestMapping(path = "/", method = RequestMethod.POST, headers = "Accept=application/json")
-    public ResponseEntity<Object> createUser(@RequestBody User newUser){
+    public ResponseEntity<Object> createUser(@RequestBody UserResponder newUser){
 		try {
-			User user = userService.createUser(new User(
+			User user = new User(
 				newUser.getUsername(),
 				newUser.getPassword(),
 				newUser.getDisplayName(),
 				newUser.getEmail()
-			));
-			return new ResponseEntity<>(user, HttpStatus.CREATED);
+			);
+			System.out.println(user.getDisplayName() + "pre save");
+			userService.createUser(user);
+			System.out.println(user.getDisplayName() + "post save");
+			UserResponder body = new UserResponder(user);
+			return new ResponseEntity<>(body, HttpStatus.CREATED);
 		}catch(IllegalArgumentException e) {
 			ErrorResponder body = new ErrorResponder();
 			body.setError(e.getMessage());
 			return new ResponseEntity<>(body.getError(), HttpStatus.BAD_REQUEST);
 		}
+	}
+
+	/**
+	 * Update a user's displayName, password, and email
+	 * @param newUser: container for the properties to update
+	 * @return
+	 */
+	@RequestMapping(path = "/", method = RequestMethod.PATCH, headers = "Accept=application/json")
+    public ResponseEntity<Object> updateUser(@RequestBody UserResponder newUser){
+		try {
+			// fetch the user
+			User user = userService.findByUsername("username1"); // get from token
+			// if an attribute is not given, the old one is used
+			String newDisplayName = newUser.getDisplayName() != null ? newUser.getDisplayName() : user.getDisplayName();
+			String newEmail = newUser.getEmail() != null ? newUser.getEmail() : user.getEmail();
+			String newPassword = newUser.getPassword() != null ? newUser.getPassword() : user.getPassword();
+			// apply the new attributes
+			user.setDisplayName(newDisplayName);
+			user.setPassword(newPassword);
+			user.setEmail(newEmail);
+			// save the changes
+			userService.saveUser(user);
+			// wrap the user and return it
+			UserResponder body = new UserResponder(user);
+			return new ResponseEntity<>(body, HttpStatus.OK);
+		}catch(IllegalArgumentException e) {
+			ErrorResponder body = new ErrorResponder();
+			body.setError(e.getMessage());
+			return new ResponseEntity<>(body.getError(), HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	@RequestMapping(path = "/", method = RequestMethod.DELETE, headers = "Accept=application/json")
+	public ResponseEntity<Object> deleteUser(){
+		Boolean invalidToken = false;
+		if(invalidToken/*invalid token*/) {
+			ErrorResponder body = new ErrorResponder();
+			body.setError("Invalid token.");
+			return new ResponseEntity<>(body.getError(), HttpStatus.UNAUTHORIZED);
+		}
+		User user = userService.findByUsername("username1"); // get from token
+		userService.deleteUser(user);
+		return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
 	}
 
 	/**
