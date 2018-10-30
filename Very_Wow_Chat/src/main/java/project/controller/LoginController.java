@@ -24,8 +24,8 @@ public class LoginController {
    * After : Validates the Client POST request and responds with an appropriate status code along with data */
   @RequestMapping(value="/login", method = RequestMethod.GET,headers = "Accept=application/json")
   public ResponseEntity<String> login() throws Exception {
-	this.ddd.addToErrorArray("errors", "username","fick");
-    return new ResponseEntity<>(this.ddd.getErrorResponse(), HttpStatus.BAD_REQUEST);
+	this.ddd.addToSuccArray("errors", "username","fick");
+    return new ResponseEntity<>(this.ddd.getSuccessResponse(), HttpStatus.OK);
   }
   
   /* While db con is not rdy this is in place */
