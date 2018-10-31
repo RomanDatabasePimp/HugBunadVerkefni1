@@ -1,5 +1,6 @@
 package project.controller;
 
+<<<<<<< HEAD
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
@@ -33,4 +34,18 @@ public class ChatroomController {
 		
 		return new ChatOutMessage("(server) " + message.getMessage());
 	}
+=======
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+/**
+ * 
+ * @author Vilhelml
+ *
+ */
+@RestController
+@RequestMapping("/chatroom")
+public class ChatroomController {
+
+>>>>>>> 19385cde6581dff0eb9c3d83daf2eccdccf76f5a
 }

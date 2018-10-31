@@ -1,5 +1,6 @@
 # Hugbúnaðarverkefni 1
 
+<<<<<<< HEAD
 Application: Very Wow Chat
 
 ## Setup
@@ -63,3 +64,10 @@ TODO: figure out how to merge local branches
 
 * 85.220.46.169:8443
 * http://85.220.46.169:8443/hello
+=======
+Hello world!
+
+## Hlekkir
+
+Google Drive mappa: <https://drive.google.com/drive/folders/1LK9SQP_2fKv09Pbfxk-JckEw37gyObZT>
+>>>>>>> 19385cde6581dff0eb9c3d83daf2eccdccf76f5a
