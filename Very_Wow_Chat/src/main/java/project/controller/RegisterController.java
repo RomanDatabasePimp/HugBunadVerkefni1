@@ -45,7 +45,7 @@ public class RegisterController {
   @RequestMapping(value="/register", method = RequestMethod.POST, headers = "Accept=application/json")
   public ResponseEntity<String> register(@RequestBody UserRegistrationFormReceiver payload) throws Exception {  
 	HttpResponseBody clientResponse = new HttpResponseBody(); // create a instance of the response body
-	AuthenticationService authenticator = new AuthenticationService();// authenticator to authenticate the received data
+	AuthenticationService authenticator = new AuthenticationService(this.userService);// authenticator to authenticate the received data
 	
 	// this is not for the api more of for debuggin.
     if(!payload.allInfoExists()) {
