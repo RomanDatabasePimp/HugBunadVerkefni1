@@ -39,7 +39,7 @@ public class LoginController {
   @RequestMapping(value="/login", method = RequestMethod.POST,headers = "Accept=application/json")
   public ResponseEntity<String> login(@RequestBody JwtUser payload) throws Exception {
     HttpResponseBody clientResponse = new HttpResponseBody(); // create a instance of the response body
-    
+
     // check if the user exists in the neo4j database if dosent exists then we respond with error and 404 not found
     if(!this.userService.userExists(payload.getUserName())) {
       clientResponse.addErrorForForm("Username", "Username not found");
@@ -50,9 +50,9 @@ public class LoginController {
     User fetchedUsr = this.userService.findByUsername(payload.getUserName());
     // the password is encrypted in the db so we need to decode it 
     BCryptPasswordEncoder privateInfoEncoder = new BCryptPasswordEncoder();
- 
+
     // check if password matches the requested login
-    if(privateInfoEncoder.matches(payload.getPassword(), fetchedUsr.getPassword())) {
+    if(!privateInfoEncoder.matches(payload.getPassword(), fetchedUsr.getPassword())) {
       clientResponse.addErrorForForm("Password", "Password does not match the username");
       return new ResponseEntity<>(clientResponse.getErrorResponse(), HttpStatus.UNAUTHORIZED);
     }
@@ -64,7 +64,7 @@ public class LoginController {
     JSONObject sessionUsr = new JSONObject();
     sessionUsr.put("username",fetchedUsr.getUsername());
     sessionUsr.put("displayname",fetchedUsr.getDisplayName());
-    sessionUsr.put("token",this.jwtGenerator.generate(payload));
+    sessionUsr.put("token","Token "+this.jwtGenerator.generate(payload));
    
     clientResponse.addSingleSucc(sessionUsr);//ad the json obj to the response body
     // send user and JTW token back as a succesful response
