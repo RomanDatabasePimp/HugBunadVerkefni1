@@ -10,10 +10,11 @@ import project.persistance.repositories.RedisRepository;
 /* class that handles Authentication and encryption of different types of data */
 public class AuthenticationService {
   private final RedisService redisService; // our redis service
- // private UserService userService; // our neo4j service
+  private  UserService userService;// our neo4j service
   
-  public AuthenticationService () {
+  public AuthenticationService (UserService userService) {
      this.redisService = new RedisService();
+     this.userService = userService;
   }
   
   /* Usage : auth.userNameExists(userName)
@@ -25,8 +26,8 @@ public class AuthenticationService {
 	 * in account or else you could start having douplicate users since Neo4j dosent really care 
 	 * for douplicate nodes */
     boolean redisRes = this.redisService.userNameExists(userName);
-   // boolean neo4Res  = this.userService.userExists(userName);
-	return redisRes || false; // one of these has to be true for us to abort
+    boolean neo4Res  = this.userService.userExists(userName);
+	return redisRes || neo4Res; // one of these has to be true for us to abort
   }
   
   /* Usage : auth.passwordsMach(p1,p2)
