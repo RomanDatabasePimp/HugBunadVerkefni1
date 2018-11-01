@@ -55,7 +55,7 @@ public class ChatroomController {
 			// use wrapper to return error
 			ErrorResponder body = new ErrorResponder();
 			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getError(), HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.NOT_FOUND);
 		}
 	}
 	/**
@@ -70,7 +70,7 @@ public class ChatroomController {
 		if(invalidToken/*invalid token*/) {
 			ErrorResponder body = new ErrorResponder();
 			body.setError("Invalid token.");
-			return new ResponseEntity<>(body.getError(), HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.UNAUTHORIZED);
 		}
 		try {
 			User user = userService.findByUsername("username1"); // get from token
@@ -78,7 +78,7 @@ public class ChatroomController {
 			if(chatroomService.isOwner(user, chatroom)) {
 				ErrorResponder body = new ErrorResponder();
 				body.setError("User is not the chatroom's owner");
-				return new ResponseEntity<>(body.getError(), HttpStatus.UNAUTHORIZED);
+				return new ResponseEntity<>(body.getWrappedError(), HttpStatus.UNAUTHORIZED);
 			}
 			// wrap the data to send in json format
 			
@@ -90,7 +90,7 @@ public class ChatroomController {
 			// use wrapper to return error
 			ErrorResponder body = new ErrorResponder();
 			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getError(), HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.NOT_FOUND);
 		}
 	}
 	
@@ -105,7 +105,7 @@ public class ChatroomController {
 		if(invalidToken/*invalid token*/) {
 			ErrorResponder body = new ErrorResponder();
 			body.setError("Invalid token.");
-			return new ResponseEntity<>(body.getError(), HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.UNAUTHORIZED);
 		}
 		try {
 			User user = userService.findByUsername("username1"); // get from token
@@ -126,7 +126,7 @@ public class ChatroomController {
 		}catch(IllegalArgumentException e) {
 			ErrorResponder body = new ErrorResponder();
 			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getError(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.BAD_REQUEST);
 		}
 	}
 	
@@ -141,7 +141,7 @@ public class ChatroomController {
 		if(invalidToken/*invalid token*/) {
 			ErrorResponder body = new ErrorResponder();
 			body.setError("Invalid token.");
-			return new ResponseEntity<>(body.getError(), HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.UNAUTHORIZED);
 		}
 		try {
 			// the user sending the invite (the invitation will be sent by the chatroom, though)
@@ -154,7 +154,7 @@ public class ChatroomController {
 			if(!chatroomService.hasMemberInvitePrivilages(user, chatroom)) {
 				ErrorResponder body = new ErrorResponder();
 				body.setError("You do not have permission to invite users to this chatroom.");
-				return new ResponseEntity<>(body.getError(), HttpStatus.UNAUTHORIZED);
+				return new ResponseEntity<>(body.getWrappedError(), HttpStatus.UNAUTHORIZED);
 			}
 			// send the invite
 			chatroomService.sendMemberInvite(invitee, chatroom);
@@ -164,12 +164,12 @@ public class ChatroomController {
 			// use wrapper to return error
 			ErrorResponder body = new ErrorResponder();
 			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getError(), HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.NOT_FOUND);
 		}catch(IllegalArgumentException e) {
 			// use wrapper to return error
 			ErrorResponder body = new ErrorResponder();
 			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getError(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.BAD_REQUEST);
 		}
 	}
 	
@@ -184,36 +184,223 @@ public class ChatroomController {
 		if(invalidToken/*invalid token*/) {
 			ErrorResponder body = new ErrorResponder();
 			body.setError("Invalid token.");
-			return new ResponseEntity<>(body.getError(), HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.UNAUTHORIZED);
 		}
 		try {
 			// the user sending the invite (the invitation will be sent by the chatroom, though)
 			User user = userService.findByUsername("username2"); // get from token
 			// the chatroom that the user wants to join
 			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
-			// send the invite
+			// join the room
 			chatroomService.joinChatroom(user, chatroom);
 			// return successful, no content 
 			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+		}catch(NoSuchElementException e) { // user was not found
+			// use wrapper to return error
+			ErrorResponder body = new ErrorResponder();
+			body.setError(e.getMessage());
+			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.NOT_FOUND);
 		}catch(IllegalArgumentException e) { // chatroom or user not found
 			// use wrapper to return error
 			ErrorResponder body = new ErrorResponder();
 			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getError(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.BAD_REQUEST);
 		}catch(UnauthorizedException e) { // no permission to perform action
 			ErrorResponder body = new ErrorResponder();
 			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getError(), HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.UNAUTHORIZED);
 		}
 	}
 	
-	// get all chatrooms
 	
-	// get listed chatrooms
 	
-	// send admin invite
-	
+	/**
+	 * Send an iadmin nvite from chatroom to user
+	 * @param chatroomName: name of the chatroom to send the request
+	 * @return: if found, return the chatroom with a status code of 200, else error message with status code of 404
+	 */
+	@RequestMapping(path = "/{chatroomName}/admininvite/{username}", method = RequestMethod.POST, headers = "Accept=application/json")
+    public ResponseEntity<Object> sendAdminInvitation(@PathVariable String chatroomName, @PathVariable String username){
+		Boolean invalidToken = false;
+		if(invalidToken/*invalid token*/) {
+			ErrorResponder body = new ErrorResponder();
+			body.setError("Invalid token.");
+			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.UNAUTHORIZED);
+		}
+		try {
+			// the user sending the invite (the invitation will be sent by the chatroom, though)
+			User user = userService.findByUsername("username1"); // get from token
+			// the chatroom that the invite is for
+			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
+			// the user receiving the invite
+			User invitee = userService.findByUsername(username);
+			// if the invitor doesn't have invite privilages
+			if(!chatroomService.hasAdminInvitePrivilages(user, chatroom)) {
+				ErrorResponder body = new ErrorResponder();
+				body.setError("You do not have permission to invite admins to this chatroom.");
+				return new ResponseEntity<>(body.getWrappedError(), HttpStatus.UNAUTHORIZED);
+			}
+			// send the invite
+			chatroomService.sendAdminInvitation(invitee, chatroom);
+			// return successful, no content 
+			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+		}catch(NoSuchElementException e) { // user was not found
+			// use wrapper to return error
+			ErrorResponder body = new ErrorResponder();
+			body.setError(e.getMessage());
+			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.NOT_FOUND);
+		}catch(IllegalArgumentException e) {
+			// use wrapper to return error
+			ErrorResponder body = new ErrorResponder();
+			body.setError(e.getMessage());
+			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.BAD_REQUEST);
+		}
+	}
+
 	// accept admin invite
+	/**
+	 * Join an open chatrom or accept n invite
+	 * @param chatroomName: name of the chatroom to be joined
+	 * @return: if successful return a status code of 204, else error message with status code of 404 for not found, or 401 for unauthorized
+	 */
+	@RequestMapping(path = "/{chatroomName}/acceptadmininvite", method = RequestMethod.POST, headers = "Accept=application/json")
+    public ResponseEntity<Object> acceptAdminInvite(@PathVariable String chatroomName){
+		Boolean invalidToken = false;
+		if(invalidToken/*invalid token*/) {
+			ErrorResponder body = new ErrorResponder();
+			body.setError("Invalid token.");
+			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.UNAUTHORIZED);
+		}
+		try {
+			// the user sending the invite (the invitation will be sent by the chatroom, though)
+			User user = userService.findByUsername("username3"); // get from token
+			// the chatroom that the user wants to join
+			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
+			// accept the invite
+			chatroomService.acceptAdminInvite(user, chatroom);
+			// return successful, no content 
+			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+		}catch(NoSuchElementException e) { // user was not found
+			// use wrapper to return error
+			ErrorResponder body = new ErrorResponder();
+			body.setError(e.getMessage());
+			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.NOT_FOUND);
+		}catch(IllegalArgumentException e) { // chatroom or user not found
+			// use wrapper to return error
+			ErrorResponder body = new ErrorResponder();
+			body.setError(e.getMessage());
+			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.BAD_REQUEST);
+		}catch(UnauthorizedException e) { // no permission to perform action
+			ErrorResponder body = new ErrorResponder();
+			body.setError(e.getMessage());
+			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.UNAUTHORIZED);
+		}
+	}
+
+	/**
+	 * Leave a chatroom, this includes losing membership and adim status
+	 * @param chatroomName
+	 * @return
+	 */
+	@RequestMapping(path = "/{chatroomName}/leave", method = RequestMethod.DELETE, headers = "Accept=application/json")
+	public ResponseEntity<Object> leaveChatroom(@PathVariable String chatroomName){
+		Boolean invalidToken = false;
+		if(invalidToken/*invalid token*/) {
+			ErrorResponder body = new ErrorResponder();
+			body.setError("Invalid token.");
+			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.UNAUTHORIZED);
+		}
+		try {
+			// the user sending the invite (the invitation will be sent by the chatroom, though)
+			User user = userService.findByUsername("username3"); // get from token
+			// the chatroom that the user wants to join
+			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
+			// leave the chatroom
+			chatroomService.leaveChatroom(user, chatroom);
+			// return successful, no content 
+			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+		}catch(NoSuchElementException e) { // user was not found
+			// use wrapper to return error
+			ErrorResponder body = new ErrorResponder();
+			body.setError(e.getMessage());
+			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.NOT_FOUND);
+		}catch(IllegalArgumentException e) { // chatroom or user not found
+			// use wrapper to return error
+			ErrorResponder body = new ErrorResponder();
+			body.setError(e.getMessage());
+			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	/**
+	 * Leave a chatroom, this includes losing membership and adim status
+	 * @param chatroomName
+	 * @return
+	 */
+	@RequestMapping(path = "/{chatroomName}/quitadmin", method = RequestMethod.DELETE, headers = "Accept=application/json")
+	public ResponseEntity<Object> quitAdmin(@PathVariable String chatroomName){
+		Boolean invalidToken = false;
+		if(invalidToken/*invalid token*/) {
+			ErrorResponder body = new ErrorResponder();
+			body.setError("Invalid token.");
+			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.UNAUTHORIZED);
+		}
+		try {
+			// the user sending the invite (the invitation will be sent by the chatroom, though)
+			User user = userService.findByUsername("username3"); // get from token
+			// the chatroom that the user wants to join
+			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
+			// leave the chatroom
+			chatroomService.quitAdmin(user, chatroom);
+			// return successful, no content 
+			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+		}catch(NoSuchElementException e) { // user was not found
+			// use wrapper to return error
+			ErrorResponder body = new ErrorResponder();
+			body.setError(e.getMessage());
+			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.NOT_FOUND);
+		}catch(IllegalArgumentException e) { // chatroom or user not found
+			// use wrapper to return error
+			ErrorResponder body = new ErrorResponder();
+			body.setError(e.getMessage());
+			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@RequestMapping(path = "/listedchatrooms", method = RequestMethod.GET, headers = "Accept=application/json")
+    public ResponseEntity<Object> getListedChatrooms(){
+		try {
+			List<Chatroom> chatrooms = chatroomService.getAllListedChatrooms();
+			
+			// create a list of ChatroomResponders for json return
+			List<ChatroomResponder> body = chatrooms.stream().map(x -> new ChatroomResponder(x)).collect(Collectors.toList());
+			
+			return new ResponseEntity<>(body, HttpStatus.OK);
+		}catch(NoSuchElementException e) {
+			ErrorResponder body = new ErrorResponder();
+			body.setError(e.getMessage());
+			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@RequestMapping(path = "/chatrooms", method = RequestMethod.GET, headers = "Accept=application/json")
+    public ResponseEntity<Object> getAllChatrooms(){
+		try {
+			List<Chatroom> chatrooms = chatroomService.getAllChatrooms();
+			
+			// create a list of ChatroomResponders for json return
+			List<ChatroomResponder> body = chatrooms.stream().map(x -> new ChatroomResponder(x)).collect(Collectors.toList());
+			
+			return new ResponseEntity<>(body, HttpStatus.OK);
+		}catch(NoSuchElementException e) {
+			ErrorResponder body = new ErrorResponder();
+			body.setError(e.getMessage());
+			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.NOT_FOUND);
+		}
+	}
+
+	
+	// quit admin
 	
 	// update chatroom
 	
@@ -238,7 +425,7 @@ public class ChatroomController {
 		}catch(NoSuchElementException e) {
 			ErrorResponder body = new ErrorResponder();
 			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getError(), HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.NOT_FOUND);
 		}
 	}
 
@@ -255,7 +442,7 @@ public class ChatroomController {
 		}catch(NoSuchElementException e) {
 			ErrorResponder body = new ErrorResponder();
 			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getError(), HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.NOT_FOUND);
 		}
 	}
 
@@ -272,7 +459,7 @@ public class ChatroomController {
 		}catch(NoSuchElementException e) {
 			ErrorResponder body = new ErrorResponder();
 			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getError(), HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.NOT_FOUND);
 		}
 	}
 
@@ -289,7 +476,7 @@ public class ChatroomController {
 		}catch(NoSuchElementException e) {
 			ErrorResponder body = new ErrorResponder();
 			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getError(), HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.NOT_FOUND);
 		}
 	}
 }

@@ -28,6 +28,10 @@ public class ErrorResponder {
 	public Map<String, Object> getError() {
 		return error;
 	}
+	
+	public Object getWrappedError() {
+		return ResponseWrapper.badWrap(error);
+	}
 
 	public void setError(String e) {
 		this.error.put("error", e);

@@ -1,6 +1,9 @@
 package project.persistance.entities;
 
-import java.awt.TextArea;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 /**
  * This class is for wrapping data in json objects
  * @author Vilhelm
@@ -51,6 +54,28 @@ public class ChatroomResponder {
 		this.listed = listed;
 		this.invited_only = invited_only;
 	}
+	
+	/**
+	 * converts a list of Chatrooms to a list of ChatroomResponders
+	 * @param list
+	 * @return
+	 */
+	public static List<ChatroomResponder> toResponderList(List<Chatroom> list) {
+		return list.stream().map(x -> new ChatroomResponder(x)).collect(Collectors.toList());
+	}
+
+	
+	/**
+	 * wrap the response
+	 * @return wrapped response
+	 */
+	public Object wrapResponse() {
+		Map<String, ChatroomResponder> wrapper = new HashMap<>();
+		wrapper.put("GoodResp", this);
+		return wrapper;
+	}
+	
+	// getters
 
 	public String getChatroomName() {
 		return chatroomName;
