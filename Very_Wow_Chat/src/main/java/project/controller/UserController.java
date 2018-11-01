@@ -281,6 +281,11 @@ public class UserController {
 			List<Chatroom> chatroomRequests = user.getChatroomRequests();
 			List<Chatroom> memberOfChatrooms = user.getMemberOfChatrooms();
 			List<Chatroom> ownedChatrooms = user.getOwnedChatrooms();
+			
+			// filter to avoid duplicates
+			memberOfChatrooms.removeIf(x -> adminOfChatrooms.contains(x));
+			adminOfChatrooms.removeIf(x -> ownedChatrooms.contains(x));
+			
 			// convert the users and chatrooms lists to responder lists
 			List<UserResponder> friendsResponderList = UserResponder.toResponderList(friends);
 			List<UserResponder> friendRequestorsResponderList = UserResponder.toResponderList(friendRequestors);
@@ -291,6 +296,7 @@ public class UserController {
 			List<ChatroomResponder> chatroomRequestsResponderList = ChatroomResponder.toResponderList(chatroomRequests);
 			List<ChatroomResponder> memberOfChatroomsResponderList = ChatroomResponder.toResponderList(memberOfChatrooms);
 			List<ChatroomResponder> ownedChatroomsResponderList = ChatroomResponder.toResponderList(ownedChatrooms);
+			
 			// wrap the responders in a container responder
 			RelationsResponder body = new RelationsResponder();
 			body.add("friends", friendsResponderList);
