@@ -13,9 +13,12 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
+import project.services.ChatroomService;
 import project.services.UserService;
 import project.persistance.entities.User;
 import project.persistance.entities.UserResponder;
+import project.persistance.entities.Chatroom;
+import project.persistance.entities.ChatroomResponder;
 import project.persistance.entities.ErrorResponder;
 
 /**
@@ -25,11 +28,13 @@ import project.persistance.entities.ErrorResponder;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-	
+
 	private final UserService userService;
+	private final ChatroomService chatroomService;
 	
-	public UserController(UserService userService) {
+	public UserController(UserService userService, ChatroomService chatroomService) {
 		this.userService = userService;
+		this.chatroomService= chatroomService;
 	}
 	
 	/* 
@@ -45,9 +50,7 @@ public class UserController {
 				newUser.getDisplayName(),
 				newUser.getEmail()
 			);
-			System.out.println(user.getDisplayName() + "pre save");
 			userService.createUser(user);
-			System.out.println(user.getDisplayName() + "post save");
 			UserResponder body = new UserResponder(user);
 			return new ResponseEntity<>(body, HttpStatus.CREATED);
 		}catch(IllegalArgumentException e) {
@@ -87,6 +90,10 @@ public class UserController {
 		}
 	}
 
+	/**
+	 * delete the user
+	 * @return nodata, 204 status
+	 */
 	@RequestMapping(path = "/", method = RequestMethod.DELETE, headers = "Accept=application/json")
 	public ResponseEntity<Object> deleteUser(){
 		Boolean invalidToken = false;
@@ -194,7 +201,6 @@ public class UserController {
 	}
 	
 	/**
-	 * getUser: 
 	 * @param username: username of the user to be returned
 	 * @return: if found, return the user with a status code of 200, else error message with status code of 404
 	 */
@@ -213,8 +219,10 @@ public class UserController {
 		}
 	}
 	
+	// --------------- get requests for the user's various lists ----------------------------------
+	
 	// GET request to this url will return a list of all the user's friends
-	@RequestMapping(path = "/{username}/friends")
+	@RequestMapping(path = "/{username}/friends", method = RequestMethod.GET, headers = "Accept=application/json")
     public ResponseEntity<Object> getFriends(@PathVariable String username){
 		try {
 			User user = userService.findByUsername(username);
@@ -231,7 +239,7 @@ public class UserController {
 		}
 	}
 	// GET request to this url will return a list of all the user's friend requestees
-	@RequestMapping(path = "/{username}/friendRequestees")
+	@RequestMapping(path = "/{username}/friendrequestees", method = RequestMethod.GET, headers = "Accept=application/json")
     public ResponseEntity<Object> getFriendRequestees(@PathVariable String username){
 		try {
 			User user = userService.findByUsername(username);
@@ -249,7 +257,7 @@ public class UserController {
 	}
 	
 	// GET request to this url will return a list of all the user's friend requestees
-	@RequestMapping(path = "/{username}/friendRequestors")
+	@RequestMapping(path = "/{username}/friendrequestors")
     public ResponseEntity<Object> getFriendRequestors(@PathVariable String username){
 		try {
 			User user = userService.findByUsername(username);
@@ -257,6 +265,108 @@ public class UserController {
 			
 			// create a list of UserResponders for json return
 			List<UserResponder> body = requestors .stream().map(x -> new UserResponder(x)).collect(Collectors.toList());
+			
+			return new ResponseEntity<>(body, HttpStatus.OK);
+		}catch(NoSuchElementException e) {
+			ErrorResponder body = new ErrorResponder();
+			body.setError(e.getMessage());
+			return new ResponseEntity<>(body.getError(), HttpStatus.NOT_FOUND);
+		}
+	}
+	// GET request to this url will return a list of all the user's friend requestees
+	@RequestMapping(path = "/{username}/memberofallchatrooms", method = RequestMethod.GET, headers = "Accept=application/json")
+    public ResponseEntity<Object> getMemberOfAllChatrooms(@PathVariable String username){
+		try {
+			User user = userService.findByUsername(username);
+			List<Chatroom> requestors = user.getMemberOfChatrooms();
+			
+			// create a list of UserResponders for json return
+			List<ChatroomResponder> body = requestors .stream().map(x -> new ChatroomResponder(x)).collect(Collectors.toList());
+			
+			return new ResponseEntity<>(body, HttpStatus.OK);
+		}catch(NoSuchElementException e) {
+			ErrorResponder body = new ErrorResponder();
+			body.setError(e.getMessage());
+			return new ResponseEntity<>(body.getError(), HttpStatus.NOT_FOUND);
+		}
+	}
+
+	@RequestMapping(path = "/{username}/memberoflistedchatrooms", method = RequestMethod.GET, headers = "Accept=application/json")
+    public ResponseEntity<Object> getListedMemberOfListedChatrooms(@PathVariable String username){
+		try {
+			User user = userService.findByUsername(username);
+			List<Chatroom> requestors = user.getMemberOfChatrooms();
+			
+			// create a list of UserResponders for json return
+			List<ChatroomResponder> body = requestors .stream().map(x -> new ChatroomResponder(x)).filter(x-> x.getListed()).collect(Collectors.toList());
+			
+			return new ResponseEntity<>(body, HttpStatus.OK);
+		}catch(NoSuchElementException e) {
+			ErrorResponder body = new ErrorResponder();
+			body.setError(e.getMessage());
+			return new ResponseEntity<>(body.getError(), HttpStatus.NOT_FOUND);
+		}
+	}
+
+	@RequestMapping(path = "/{username}/adminofchatrooms", method = RequestMethod.GET, headers = "Accept=application/json")
+    public ResponseEntity<Object> getAdminOfChatrooms(@PathVariable String username){
+		try {
+			User user = userService.findByUsername(username);
+			List<Chatroom> chatrooms = user.getAdminOfChatrooms();
+			
+			// create a list of UserResponders for json return
+			List<ChatroomResponder> body = chatrooms.stream().map(x -> new ChatroomResponder(x)).collect(Collectors.toList());
+			
+			return new ResponseEntity<>(body, HttpStatus.OK);
+		}catch(NoSuchElementException e) {
+			ErrorResponder body = new ErrorResponder();
+			body.setError(e.getMessage());
+			return new ResponseEntity<>(body.getError(), HttpStatus.NOT_FOUND);
+		}
+	}
+
+	@RequestMapping(path = "/{username}/ownerofchatrooms", method = RequestMethod.GET, headers = "Accept=application/json")
+    public ResponseEntity<Object> getOwnerOfChatrooms(@PathVariable String username){
+		try {
+			User user = userService.findByUsername(username);
+			List<Chatroom> chatrooms = user.getOwnedChatrooms();
+			
+			// create a list of UserResponders for json return
+			List<ChatroomResponder> body = chatrooms.stream().map(x -> new ChatroomResponder(x)).collect(Collectors.toList());
+			
+			return new ResponseEntity<>(body, HttpStatus.OK);
+		}catch(NoSuchElementException e) {
+			ErrorResponder body = new ErrorResponder();
+			body.setError(e.getMessage());
+			return new ResponseEntity<>(body.getError(), HttpStatus.NOT_FOUND);
+		}
+	}
+
+	@RequestMapping(path = "/{username}/chatroominvites", method = RequestMethod.GET, headers = "Accept=application/json")
+    public ResponseEntity<Object> getChatroomInvites(@PathVariable String username){
+		try {
+			User user = userService.findByUsername(username);
+			List<Chatroom> chatrooms = user.getChatroomInvites();
+			
+			// create a list of UserResponders for json return
+			List<ChatroomResponder> body = chatrooms.stream().map(x -> new ChatroomResponder(x)).collect(Collectors.toList());
+			
+			return new ResponseEntity<>(body, HttpStatus.OK);
+		}catch(NoSuchElementException e) {
+			ErrorResponder body = new ErrorResponder();
+			body.setError(e.getMessage());
+			return new ResponseEntity<>(body.getError(), HttpStatus.NOT_FOUND);
+		}
+	}
+
+	@RequestMapping(path = "/{username}/chatroomadmininvites", method = RequestMethod.GET, headers = "Accept=application/json")
+    public ResponseEntity<Object> getChatroomAdminInvites(@PathVariable String username){
+		try {
+			User user = userService.findByUsername(username);
+			List<Chatroom> chatrooms = user.getChatroomAdminInvites();
+			
+			// create a list of UserResponders for json return
+			List<ChatroomResponder> body = chatrooms.stream().map(x -> new ChatroomResponder(x)).collect(Collectors.toList());
 			
 			return new ResponseEntity<>(body, HttpStatus.OK);
 		}catch(NoSuchElementException e) {

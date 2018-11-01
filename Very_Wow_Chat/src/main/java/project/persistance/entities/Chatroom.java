@@ -19,19 +19,20 @@ public class Chatroom {
 	// non-unique name to be displayed
 	private String displayName;
 	// description of the chatroom
-	private TextArea description;
+	private String description;
 	// denotes the visibility of the chatroom: true means listed, false means unlisted
 	private Boolean listed;
 	// denots the accessability of the chatroom: true means users can only join with an invite, false means anyone can join
 	private Boolean invited_only;
 	// the owner of the chatroom, has master privileges 
+	@Relationship(type="OWNS", direction=Relationship.INCOMING)
 	private User owner;
 	// when the chatroom was created
 	private Long created;
 
 	// the tags the chatroom is associated with
-	@Relationship(type="HAS_TAG", direction=Relationship.OUTGOING)
-	private List<Tag> tags;
+//	@Relationship(type="HAS_TAG", direction=Relationship.OUTGOING)
+//	private List<Tag> tags;
 	
 	// users who are members of the chatroom
 	@Relationship(type="MEMBER_OF", direction=Relationship.INCOMING)
@@ -43,7 +44,7 @@ public class Chatroom {
 
 	// users who have been invited to join the chatroom
 	@Relationship(type="INVITES", direction=Relationship.OUTGOING)
-	private List<User> Memberinvitees;
+	private List<User> memberInvitees;
 
 	// users who have benen invited to become administrators of the chatroom
 	@Relationship(type="ADMIN_INVITES", direction=Relationship.OUTGOING)
@@ -66,23 +67,14 @@ public class Chatroom {
 	 * @param invited_only
 	 * @param owner
 	 */
-	public Chatroom(String chatroomName, String displayName, TextArea description, Boolean listed, Boolean invited_only, User owner) {
+	public Chatroom(String chatroomName, String displayName, String description, Boolean listed, Boolean invited_only) {
 		this.chatroomName = chatroomName;
 		this.displayName = displayName;
 		this.description = description;
 		this.listed = listed;
 		this.invited_only = invited_only;
-		this.owner = owner;
 
 		this.created = (new Date()).getTime(); // current time
-
-		// initalize the relations
-		this.tags = new ArrayList<>();
-		this.members = new ArrayList<>();
-		this.administrators = new ArrayList<>();
-		this.Memberinvitees = new ArrayList<>();
-		this.adminInvitees = new ArrayList<>();
-		this.requestors = new ArrayList<>();
 	}
 
 	// getters and setters
@@ -111,11 +103,11 @@ public class Chatroom {
 		this.displayName = displayName;
 	}
 
-	public TextArea getDescription() {
+	public String getDescription() {
 		return description;
 	}
 
-	public void setDescription(TextArea description) {
+	public void setDescription(String description) {
 		this.description = description;
 	}
 
@@ -151,15 +143,18 @@ public class Chatroom {
 		this.created = created;
 	}
 
-	public List<Tag> getTags() {
-		return tags;
-	}
-
-	public void setTags(List<Tag> tags) {
-		this.tags = tags;
-	}
+//	public List<Tag> getTags() {
+//		return tags;
+//	}
+//
+//	public void setTags(List<Tag> tags) {
+//		this.tags = tags;
+//	}
 
 	public List<User> getMembers() {
+		if(members == null) {
+			members = new ArrayList<>();
+		}
 		return members;
 	}
 
@@ -168,6 +163,9 @@ public class Chatroom {
 	}
 
 	public List<User> getAdministrators() {
+		if(administrators == null) {
+			administrators = new ArrayList<>();
+		}
 		return administrators;
 	}
 
@@ -175,15 +173,10 @@ public class Chatroom {
 		this.administrators = administrators;
 	}
 
-	public List<User> getMemberinvitees() {
-		return Memberinvitees;
-	}
-
-	public void setMemberinvitees(List<User> memberinvitees) {
-		Memberinvitees = memberinvitees;
-	}
-
 	public List<User> getAdminInvitees() {
+		if(adminInvitees == null) {
+			adminInvitees = new ArrayList<>();
+		}
 		return adminInvitees;
 	}
 
@@ -192,13 +185,25 @@ public class Chatroom {
 	}
 
 	public List<User> getRequestors() {
+		if(requestors == null) {
+			requestors = new ArrayList<>();
+		}
 		return requestors;
 	}
 
 	public void setRequestors(List<User> requestors) {
 		this.requestors = requestors;
 	}
-	
-	
+
+	public List<User> getMemberInvitees() {
+		if(memberInvitees == null) {
+			memberInvitees = new ArrayList<>();
+		}
+		return memberInvitees;
+	}
+
+	public void setMemberInvitees(List<User> memberInvitees) {
+		this.memberInvitees = memberInvitees;
+	}
 	
 }

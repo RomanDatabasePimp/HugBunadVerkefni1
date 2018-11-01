@@ -61,10 +61,10 @@ public class UserService {
 	}
 	
 	/**
-	 * returns a user if the userName is in use
+	 * returns a user if the username is in use
 	 * else, returns and error message
-	 * @param userName
-	 * @return Map object containing user or error message
+	 * @param username
+	 * @return the user
 	 * @throws exception if userName doesn't belong to any user
 	 */
 	@Transactional(readOnly = true)

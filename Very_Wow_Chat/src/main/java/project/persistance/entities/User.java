@@ -37,6 +37,10 @@ public class User {
 	private List<Chatroom> memberOfChatrooms;
 	
 	// chatrooms the user is a member of
+	@Relationship(type="OWNS", direction=Relationship.OUTGOING)
+	private List<Chatroom> ownedChatrooms;
+	
+	// chatrooms the user is a member of
 	@Relationship(type="ADMIN_OF", direction=Relationship.OUTGOING)
 	private List<Chatroom> adminOfChatrooms;
 	
@@ -160,6 +164,18 @@ public class User {
 
 	public void setMemberOfChatrooms(List<Chatroom> memberOfChatrooms) {
 		this.memberOfChatrooms = memberOfChatrooms;
+	}
+	
+	public List<Chatroom> getOwnedChatrooms() {
+		if(ownedChatrooms == null) {
+			System.out.println("owned chatrooms is null");
+			ownedChatrooms = new ArrayList<>();
+		}
+		return ownedChatrooms;
+	}
+
+	public void setOwnedChatrooms(List<Chatroom> ownedChatrooms) {
+		this.ownedChatrooms = ownedChatrooms;
 	}
 
 	public List<Chatroom> getAdminOfChatrooms() {
