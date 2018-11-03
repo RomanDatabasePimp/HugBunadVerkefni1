@@ -8,30 +8,46 @@ package project.persistance.entities;
  * to make it more simple */
 public class JwtUser {
 
-  private String userName; 
-  private String password;
-  /* this is for authentication, we can have role based authentication later if we want 
-   * to add more restrictions to what people can and cant do like user roles and admin roles
-   * but for now we just have one role */
-  private String role;
+	private String userName;
+	private String password;
+	/*
+	 * this is for authentication, we can have role based authentication later if we
+	 * want to add more restrictions to what people can and cant do like user roles
+	 * and admin roles but for now we just have one role
+	 */
+	private String role;
 
-  public JwtUser () {} // used for authentication in middlewares
-  // used when we receive a payload
-  public JwtUser (String userName,String password) {
-    this.userName = userName;
-    this.password = password;
-    this.role = "User"; // the moment everyone have user role later we can change that if we want
-  }
-  
-  public void setPassword(String password) { this.password = password;}
-  
-  public void setUserName(String userName) { this.userName = userName; }
+	public JwtUser() {
+	} // used for authentication in middlewares
+	// used when we receive a payload
 
-  public void setRole(String role) { this.role = role; }
+	public JwtUser(String userName, String password) {
+		this.userName = userName;
+		this.password = password;
+		this.role = "User"; // the moment everyone have user role later we can change that if we want
+	}
 
-  public String getUserName() { return userName; }
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
-  public String getRole() { return role;  }
-  
-  public String getPassword() { return this.password; }
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public String getPassword() {
+		return this.password;
+	}
 }

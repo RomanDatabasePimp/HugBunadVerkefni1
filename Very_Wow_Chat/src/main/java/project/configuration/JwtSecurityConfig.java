@@ -26,12 +26,13 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     @Autowired
-    private JwtAuthenticationProvider authenticationProvider;
+    private JwtAuthenticationProvider authenticationProvider; // our authenticator
     @Autowired
-    private JwtAuthenticationEntryPoint entryPoint;
-
+    private JwtAuthenticationEntryPoint entryPoint; // what happens if the authentication fails
+    
     @Bean
     public AuthenticationManager authenticationManager() {
+    	// how we authenticate the user
         return new ProviderManager(Collections.singletonList(authenticationProvider));
     }
 
@@ -56,6 +57,5 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.addFilterBefore(authenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         http.headers().cacheControl();
-
     }
 }
