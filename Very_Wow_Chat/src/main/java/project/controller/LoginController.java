@@ -1,107 +1,77 @@
 package project.controller;
 
-import java.util.ArrayList;
-
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import project.persistance.entities.HttpResponseBody;
-import project.persistance.entities.LoginFormReciver;
+import project.persistance.entities.JwtUser;
+import project.persistance.entities.User;
+import project.security.JwtGenerator;
+import project.services.UserService;
 
-/* This class handles http POST request on url/login with a sent json obj  */
-/*  https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/HttpStatus.html */
+/* This class handles login requested that are posted to the ulr/login  */
 @RestController
 public class LoginController {
-<<<<<<< HEAD
-	private HttpReturner clientResponse = new HttpReturner(); // responsible for creating json response objects
 
-	/*
-	 * Usage : url/login For : METHOD TYPE POST Should contain a json obj of a form
-	 * {"username":"shitufkc","password":"123123"} After : Validates the Client POST
-	 * request and responds with an appropriate status code along with data
-	 */
+	private final UserService userService; // we need neo4j to auth users
+	private final JwtGenerator jwtGenerator; // create the JWT token
+
+	public LoginController(UserService userService, JwtGenerator jwtGenerator) {
+		this.userService = userService;
+		this.jwtGenerator = jwtGenerator;
+	}
+
+	/*------------------------------------CONTROLLERS START -----------------------------------------------*/
+
+	/* Usage : url/login 
+	 *   For : METHOD TYPE POST Should contain a json obj of a form 
+	 *         {"username":"shitufkc","password":"123123"} 
+	 * After : Validates the Client POST request and responds with an appropriate 
+	 *         status code along with user data and  a JTW token */
+	@CrossOrigin(origins = "http://localhost:3000") // to prevent cors headder errors when working locally
 	@RequestMapping(value = "/login", method = RequestMethod.POST, headers = "Accept=application/json")
-	public ResponseEntity<String> login(@RequestBody LoginFormReciver payload) throws Exception {
-		ArrayList<String> errors = new ArrayList<String>();// Array List that will contain all the errors
-		/*
-		 * If an enmpty send was somehow made we will handle it we resonde with a 400
-		 * status code along with json error
-		 */
-		if (payload.getPassword() == null || payload.getUsername() == null) {
-			errors.add("Illegal json format recived. leagal format should only have username and password ");
-			this.clientResponse.createErrors(errors);
-			return new ResponseEntity<>(this.clientResponse.getErrors(), HttpStatus.BAD_REQUEST);
-		}
-		
-		System.out.println(payload.getUsername());
-		
-		/*
-		 * If username is not found in the services then We responde with a 404 error
-		 * along with a json error
-		 */
-		if (!UserNameEx(payload.getUsername())) {
-			errors.add("Username not found");
-			this.clientResponse.createErrors(errors);
-			return new ResponseEntity<>(this.clientResponse.getErrors(), HttpStatus.NOT_FOUND);
-		}
-		/*
-		 * if the username exists then the next step is to check if the password matches
-		 * sed username if it does not then we responde with status code of 401 and json
-		 * erro
-		 */
-		if (!PassEx(payload.getUsername(), payload.getPassword())) {
-			errors.add("Password did not match");
-			this.clientResponse.createErrors(errors);
-			return new ResponseEntity<>(this.clientResponse.getErrors(), HttpStatus.UNAUTHORIZED);
-		}
-		
-		// TODO: figure out what to do if we find the user.
+	public ResponseEntity<String> login(@RequestBody JwtUser payload) throws Exception {
+		HttpResponseBody clientResponse = new HttpResponseBody(); // create a instance of the response body
 
-		return null;
+		// check if the user exists in the neo4j database if dosent exists then we
+		// respond with error and 404 not found
+		if (!this.userService.userExists(payload.getUserName())) {
+			clientResponse.addErrorForForm("Username", "Username not found");
+			return new ResponseEntity<>(clientResponse.getErrorResponse(), HttpStatus.NOT_FOUND);
+		}
+
+		// now we know the user exists we fetch him and need to validate the password
+		User fetchedUsr = this.userService.findByUsername(payload.getUserName());
+		// the password is encrypted in the db so we need to decode it
+		BCryptPasswordEncoder privateInfoEncoder = new BCryptPasswordEncoder();
+
+		// check if password matches the requested login
+		if (!privateInfoEncoder.matches(payload.getPassword(), fetchedUsr.getPassword())) {
+			clientResponse.addErrorForForm("Password", "Password does not match the username");
+			return new ResponseEntity<>(clientResponse.getErrorResponse(), HttpStatus.UNAUTHORIZED);
+		}
+
+		/*
+		 * create user and jtw to store in session storage This is the obj that will be
+		 * stored in the users session storage for now we only need to store his
+		 * displayname, username and the JTW for authentication, but later if we need to
+		 * store something more its just a couple of adds here and it will work the same
+		 */
+		JSONObject sessionUsr = new JSONObject();
+		sessionUsr.put("username", fetchedUsr.getUsername());
+		sessionUsr.put("displayname", fetchedUsr.getDisplayName());
+		sessionUsr.put("token", "Token " + this.jwtGenerator.generate(payload));
+
+		clientResponse.addSingleSucc(sessionUsr);// ad the json obj to the response body
+		// send user and JTW token back as a succesful response
+		return new ResponseEntity<>(clientResponse.getSuccessResponse(), HttpStatus.OK);
 	}
 
-
-	/**
-	 * 
-	 * DH: I think this method checks whether user `Usr` exists.
-	 * 
-	 * While db con is not rdy this is in place
-	 * @param Usr
-	 * @return
-	 */
-	public boolean UserNameEx(String Usr) {
-		return true;
-	}
-
-	public boolean PassEx(String Usr, String password) {
-		return true;
-	}
-
-=======
-   HttpResponseBody ddd = new HttpResponseBody();
-  /* Usage : url/login 
-   * For   : METHOD TYPE POST
-   *         Should contain a json obj of a form {"username":"shitufkc","password":"123123"}
-   * After : Validates the Client POST request and responds with an appropriate status code along with data */
-  @RequestMapping(value="/login", method = RequestMethod.GET,headers = "Accept=application/json")
-  public ResponseEntity<String> login() throws Exception {
-	this.ddd.addToSuccArray("errors", "username","fick");
-    return new ResponseEntity<>(this.ddd.getSuccessResponse(), HttpStatus.OK);
-  }
-  
-  /* While db con is not rdy this is in place */
-  public boolean UserNameEx(String Usr) {
-	  return true;
-  }
-  public boolean PassEx(String Usr, String password) {
-	  return true;
-  }
- 
-  
->>>>>>> 19385cde6581dff0eb9c3d83daf2eccdccf76f5a
 }

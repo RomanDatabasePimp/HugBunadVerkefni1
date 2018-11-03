@@ -5,6 +5,8 @@ import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -12,48 +14,57 @@ import java.util.List;
 @NodeEntity
 public class User {
 
-	@Id @GeneratedValue private Long id;
+	@Id @GeneratedValue protected Long id;
 
-	private String username;
-	private String password;
-	private String displayName;
-	private String email;
-	private Long created;
+	protected String username;
+	protected String password;
+	protected String displayName;
+	protected String email;
+	protected Long created;
 
 	// The User's friends
 	@Relationship(type="FRIENDS", direction=Relationship.UNDIRECTED)
-	private List<User> friends;
+	protected List<User> friends;
 
 	// Users who have received a friend request from the User
 	@Relationship(type="FRIEND_REQUEST", direction=Relationship.OUTGOING)
-	private List<User> friendRequestees;
+	protected List<User> friendRequestees;
 	
 	// Users who have sent a friend request to the User
 	@Relationship(type="FRIEND_REQUEST", direction=Relationship.INCOMING)
-	private List<User> friendRequestors;
-
+	protected List<User> friendRequestors;
+	
 	// chatrooms the user is a member of
-	@Relationship(type="MEMBER_OF", direction=Relationship.OUTGOING)
-	private List<Chatroom> memberOfChatrooms;
+	@Relationship(type="OWNS", direction=Relationship.OUTGOING)
+	protected List<Chatroom> ownedChatrooms;
 	
 	// chatrooms the user is a member of
 	@Relationship(type="ADMIN_OF", direction=Relationship.OUTGOING)
-	private List<Chatroom> adminOfChatrooms;
+	protected List<Chatroom> adminOfChatrooms;
 	
 	// chatooms the user has requested to join
 	@Relationship(type="REQUESTS_TO_JOIN", direction=Relationship.OUTGOING)
-	private List<Chatroom> chatroomRequests;
+	protected List<Chatroom> chatroomRequests;
 
 	// chatooms the user has received an invite to join from
 	@Relationship(type="INVITES", direction=Relationship.INCOMING)
-	private List<Chatroom> chatroomInvites;
+	protected List<Chatroom> chatroomInvites;
 
 	// chatooms the user has received an invite to become an administrator
 	@Relationship(type="ADMIN_INVITES", direction=Relationship.INCOMING)
-	private List<Chatroom> chatroomAdminInvites;
+	protected List<Chatroom> chatroomAdminInvites;
+
+	// chatrooms the user is a member of
+	@Relationship(type="MEMBER_OF", direction=Relationship.OUTGOING)
+	protected List<Chatroom> memberOfChatrooms;
+	
+	// list of all the relations to chatrooms that the user is a member of
+	//@JsonIgnoreProperties("user")
+	@Relationship(type="MEMBER_OF", direction=Relationship.OUTGOING)
+	protected List<Membership> memberships;
 
 	// Empty constructor required as of Neo4j API 2.0.5
-	private User() {};
+	protected User() {};
 
 	/**
 	 * Create a new user
@@ -161,6 +172,18 @@ public class User {
 	public void setMemberOfChatrooms(List<Chatroom> memberOfChatrooms) {
 		this.memberOfChatrooms = memberOfChatrooms;
 	}
+	
+	public List<Chatroom> getOwnedChatrooms() {
+		if(ownedChatrooms == null) {
+			System.out.println("owned chatrooms is null");
+			ownedChatrooms = new ArrayList<>();
+		}
+		return ownedChatrooms;
+	}
+
+	public void setOwnedChatrooms(List<Chatroom> ownedChatrooms) {
+		this.ownedChatrooms = ownedChatrooms;
+	}
 
 	public List<Chatroom> getAdminOfChatrooms() {
 		if(adminOfChatrooms == null) {
@@ -206,5 +229,15 @@ public class User {
 		this.chatroomAdminInvites = chatroomAdminInvites;
 	}
 
+	public List<Membership> getMemberships() {
+		if(memberships == null) {
+			memberships = new ArrayList<>();
+		}
+		return memberships;
+	}
+
+	public void setMemberships(List<Membership> memberships) {
+		this.memberships = memberships;
+	}
 	
 }

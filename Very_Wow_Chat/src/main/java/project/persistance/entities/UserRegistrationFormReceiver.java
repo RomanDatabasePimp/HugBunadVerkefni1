@@ -9,7 +9,7 @@ public class UserRegistrationFormReceiver {
 	private final String email;
 	
 	public UserRegistrationFormReceiver(String userName,String displayName, String password,String passwordReap ,String email) {
-		this.userName = userName;
+		this.userName = userName.toLowerCase();//want to have all lowercase
 		this.displayName = displayName;
 		this.password = password;
 		this.passwordReap = passwordReap;
