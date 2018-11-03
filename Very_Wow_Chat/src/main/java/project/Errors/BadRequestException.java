@@ -10,10 +10,10 @@ import project.persistance.entities.ErrorResponder;
  * @author Vilhelml
  *
  */
-public class UnauthorizedException extends HttpException{
+public class BadRequestException extends HttpException{
 	
-	public UnauthorizedException (String msg) {
+	public BadRequestException (String msg) {
 		super(msg);
-		super.setStatus(HttpStatus.UNAUTHORIZED);
+		super.setStatus(HttpStatus.BAD_REQUEST);
 	}
 }

@@ -19,10 +19,14 @@ import project.persistance.entities.User;
 import project.persistance.entities.UserFullResponder;
 import project.persistance.entities.UserResponder;
 import project.persistance.entities.UserUpdateReceiver;
+import project.Errors.HttpException;
 import project.persistance.entities.Chatroom;
 import project.persistance.entities.ChatroomResponder;
 import project.persistance.entities.ErrorResponder;
+import project.persistance.entities.Membership;
+import project.persistance.entities.MembershipResponder;
 import project.persistance.entities.RelationsResponder;
+import project.persistance.entities.ResponderLibrary;
 import project.persistance.entities.ResponseWrapper;
 
 
@@ -95,10 +99,8 @@ public class UserController {
 			// wrap the user and return it
 			UserResponder body = new UserResponder(user);
 			return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
-		}catch(IllegalArgumentException e) {
-			ErrorResponder body = new ErrorResponder();
-			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.BAD_REQUEST);
+		}catch(HttpException e) {
+			return e.getErrorResponseEntity();
 		}
 	}
 
@@ -114,9 +116,13 @@ public class UserController {
 			body.setError("Invalid token.");
 			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.UNAUTHORIZED);
 		}
-		User user = userService.findByUsername("username1"); // get from token
-		userService.deleteUser(user);
-		return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+		try {
+			User user = userService.findByUsername("username1"); // get from token
+			userService.deleteUser(user);
+			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);			
+		}catch(HttpException e) {
+			return e.getErrorResponseEntity();
+		}
 	}
 
 	/**
@@ -141,14 +147,8 @@ public class UserController {
 			userService.deleteFriendRequest(user, requestee);
 			
 			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
-		}catch(IllegalArgumentException e){
-			ErrorResponder body = new ErrorResponder();
-			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.BAD_REQUEST);
-		}catch(NoSuchElementException e){
-			ErrorResponder body = new ErrorResponder();
-			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.NOT_FOUND);
+		}catch(HttpException e) {
+			return e.getErrorResponseEntity();
 		}
 	}
 
@@ -172,14 +172,8 @@ public class UserController {
 			userService.deleteFriendship(user, friend);
 			
 			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
-		}catch(IllegalArgumentException e){
-			ErrorResponder body = new ErrorResponder();
-			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.BAD_REQUEST);
-		}catch(NoSuchElementException e){
-			ErrorResponder body = new ErrorResponder();
-			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.NOT_FOUND);
+		}catch(HttpException e) {
+			return e.getErrorResponseEntity();
 		}
 	}
 
@@ -201,14 +195,8 @@ public class UserController {
 			// whether friend request was sent or a friendship was created, no content is returned
 			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
 			
-		}catch(IllegalArgumentException e){
-			ErrorResponder body = new ErrorResponder();
-			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.BAD_REQUEST);
-		}catch(NoSuchElementException e){
-			ErrorResponder body = new ErrorResponder();
-			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.NOT_FOUND);
+		}catch(HttpException e) {
+			return e.getErrorResponseEntity();
 		}
 	}
 	
@@ -223,11 +211,8 @@ public class UserController {
 			// wrap the data to send in json format
 			UserResponder body = new UserResponder(user);
 			return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
-		}catch(NoSuchElementException e) { // user was not found
-			// use wrapper to return error
-			ErrorResponder body = new ErrorResponder();
-			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.NOT_FOUND);
+		}catch(HttpException e) {
+			return e.getErrorResponseEntity();
 		}
 	}
 
@@ -248,11 +233,8 @@ public class UserController {
 			// wrap the data to send in json format
 			UserFullResponder body = new UserFullResponder(user);
 			return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
-		}catch(NoSuchElementException e) { // user was not found
-			// use wrapper to return error
-			ErrorResponder body = new ErrorResponder();
-			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.NOT_FOUND);
+		}catch(HttpException e) {
+			return e.getErrorResponseEntity();
 		}
 	}
 	
@@ -269,52 +251,40 @@ public class UserController {
 			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.UNAUTHORIZED);
 		}
 		try {
-			User user = userService.findByUsername("username1");// from token
+			User user = userService.findByUsername("username3");// from token
 			
 			// get the user's relations
 			List<User> friends = user.getFriends();
 			List<User> friendRequestors = user.getFriendRequestors();
 			List<User> friendRequestees = user.getFriendRequestees();
-			List<Chatroom> adminOfChatrooms = user.getAdminOfChatrooms();
 			List<Chatroom> chatroomAdminInvites = user.getChatroomAdminInvites();
 			List<Chatroom> chatroomInvites = user.getChatroomInvites();
 			List<Chatroom> chatroomRequests = user.getChatroomRequests();
-			List<Chatroom> memberOfChatrooms = user.getMemberOfChatrooms();
-			List<Chatroom> ownedChatrooms = user.getOwnedChatrooms();
-			
-			// filter to avoid duplicates
-			memberOfChatrooms.removeIf(x -> adminOfChatrooms.contains(x));
-			adminOfChatrooms.removeIf(x -> ownedChatrooms.contains(x));
+			List<Membership> memberships = user.getMemberships(); // memberOfChatrooms, adminOfChatrooms, and ownedChatrooms are combined into this list
 			
 			// convert the users and chatrooms lists to responder lists
-			List<UserResponder> friendsResponderList = UserResponder.toResponderList(friends);
-			List<UserResponder> friendRequestorsResponderList = UserResponder.toResponderList(friendRequestors);
-			List<UserResponder> friendRequesteesResponderList = UserResponder.toResponderList(friendRequestees);
-			List<ChatroomResponder> adminOfChatroomsResponderList = ChatroomResponder.toResponderList(adminOfChatrooms);
-			List<ChatroomResponder> chatroomAdminInvitesResponderList = ChatroomResponder.toResponderList(chatroomAdminInvites);
-			List<ChatroomResponder> chatroomInvitesResponderList = ChatroomResponder.toResponderList(chatroomInvites);
-			List<ChatroomResponder> chatroomRequestsResponderList = ChatroomResponder.toResponderList(chatroomRequests);
-			List<ChatroomResponder> memberOfChatroomsResponderList = ChatroomResponder.toResponderList(memberOfChatrooms);
-			List<ChatroomResponder> ownedChatroomsResponderList = ChatroomResponder.toResponderList(ownedChatrooms);
-			
+			List<UserResponder> friendsResponderList = ResponderLibrary.toUserResponderList(friends);
+			List<UserResponder> friendRequestorsResponderList = ResponderLibrary.toUserResponderList(friendRequestors);
+			List<UserResponder> friendRequesteesResponderList = ResponderLibrary.toUserResponderList(friendRequestees);
+			List<ChatroomResponder> chatroomAdminInvitesResponderList = ResponderLibrary.toChatroomResponderList(chatroomAdminInvites);
+			List<ChatroomResponder> chatroomInvitesResponderList = ResponderLibrary.toChatroomResponderList(chatroomInvites);
+			List<ChatroomResponder> chatroomRequestsResponderList = ResponderLibrary.toChatroomResponderList(chatroomRequests);
+			List<MembershipResponder> membershpsResponderList = ResponderLibrary.toMembershipResponderList(memberships);
+
 			// wrap the responders in a container responder
 			RelationsResponder body = new RelationsResponder();
 			body.add("friends", friendsResponderList);
 			body.add("friendRequestors", friendRequestorsResponderList);
 			body.add("friendRequestees", friendRequesteesResponderList);
-			body.add("adminOfChatrooms", adminOfChatroomsResponderList);
 			body.add("chatroomAdminInvites", chatroomAdminInvitesResponderList);
 			body.add("chatroomInvites", chatroomInvitesResponderList);
 			body.add("chatroomRequests", chatroomRequestsResponderList);
-			body.add("memberOfChatrooms", memberOfChatroomsResponderList);
-			body.add("ownedChatrooms", ownedChatroomsResponderList);
+			body.add("chatrooms", membershpsResponderList);
+
 			// return the responder with a 201 status
 			return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
-		}catch(NoSuchElementException e) { // user was not found
-			// use wrapper to return error
-			ErrorResponder body = new ErrorResponder();
-			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.NOT_FOUND);
+		}catch(HttpException e) {
+			return e.getErrorResponseEntity();
 		}
 	}
 	
@@ -328,13 +298,11 @@ public class UserController {
 			List<User> friends = user.getFriends();
 			
 			// create a list of UserResponders for json return
-			List<UserResponder> body = UserResponder.toResponderList(friends);
+			List<UserResponder> body = ResponderLibrary.toUserResponderList(friends);
 
 			return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
-		}catch(NoSuchElementException e) {
-			ErrorResponder body = new ErrorResponder();
-			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.NOT_FOUND);
+		}catch(HttpException e) {
+			return e.getErrorResponseEntity();
 		}
 	}
 	// GET request to this url will return a list of all the user's friend requestees
@@ -345,13 +313,11 @@ public class UserController {
 			List<User> requestees = user.getFriendRequestees();
 			
 			// create a list of UserResponders for json return
-			List<UserResponder> body = UserResponder.toResponderList(requestees);
+			List<UserResponder> body = ResponderLibrary.toUserResponderList(requestees);
 			
 			return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
-		}catch(NoSuchElementException e) {
-			ErrorResponder body = new ErrorResponder();
-			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.NOT_FOUND);
+		}catch(HttpException e) {
+			return e.getErrorResponseEntity();
 		}
 	}
 	
@@ -363,47 +329,26 @@ public class UserController {
 			List<User> requestors = user.getFriendRequestors();
 			
 			// create a list of UserResponders for json return
-			List<UserResponder> body = UserResponder.toResponderList(requestors);
+			List<UserResponder> body = ResponderLibrary.toUserResponderList(requestors);
 			
 			return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
-		}catch(NoSuchElementException e) {
-			ErrorResponder body = new ErrorResponder();
-			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.NOT_FOUND);
+		}catch(HttpException e) {
+			return e.getErrorResponseEntity();
 		}
 	}
 	// GET request to this url will return a list of all the user's friend requestees
-	@RequestMapping(path = "/{username}/memberofallchatrooms", method = RequestMethod.GET, headers = "Accept=application/json")
-    public ResponseEntity<Object> getMemberOfAllChatrooms(@PathVariable String username){
+	@RequestMapping(path = "/{username}/memberofchatrooms", method = RequestMethod.GET, headers = "Accept=application/json")
+    public ResponseEntity<Object> getMemberOfChatrooms(@PathVariable String username){
 		try {
 			User user = userService.findByUsername(username);
-			List<Chatroom> requestors = user.getMemberOfChatrooms();
+			List<Chatroom> chatrooms = user.getMemberOfChatrooms();
 			
 			// create a list of UserResponders for json return
-			List<ChatroomResponder> body = ChatroomResponder.toResponderList(requestors);
+			List<ChatroomResponder> body = ResponderLibrary.toChatroomResponderList(chatrooms);
 			
 			return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
-		}catch(NoSuchElementException e) {
-			ErrorResponder body = new ErrorResponder();
-			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.NOT_FOUND);
-		}
-	}
-
-	@RequestMapping(path = "/{username}/memberoflistedchatrooms", method = RequestMethod.GET, headers = "Accept=application/json")
-    public ResponseEntity<Object> getListedMemberOfListedChatrooms(@PathVariable String username){
-		try {
-			User user = userService.findByUsername(username);
-			List<Chatroom> requestors = user.getMemberOfChatrooms();
-			
-			// create a list of UserResponders for json return
-			List<ChatroomResponder> body = ChatroomResponder.toResponderList(requestors);
-			
-			return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
-		}catch(NoSuchElementException e) {
-			ErrorResponder body = new ErrorResponder();
-			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.NOT_FOUND);
+		}catch(HttpException e) {
+			return e.getErrorResponseEntity();
 		}
 	}
 
@@ -414,13 +359,11 @@ public class UserController {
 			List<Chatroom> chatrooms = user.getAdminOfChatrooms();
 			
 			// create a list of UserResponders for json return
-			List<ChatroomResponder> body = ChatroomResponder.toResponderList(chatrooms);
+			List<ChatroomResponder> body = ResponderLibrary.toChatroomResponderList(chatrooms);
 			
 			return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
-		}catch(NoSuchElementException e) {
-			ErrorResponder body = new ErrorResponder();
-			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.NOT_FOUND);
+		}catch(HttpException e) {
+			return e.getErrorResponseEntity();
 		}
 	}
 
@@ -431,13 +374,11 @@ public class UserController {
 			List<Chatroom> chatrooms = user.getOwnedChatrooms();
 			
 			// create a list of UserResponders for json return
-			List<ChatroomResponder> body = ChatroomResponder.toResponderList(chatrooms);
+			List<ChatroomResponder> body = ResponderLibrary.toChatroomResponderList(chatrooms);
 			
 			return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
-		}catch(NoSuchElementException e) {
-			ErrorResponder body = new ErrorResponder();
-			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.NOT_FOUND);
+		}catch(HttpException e) {
+			return e.getErrorResponseEntity();
 		}
 	}
 
@@ -448,13 +389,11 @@ public class UserController {
 			List<Chatroom> chatrooms = user.getChatroomInvites();
 			
 			// create a list of UserResponders for json return
-			List<ChatroomResponder> body = ChatroomResponder.toResponderList(chatrooms);
+			List<ChatroomResponder> body = ResponderLibrary.toChatroomResponderList(chatrooms);
 			
 			return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
-		}catch(NoSuchElementException e) {
-			ErrorResponder body = new ErrorResponder();
-			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.NOT_FOUND);
+		}catch(HttpException e) {
+			return e.getErrorResponseEntity();
 		}
 	}
 
@@ -465,13 +404,11 @@ public class UserController {
 			List<Chatroom> chatrooms = user.getChatroomAdminInvites();
 			
 			// create a list of UserResponders for json return
-			List<ChatroomResponder> body = ChatroomResponder.toResponderList(chatrooms);
+			List<ChatroomResponder> body = ResponderLibrary.toChatroomResponderList(chatrooms);
 			
 			return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
-		}catch(NoSuchElementException e) {
-			ErrorResponder body = new ErrorResponder();
-			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.NOT_FOUND);
+		}catch(HttpException e) {
+			return e.getErrorResponseEntity();
 		}
 	}
 	

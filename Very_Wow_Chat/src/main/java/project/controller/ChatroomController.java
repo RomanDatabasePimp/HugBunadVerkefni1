@@ -1,10 +1,15 @@
 package project.controller;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import project.Errors.UnauthorizedException;
+import project.Errors.BadRequestException;
+import project.Errors.NotFoundException;
+import project.Errors.HttpException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,10 +20,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import project.persistance.entities.ErrorResponder;
+import project.persistance.entities.Membership;
+import project.persistance.entities.ChatStampReceiver;
 import project.persistance.entities.User;
 import project.persistance.entities.Chatroom;
 import project.persistance.entities.UserResponder;
 import project.persistance.entities.ChatroomResponder;
+import project.persistance.entities.MembershipResponder;
+import project.persistance.entities.ResponderLibrary;
 import project.services.ChatroomService;
 import project.services.UserService;
 
@@ -32,12 +41,38 @@ import project.services.UserService;
 @RequestMapping("/chatroom")
 public class ChatroomController {
 
-	private final ChatroomService chatroomService;
-	private final UserService userService;
+	protected final ChatroomService chatroomService;
+	protected final UserService userService;
 	
 	public ChatroomController(ChatroomService chatroomService, UserService userService) {
 		this.chatroomService = chatroomService;
 		this.userService = userService;
+	}
+	
+
+	/**
+	 * 
+	 * @param timestampResponder
+	 * @param chatroomName
+	 * @return
+	 * @deprecated temporary method for testing purposes
+	 */
+	@RequestMapping(path = "/{chatroomName}/updatechatroomlastmessage", method = RequestMethod.POST, headers = "Accept=application/json")
+	public ResponseEntity<Object> updateChatroomLastMessage(@PathVariable String chatroomName) {
+		try {
+			// fetch the chatroom to be updated
+			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
+			// set the latest message received as now
+			chatroom.setLastMessageReceived((new Date()).getTime());
+			// save the changes
+			chatroomService.saveChatroom(chatroom);
+			// prepare the payload
+			ChatroomResponder body = new ChatroomResponder(chatroom);
+			// return the payload with a status of 200
+			return new ResponseEntity<>(body, HttpStatus.OK);
+		}catch(HttpException e) {
+			return e.getErrorResponseEntity();
+		}
 	}
 
 	/**
@@ -51,11 +86,8 @@ public class ChatroomController {
 			// wrap the data to send in json format
 			ChatroomResponder body = new ChatroomResponder(chatroom);
 			return new ResponseEntity<>(body, HttpStatus.OK);
-		}catch(NoSuchElementException e) { // user was not found
-			// use wrapper to return error
-			ErrorResponder body = new ErrorResponder();
-			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.NOT_FOUND);
+		}catch(HttpException e) {
+			return e.getErrorResponseEntity();
 		}
 	}
 	/**
@@ -86,11 +118,8 @@ public class ChatroomController {
 			
 			chatroomService.deleteChatroom(chatroom);
 			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
-		}catch(NoSuchElementException e) { // user was not found
-			// use wrapper to return error
-			ErrorResponder body = new ErrorResponder();
-			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.NOT_FOUND);
+		}catch(HttpException e) {
+			return e.getErrorResponseEntity();
 		}
 	}
 	
@@ -123,10 +152,8 @@ public class ChatroomController {
 			ChatroomResponder body = new ChatroomResponder(result);
 			// return the chatroom and a 201 status code
 			return new ResponseEntity<>(body, HttpStatus.CREATED);
-		}catch(IllegalArgumentException e) {
-			ErrorResponder body = new ErrorResponder();
-			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.BAD_REQUEST);
+		}catch(HttpException e) {
+			return e.getErrorResponseEntity();
 		}
 	}
 	
@@ -160,16 +187,8 @@ public class ChatroomController {
 			chatroomService.sendMemberInvite(invitee, chatroom);
 			// return successful, no content 
 			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
-		}catch(NoSuchElementException e) { // user was not found
-			// use wrapper to return error
-			ErrorResponder body = new ErrorResponder();
-			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.NOT_FOUND);
-		}catch(IllegalArgumentException e) {
-			// use wrapper to return error
-			ErrorResponder body = new ErrorResponder();
-			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.BAD_REQUEST);
+		}catch(HttpException e) {
+			return e.getErrorResponseEntity();
 		}
 	}
 	
@@ -188,31 +207,17 @@ public class ChatroomController {
 		}
 		try {
 			// the user sending the invite (the invitation will be sent by the chatroom, though)
-			User user = userService.findByUsername("username2"); // get from token
+			User user = userService.findByUsername("username3"); // get from token
 			// the chatroom that the user wants to join
 			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
 			// join the room
 			chatroomService.joinChatroom(user, chatroom);
 			// return successful, no content 
 			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
-		}catch(NoSuchElementException e) { // user was not found
-			// use wrapper to return error
-			ErrorResponder body = new ErrorResponder();
-			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.NOT_FOUND);
-		}catch(IllegalArgumentException e) { // chatroom or user not found
-			// use wrapper to return error
-			ErrorResponder body = new ErrorResponder();
-			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.BAD_REQUEST);
-		}catch(UnauthorizedException e) { // no permission to perform action
-			ErrorResponder body = new ErrorResponder();
-			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.UNAUTHORIZED);
+		}catch(HttpException e) {
+			return e.getErrorResponseEntity();
 		}
-	}
-	
-	
+	}	
 	
 	/**
 	 * Send an iadmin nvite from chatroom to user
@@ -244,16 +249,8 @@ public class ChatroomController {
 			chatroomService.sendAdminInvitation(invitee, chatroom);
 			// return successful, no content 
 			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
-		}catch(NoSuchElementException e) { // user was not found
-			// use wrapper to return error
-			ErrorResponder body = new ErrorResponder();
-			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.NOT_FOUND);
-		}catch(IllegalArgumentException e) {
-			// use wrapper to return error
-			ErrorResponder body = new ErrorResponder();
-			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.BAD_REQUEST);
+		}catch(HttpException e) {
+			return e.getErrorResponseEntity();
 		}
 	}
 
@@ -280,20 +277,8 @@ public class ChatroomController {
 			chatroomService.acceptAdminInvite(user, chatroom);
 			// return successful, no content 
 			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
-		}catch(NoSuchElementException e) { // user was not found
-			// use wrapper to return error
-			ErrorResponder body = new ErrorResponder();
-			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.NOT_FOUND);
-		}catch(IllegalArgumentException e) { // chatroom or user not found
-			// use wrapper to return error
-			ErrorResponder body = new ErrorResponder();
-			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.BAD_REQUEST);
-		}catch(UnauthorizedException e) { // no permission to perform action
-			ErrorResponder body = new ErrorResponder();
-			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.UNAUTHORIZED);
+		}catch(HttpException e) {
+			return e.getErrorResponseEntity();
 		}
 	}
 
@@ -319,16 +304,8 @@ public class ChatroomController {
 			chatroomService.leaveChatroom(user, chatroom);
 			// return successful, no content 
 			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
-		}catch(NoSuchElementException e) { // user was not found
-			// use wrapper to return error
-			ErrorResponder body = new ErrorResponder();
-			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.NOT_FOUND);
-		}catch(IllegalArgumentException e) { // chatroom or user not found
-			// use wrapper to return error
-			ErrorResponder body = new ErrorResponder();
-			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.BAD_REQUEST);
+		}catch(HttpException e) {
+			return e.getErrorResponseEntity();
 		}
 	}
 	
@@ -354,53 +331,107 @@ public class ChatroomController {
 			chatroomService.quitAdmin(user, chatroom);
 			// return successful, no content 
 			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
-		}catch(NoSuchElementException e) { // user was not found
-			// use wrapper to return error
-			ErrorResponder body = new ErrorResponder();
-			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.NOT_FOUND);
-		}catch(IllegalArgumentException e) { // chatroom or user not found
-			// use wrapper to return error
-			ErrorResponder body = new ErrorResponder();
-			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.BAD_REQUEST);
+		}catch(HttpException e) {
+			return e.getErrorResponseEntity();
 		}
 	}
 	
 	@RequestMapping(path = "/listedchatrooms", method = RequestMethod.GET, headers = "Accept=application/json")
     public ResponseEntity<Object> getListedChatrooms(){
-		try {
-			List<Chatroom> chatrooms = chatroomService.getAllListedChatrooms();
-			
-			// create a list of ChatroomResponders for json return
-			List<ChatroomResponder> body = chatrooms.stream().map(x -> new ChatroomResponder(x)).collect(Collectors.toList());
-			
-			return new ResponseEntity<>(body, HttpStatus.OK);
-		}catch(NoSuchElementException e) {
-			ErrorResponder body = new ErrorResponder();
-			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.NOT_FOUND);
-		}
+
+		List<Chatroom> chatrooms = chatroomService.getAllListedChatrooms();
+		
+		// create a list of ChatroomResponders for json return
+		List<ChatroomResponder> body = chatrooms.stream().map(x -> new ChatroomResponder(x)).collect(Collectors.toList());
+		
+		return new ResponseEntity<>(body, HttpStatus.OK);
+
 	}
 	
 	@RequestMapping(path = "/chatrooms", method = RequestMethod.GET, headers = "Accept=application/json")
     public ResponseEntity<Object> getAllChatrooms(){
-		try {
-			List<Chatroom> chatrooms = chatroomService.getAllChatrooms();
-			
-			// create a list of ChatroomResponders for json return
-			List<ChatroomResponder> body = chatrooms.stream().map(x -> new ChatroomResponder(x)).collect(Collectors.toList());
-			
-			return new ResponseEntity<>(body, HttpStatus.OK);
-		}catch(NoSuchElementException e) {
-			ErrorResponder body = new ErrorResponder();
-			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.NOT_FOUND);
-		}
+		List<Chatroom> chatrooms = chatroomService.getAllChatrooms();
+		
+		// create a list of ChatroomResponders for json return
+		List<ChatroomResponder> body = chatrooms.stream().map(x -> new ChatroomResponder(x)).collect(Collectors.toList());
+		
+		return new ResponseEntity<>(body, HttpStatus.OK);
 	}
 
+	// mark a chatroom as read; set when the user last read a message
+	@RequestMapping(path = "/markread", method = RequestMethod.POST, headers = "Accept=application/json")
+	public ResponseEntity<Object> markChatroomRead(@RequestBody ChatStampReceiver chatStampReceiver) {
+		Boolean invalidToken = false;
+		if(invalidToken/*invalid token*/) {
+			ErrorResponder body = new ErrorResponder();
+			body.setError("Invalid token.");
+			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.UNAUTHORIZED);
+		}
+		try {
+			System.out.println(chatStampReceiver.getChatroomName());
+			System.out.println(chatStampReceiver.getTimestamp());
+			// the user sending the request
+			User user = userService.findByUsername("username3"); // get from token
+			// fetch the user provided new timestamp
+			Long timestamp = chatStampReceiver.getTimestamp();
+			// fetch the chatroom the user wants to mark as read
+			Chatroom chatroom = chatroomService.findByChatname(chatStampReceiver.getChatroomName());
+			// get the membership to update
+			Membership membership = chatroomService.getUserMembershipOfChatroom(user, chatroom);
+			// update the lastRead timestamp
+			membership.setLastRead(timestamp);
+			// save the changes
+			userService.saveUser(user);
+			// prepare the payload
+			MembershipResponder body = new MembershipResponder(membership);
+			// return the payload with a status of 200
+			return new ResponseEntity<>(body, HttpStatus.OK);
+		}catch(HttpException e) {
+			return e.getErrorResponseEntity();
+		}
+	}
 	
-	// quit admin
+	// to do
+	// mark a chatroom as read; set when the user last read a message
+	@RequestMapping(path = "/markmultipleread", method = RequestMethod.POST, headers = "Accept=application/json")
+	public ResponseEntity<Object> markMultipleChatroomRead(@RequestBody List<ChatStampReceiver> chatstampReceiver) {
+		Boolean invalidToken = false;
+		if(invalidToken/*invalid token*/) {
+			ErrorResponder body = new ErrorResponder();
+			body.setError("Invalid token.");
+			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.UNAUTHORIZED);
+		}
+		try {
+			// the user sending the request
+			User user = userService.findByUsername("username3"); // get from token
+			
+			List<Membership> memberships = new ArrayList<>();
+			
+			// update all the chatrooms supplied by user
+			for(ChatStampReceiver x : chatstampReceiver) {
+				// fetch the user provided new timestamp
+				Long timestamp = x.getTimestamp();
+				// fetch the chatroom the user wants to mark as read
+				Chatroom chatroom = chatroomService.findByChatname(x.getChatroomName());
+				// get the membership to update
+				Membership membership = chatroomService.getUserMembershipOfChatroom(user, chatroom);
+				// update the lastRead timestamp
+				membership.setLastRead(timestamp);
+				// collect the payloads
+				memberships.add(membership);
+			}
+			
+			// save the changes
+			userService.saveUser(user);
+			
+			// convert the memberships into responders for return
+			List<MembershipResponder> body = ResponderLibrary.toMembershipResponderList(memberships);
+			// return the payload with a status of 200
+			return new ResponseEntity<>(body, HttpStatus.OK);
+		}catch(HttpException e) {
+			return e.getErrorResponseEntity();
+		}
+	}
 	
 	// update chatroom
 	
@@ -422,10 +453,8 @@ public class ChatroomController {
 			List<UserResponder> body = users.stream().map(x -> new UserResponder(x)).collect(Collectors.toList());
 			
 			return new ResponseEntity<>(body, HttpStatus.OK);
-		}catch(NoSuchElementException e) {
-			ErrorResponder body = new ErrorResponder();
-			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.NOT_FOUND);
+		}catch(HttpException e) {
+			return e.getErrorResponseEntity();
 		}
 	}
 
@@ -439,10 +468,8 @@ public class ChatroomController {
 			List<UserResponder> body = users.stream().map(x -> new UserResponder(x)).collect(Collectors.toList());
 			
 			return new ResponseEntity<>(body, HttpStatus.OK);
-		}catch(NoSuchElementException e) {
-			ErrorResponder body = new ErrorResponder();
-			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.NOT_FOUND);
+		}catch(HttpException e) {
+			return e.getErrorResponseEntity();
 		}
 	}
 
@@ -456,10 +483,8 @@ public class ChatroomController {
 			List<UserResponder> body = users.stream().map(x -> new UserResponder(x)).collect(Collectors.toList());
 			
 			return new ResponseEntity<>(body, HttpStatus.OK);
-		}catch(NoSuchElementException e) {
-			ErrorResponder body = new ErrorResponder();
-			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.NOT_FOUND);
+		}catch(HttpException e) {
+			return e.getErrorResponseEntity();
 		}
 	}
 
@@ -473,10 +498,8 @@ public class ChatroomController {
 			List<UserResponder> body = users.stream().map(x -> new UserResponder(x)).collect(Collectors.toList());
 			
 			return new ResponseEntity<>(body, HttpStatus.OK);
-		}catch(NoSuchElementException e) {
-			ErrorResponder body = new ErrorResponder();
-			body.setError(e.getMessage());
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.NOT_FOUND);
+		}catch(HttpException e) {
+			return e.getErrorResponseEntity();
 		}
 	}
 }
