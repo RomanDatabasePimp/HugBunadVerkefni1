@@ -63,8 +63,4 @@ public class JwtUserDetails implements UserDetails {
     public String getToken() {
         return token;
     }
-
-
-   
-
 }
