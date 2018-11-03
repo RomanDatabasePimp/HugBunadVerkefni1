@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import project.Errors.HttpException;
 import project.persistance.entities.HttpResponseBody;
 import project.persistance.entities.User;
 import project.persistance.entities.UserRegistrationFormReceiver;
@@ -140,7 +141,13 @@ public class RegisterController {
 				                tempUrs.getString("displayName"), tempUrs.getString("email"));
 
 		// create the user in our neo4j database
-		this.userService.createUser(newuser);
+	    try {
+	    	this.userService.createUser(newuser);    	
+	    }catch(HttpException e) {
+	        clientResponse.addSingleError("error", e.getMessage());
+	        return new ResponseEntity<>(clientResponse.getErrorResponse(), HttpStatus.BAD_REQUEST);
+		}
+		
 		/* we responde with that the validation was successful and dont send any content back */
 		return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
 	}

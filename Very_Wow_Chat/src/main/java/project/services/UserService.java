@@ -11,15 +11,17 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.NoSuchElementException;
+import project.Errors.UnauthorizedException;
+import project.Errors.BadRequestException;
+import project.Errors.NotFoundException;
 
 @Service
 public class UserService {
 
 	// logs all neo4j calls
-	private final static Logger LOG = LoggerFactory.getLogger(UserService.class);
+	protected final static Logger LOG = LoggerFactory.getLogger(UserService.class);
 	
-	private final UserRepository userRepository;
+	protected final UserRepository userRepository;
 	
 	public UserService(UserRepository userRepository) {
 		this.userRepository = userRepository;
@@ -49,12 +51,12 @@ public class UserService {
 	 * create a a user
 	 * @param newUser
 	 * @return the new user
-	 * @throws IllegalArgumentException if username is taken
+	 * @throws BadRequestException if username is taken
 	 */
-	public User createUser(User newUser) throws IllegalArgumentException{
+	public User createUser(User newUser) throws BadRequestException{
 		// throw error if username is taken
 		if(userExists(newUser.getUsername())) {
-			throw new IllegalArgumentException("Username is already in use.");
+			throw new BadRequestException("Username is already in use.");
 		}
 		User user = userRepository.save(newUser);
 		return user;
@@ -68,10 +70,10 @@ public class UserService {
 	 * @throws exception if userName doesn't belong to any user
 	 */
 	@Transactional(readOnly = true)
-    public User findByUsername(String username) throws NoSuchElementException{
+    public User findByUsername(String username) throws NotFoundException{
 		// throw error if user doesn't exist
 		if(!userExists(username)) {
-			throw new NoSuchElementException("User not found");
+			throw new NotFoundException("User not found");
 		}
 		
 		User user = this.userRepository.findByUsername(username);
@@ -93,23 +95,23 @@ public class UserService {
 	 * Add a friend: sends a friend request, or creates a friend relation if requestee has already sent a friend request
 	 * @param requestor: user sending the request
 	 * @param requestee user receiving the request
-	 * @throws IllegalArgumentException
+	 * @throws BadRequestException
 	 */
 	@Transactional(readOnly = false)
-	public void addFriend(User requestor, User requestee) throws IllegalArgumentException{
+	public void addFriend(User requestor, User requestee) throws BadRequestException{
 		System.out.println("send request");
 		System.out.println(requestor.getUsername() + " -[request]-> " + requestee.getUsername());
 		// check if user is sending himself a friend request
 		if(requestor == requestee) {
-			throw new IllegalArgumentException("Cannot add self as friend.");
+			throw new BadRequestException("Cannot add self as friend.");
 		}
 		// check if a friend request has already been sent
 		if(friendRequestSent(requestor, requestee)) {
-			throw new IllegalArgumentException("A friend request is already pending.");
+			throw new BadRequestException("A friend request is already pending.");
 		}
 		// check if they are already friends
 		if(areFriends(requestor, requestee)) {
-			throw new IllegalArgumentException("おまえ は もう 友達。(You are already friends)");
+			throw new BadRequestException("おまえ は もう 友達。(You are already friends)");
 		}
 		// check if a friend requet has been sent in the other direction already
 		if(friendRequestSent(requestee, requestor)) {
@@ -126,24 +128,23 @@ public class UserService {
 	}
 	
 	/**
-	 * Delete a friend request from requestor to requestee
+	 * Delete a friend request from requestor to requestee if exists
 	 * @param requestor: the original requestor of the request
 	 * @param requestee: the original requestee of the request
 	 */
 	@Transactional(readOnly = false)
-	public void deleteFriendRequest(User requestor, User requestee) throws NoSuchElementException {
-		if(!friendRequestSent(requestor, requestee)) {
-			throw new IllegalArgumentException("There is no friend request to delete");
-		}
+	public void deleteFriendRequest(User requestor, User requestee) {
 		List<User> requestorRequestees = requestor.getFriendRequestees();
 		List<User> requesteeRequestors = requestee.getFriendRequestors();
-
-		// delete the request
-		requestorRequestees.remove(requestee);
-		requesteeRequestors.remove(requestor);
-		// save both users so the database will be updated and the request deleted
-		userRepository.save(requestee);
-		userRepository.save(requestor);
+		
+		if(friendRequestSent(requestor, requestee)) {
+			// delete the request
+			requestorRequestees.remove(requestee);
+			requesteeRequestors.remove(requestor);
+			// save both users so the database will be updated and the request deleted
+			userRepository.save(requestee);
+			userRepository.save(requestor);
+		}
 	}
 
 	/**
@@ -152,9 +153,9 @@ public class UserService {
 	 * @param user2
 	 */
 	@Transactional(readOnly = false)
-	public void deleteFriendship(User user1, User user2) throws NoSuchElementException {
+	public void deleteFriendship(User user1, User user2) throws NotFoundException {
 		if(!areFriends(user1, user2)) {
-			throw new IllegalArgumentException("There is no friend relation to delete");
+			throw new NotFoundException("There is no friend relation to delete");
 		}
 		List<User> user1Friends = user1.getFriends();
 		List<User> user2Friends = user2.getFriends();
@@ -187,16 +188,16 @@ public class UserService {
 	 * Send a friend request
 	 * @param requestor: user sending the request
 	 * @param requestee user receiving the request
-	 * @throws IllegalArgumentException if a request is already pending
+	 * @throws BadRequestException if a request is already pending
 	 */
-	private void sendFriendRequest(User requestor, User requestee) throws IllegalArgumentException{
+	protected void sendFriendRequest(User requestor, User requestee) throws BadRequestException{
 		// get the requestors and requestees
 		List<User> requestorRequestees = requestor.getFriendRequestees();
 		List<User> requesteeRequestors = requestee.getFriendRequestors();
 		
 		// check if a friend request has already been sent
 		if(friendRequestSent(requestor, requestee)) {
-			throw new IllegalArgumentException("A friend request is already pending.");
+			throw new BadRequestException("A friend request is already pending.");
 		}
 		
 		// create the friend request
@@ -228,14 +229,14 @@ public class UserService {
 	 * Create a friend relation between 2 users
 	 * @param user1
 	 * @param user2
-	 * @throws IllegalArgumentException: if users are already friends or if it's the same user
+	 * @throws BadRequestException: if users are already friends or if it's the same user
 	 */
-	private void createFriendRelation(User user1, User user2) throws IllegalArgumentException{
+	protected void createFriendRelation(User user1, User user2) throws BadRequestException{
 		if(user1 == user2) {
-			throw new IllegalArgumentException("Cannot add self as friend.");
+			throw new BadRequestException("Cannot add self as friend.");
 		}
 		if(areFriends(user1, user2)) {
-			throw new IllegalArgumentException("Users are already friends.");
+			throw new BadRequestException("Users are already friends.");
 		}
 		List<User> user1Friends = user1.getFriends();
 		List<User> user2Friends = user2.getFriends();

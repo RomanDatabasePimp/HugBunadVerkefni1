@@ -13,8 +13,8 @@ import java.util.stream.Collectors;
  *
  */
 public class UserResponder {
-	private String username;
-	private String displayName;
+	protected String username;
+	protected String displayName;
 	
 	public UserResponder(User user) {
 		this.username = user.getUsername();
@@ -41,15 +41,6 @@ public class UserResponder {
 		Map<String, UserResponder> wrapper = new HashMap<>();
 		wrapper.put("GoodResp", this);
 		return wrapper;
-	}
-
-	/**
-	 * converts a list of Users to a list of UserResponders
-	 * @param list
-	 * @return
-	 */
-	public static List<UserResponder> toResponderList(List<User> list) {
-		return list.stream().map(x -> new UserResponder(x)).collect(Collectors.toList());
 	}
 	
 	// getters

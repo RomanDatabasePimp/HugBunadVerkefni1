@@ -10,10 +10,10 @@ import project.persistance.entities.ErrorResponder;
  * @author Vilhelml
  *
  */
-public class UnauthorizedException extends HttpException{
+public class NotFoundException extends HttpException{
 	
-	public UnauthorizedException (String msg) {
+	public NotFoundException (String msg) {
 		super(msg);
-		super.setStatus(HttpStatus.UNAUTHORIZED);
+		super.setStatus(HttpStatus.NOT_FOUND);
 	}
 }

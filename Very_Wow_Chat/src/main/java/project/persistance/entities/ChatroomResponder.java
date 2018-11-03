@@ -1,9 +1,4 @@
 package project.persistance.entities;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 /**
  * This class is for wrapping data in json objects
  * @author Vilhelm
@@ -11,19 +6,21 @@ import java.util.stream.Collectors;
  */
 public class ChatroomResponder {
 	// unique name serving as an identifier
-	private String chatroomName;
+	protected String chatroomName;
 	// non-unique name to be displayed
-	private String displayName;
+	protected String displayName;
 	// description of the chatroom
-	private String description;
+	protected String description;
 	// denotes the visibility of the chatroom: true means listed, false means unlisted
-	private Boolean listed;
+	protected Boolean listed;
 	// denots the accessability of the chatroom: true means users can only join with an invite, false means anyone can join
-	private Boolean invited_only;
+	protected Boolean invited_only;
 	// the username of the owner of the chatroom
-	private String ownerUsername;
+	protected String ownerUsername;
 	// when the chatroom was created
-	private Long created;
+	protected Long created;
+	// timestamp of when the latest message was received
+	protected Long lastMessageReceived;
 	
 	/**
 	 * Create a responder from a chatroom
@@ -37,6 +34,7 @@ public class ChatroomResponder {
 		this.invited_only = chatroom.getInvited_only();
 		this.ownerUsername = chatroom.getOwner() != null ? chatroom.getOwner().getUsername() : "";
 		this.created = chatroom.getCreated();
+		this.lastMessageReceived = chatroom.getLastMessageReceived();
 	}
 	
 	/**
@@ -47,34 +45,14 @@ public class ChatroomResponder {
 	 * @param listed
 	 * @param invited_only
 	 */
-	public ChatroomResponder(String chatroomName, String displayName, String description, Boolean listed, Boolean invited_only) {
+	public ChatroomResponder(String chatroomName, String displayName, String description, Boolean listed, Boolean invited_only, Long lastMessageReceived) {
 		this.chatroomName = chatroomName;
 		this.displayName = displayName;
 		this.description = description;
 		this.listed = listed;
 		this.invited_only = invited_only;
+		this.lastMessageReceived = lastMessageReceived;
 	}
-	
-	/**
-	 * converts a list of Chatrooms to a list of ChatroomResponders
-	 * @param list
-	 * @return
-	 */
-	public static List<ChatroomResponder> toResponderList(List<Chatroom> list) {
-		return list.stream().map(x -> new ChatroomResponder(x)).collect(Collectors.toList());
-	}
-
-	
-	/**
-	 * wrap the response
-	 * @return wrapped response
-	 */
-	public Object wrapResponse() {
-		Map<String, ChatroomResponder> wrapper = new HashMap<>();
-		wrapper.put("GoodResp", this);
-		return wrapper;
-	}
-	
 	// getters
 
 	public String getChatroomName() {
@@ -103,6 +81,14 @@ public class ChatroomResponder {
 
 	public Long getCreated() {
 		return created;
+	}
+
+	public Long getLastMessageReceived() {
+		return lastMessageReceived;
+	}
+
+	public void setLastMessageReceived(Long lastMessageReceived) {
+		this.lastMessageReceived = lastMessageReceived;
 	}
 	
 }

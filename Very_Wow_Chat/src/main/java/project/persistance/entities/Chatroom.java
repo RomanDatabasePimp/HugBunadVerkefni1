@@ -13,46 +13,48 @@ import java.util.List;
 @NodeEntity
 public class Chatroom {
 
-	@Id @GeneratedValue private Long id;
+	@Id @GeneratedValue protected Long id;
 	// unique name serving as an identifier
-	private String chatroomName;
+	protected String chatroomName;
 	// non-unique name to be displayed
-	private String displayName;
+	protected String displayName;
 	// description of the chatroom
-	private String description;
+	protected String description;
 	// denotes the visibility of the chatroom: true means listed, false means unlisted
-	private Boolean listed;
+	protected Boolean listed;
+	// when the chatroom was created
+	protected Long created;
+	// timestamp of when the latest message was received
+	protected Long lastMessageReceived;
 	// denots the accessability of the chatroom: true means users can only join with an invite, false means anyone can join
-	private Boolean invited_only;
+	protected Boolean invited_only;
 	// the owner of the chatroom, has master privileges 
 	@Relationship(type="OWNS", direction=Relationship.INCOMING)
-	private User owner;
-	// when the chatroom was created
-	private Long created;
+	protected User owner;
 
 	// the tags the chatroom is associated with
 //	@Relationship(type="HAS_TAG", direction=Relationship.OUTGOING)
-//	private List<Tag> tags;
+//	protected List<Tag> tags;
 	
 	// users who are members of the chatroom
 	@Relationship(type="MEMBER_OF", direction=Relationship.INCOMING)
-	private List<User> members;
+	protected List<User> members;
 	
 	// users who have administrative privileges of the chatroom
 	@Relationship(type="ADMIN_OF", direction=Relationship.INCOMING)
-	private List<User> administrators;
+	protected List<User> administrators;
 
 	// users who have been invited to join the chatroom
 	@Relationship(type="INVITES", direction=Relationship.OUTGOING)
-	private List<User> memberInvitees;
+	protected List<User> memberInvitees;
 
 	// users who have benen invited to become administrators of the chatroom
 	@Relationship(type="ADMIN_INVITES", direction=Relationship.OUTGOING)
-	private List<User> adminInvitees;
+	protected List<User> adminInvitees;
 
 	// users who have been invited to become administrators of the chatroom
 	@Relationship(type="REQUESTS_TO_JOIN", direction=Relationship.INCOMING)
-	private List<User> requestors;
+	protected List<User> requestors;
 	
 
 	// Empty constructor required as of Neo4j API 2.0.5
@@ -73,7 +75,8 @@ public class Chatroom {
 		this.description = description;
 		this.listed = listed;
 		this.invited_only = invited_only;
-
+		
+		this.lastMessageReceived = null;
 		this.created = (new Date()).getTime(); // current time
 	}
 
@@ -142,6 +145,15 @@ public class Chatroom {
 	public void setCreated(Long created) {
 		this.created = created;
 	}
+
+	public Long getLastMessageReceived() {
+		return lastMessageReceived;
+	}
+
+	public void setLastMessageReceived(Long lastMessageReceived) {
+		this.lastMessageReceived = lastMessageReceived;
+	}
+
 
 //	public List<Tag> getTags() {
 //		return tags;
