@@ -245,7 +245,12 @@ public class UserController {
 	 * @return: if found, return the user with a status code of 200, else error message with status code of 404
 	 */
 	@CrossOrigin(origins = "http://localhost:3000")
-	@RequestMapping(path = "/getallrelations", method = RequestMethod.GET, headers = "Accept=application/json")
+	@RequestMapping(
+		path = "/getallrelations",
+		method = RequestMethod.GET,
+		//headers = "Access-Control-Allow-Origin=*"
+		headers = "Accept=application/json"
+	)
     public ResponseEntity<Object> getAllRelations(UsernamePasswordAuthenticationToken token){
 		try {
 			User user = userService.findByUsername(token.getName());
