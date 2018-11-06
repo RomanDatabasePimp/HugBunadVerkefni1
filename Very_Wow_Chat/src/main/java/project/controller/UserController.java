@@ -5,7 +5,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -34,6 +35,7 @@ import project.persistance.entities.ResponseWrapper;
  * 
  * @author Vilhelml
  */
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -243,7 +245,7 @@ public class UserController {
 	 * @return: if found, return the user with a status code of 200, else error message with status code of 404
 	 */
 	@RequestMapping(path = "/getallrelations", method = RequestMethod.GET, headers = "Accept=application/json")
-    public ResponseEntity<Object> getAllRelations(){
+    public ResponseEntity<Object> getAllRelations(UsernamePasswordAuthenticationToken token){
 		Boolean invalidToken = false;
 		if(invalidToken/*invalid token*/) {
 			ErrorResponder body = new ErrorResponder();
@@ -251,7 +253,7 @@ public class UserController {
 			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.UNAUTHORIZED);
 		}
 		try {
-			User user = userService.findByUsername("username3");// from token
+			User user = userService.findByUsername(token.getName());
 			
 			// get the user's relations
 			List<User> friends = user.getFriends();
