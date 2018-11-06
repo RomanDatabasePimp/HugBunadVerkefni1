@@ -244,14 +244,9 @@ public class UserController {
 	 * @param username: username of the user to be returned
 	 * @return: if found, return the user with a status code of 200, else error message with status code of 404
 	 */
+	@CrossOrigin(origins = "http://localhost:3000")
 	@RequestMapping(path = "/getallrelations", method = RequestMethod.GET, headers = "Accept=application/json")
     public ResponseEntity<Object> getAllRelations(UsernamePasswordAuthenticationToken token){
-		Boolean invalidToken = false;
-		if(invalidToken/*invalid token*/) {
-			ErrorResponder body = new ErrorResponder();
-			body.setError("Invalid token.");
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.UNAUTHORIZED);
-		}
 		try {
 			User user = userService.findByUsername(token.getName());
 			
