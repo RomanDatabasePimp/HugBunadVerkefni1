@@ -13,6 +13,7 @@ import project.Errors.HttpException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,6 +38,7 @@ import project.services.UserService;
  * @author Vilhelml
  *
  */
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/chatroom")
 public class ChatroomController {
@@ -207,7 +209,7 @@ public class ChatroomController {
 		}
 		try {
 			// the user sending the invite (the invitation will be sent by the chatroom, though)
-			User user = userService.findByUsername("username3"); // get from token
+			User user = userService.findByUsername("username1"); // get from token
 			// the chatroom that the user wants to join
 			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
 			// join the room
@@ -234,7 +236,7 @@ public class ChatroomController {
 		}
 		try {
 			// the user sending the invite (the invitation will be sent by the chatroom, though)
-			User user = userService.findByUsername("username1"); // get from token
+			User user = userService.findByUsername("username3"); // get from token
 			// the chatroom that the invite is for
 			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
 			// the user receiving the invite
