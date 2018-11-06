@@ -42,7 +42,6 @@ public class RegisterController {
 	 *                                                           "email":"shitufck@gmail.com"} 
 	 * After : Validates the Client POST request and responds with an appropriate status code along with  data
 	 */
-	@CrossOrigin(origins = "http://localhost:3000") // to prevent cors headder errors when working locally
 	@RequestMapping(value = "/register", method = RequestMethod.POST, headers = "Accept=application/json")
 	public ResponseEntity<String> register(@RequestBody UserRegistrationFormReceiver payload) throws Exception {
 		HttpResponseBody clientResponse = new HttpResponseBody(); // create a instance of the response body
@@ -122,7 +121,6 @@ public class RegisterController {
 	 *   For : PUT request key is a String pointer to the data that needs to be validated dosent need to contain any type of json 
 	 *  After: checks if the key is points to a unvalidated user, if so it stores the user in neo4j and sets its status as validated
 	 */
-	@CrossOrigin(origins = "http://localhost:3000") // to prevent cors headder errors when working locally
 	@RequestMapping(path = "/validation/{key}", method = RequestMethod.PUT, headers = "Accept=application/json")
 	public ResponseEntity<String> validateUser(@PathVariable String key) {
 		HttpResponseBody clientResponse = new HttpResponseBody(); // create a instance of the response body
