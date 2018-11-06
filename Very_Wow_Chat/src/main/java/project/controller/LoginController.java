@@ -35,7 +35,6 @@ public class LoginController {
 	 *         {"username":"shitufkc","password":"123123"} 
 	 * After : Validates the Client POST request and responds with an appropriate 
 	 *         status code along with user data and  a JTW token */
-	@CrossOrigin(origins = "http://localhost:3000") // to prevent cors headder errors when working locally
 	@RequestMapping(value = "/login", method = RequestMethod.POST, headers = "Accept=application/json")
 	public ResponseEntity<String> login(@RequestBody JwtUser payload) throws Exception {
 		HttpResponseBody clientResponse = new HttpResponseBody(); // create a instance of the response body
