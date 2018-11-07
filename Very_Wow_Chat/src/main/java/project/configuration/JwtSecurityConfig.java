@@ -47,7 +47,7 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
+    		// TODO: examine "/dsfdsfdsfd", should it even be here?
         http.csrf().disable()
                 .authorizeRequests().antMatchers("/dsfdsfdsfd").authenticated()
                 .and()

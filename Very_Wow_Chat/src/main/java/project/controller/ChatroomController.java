@@ -28,6 +28,7 @@ import project.persistance.entities.UserResponder;
 import project.persistance.entities.ChatroomResponder;
 import project.persistance.entities.MembershipResponder;
 import project.persistance.entities.ResponderLibrary;
+import project.services.ChatMessageTestService;
 import project.services.ChatroomService;
 import project.services.UserService;
 
@@ -43,6 +44,7 @@ public class ChatroomController {
 
 	protected final ChatroomService chatroomService;
 	protected final UserService userService;
+	
 	
 	public ChatroomController(ChatroomService chatroomService, UserService userService) {
 		this.chatroomService = chatroomService;
