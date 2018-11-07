@@ -13,6 +13,7 @@ import project.Errors.HttpException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,9 +39,8 @@ import project.services.UserService;
  * @author Vilhelml
  *
  */
-@CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/chatroom")
+@RequestMapping("/auth/chatroom")
 public class ChatroomController {
 
 	protected final ChatroomService chatroomService;
@@ -99,15 +99,10 @@ public class ChatroomController {
 	 * 			if successful: return 204 no content
 	 */
 	@RequestMapping(path = "/{chatroomName}", method = RequestMethod.DELETE, headers = "Accept=application/json")
-    public ResponseEntity<Object> deleteChatroom(@PathVariable String chatroomName){
-		Boolean invalidToken = false;
-		if(invalidToken/*invalid token*/) {
-			ErrorResponder body = new ErrorResponder();
-			body.setError("Invalid token.");
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.UNAUTHORIZED);
-		}
+    public ResponseEntity<Object> deleteChatroom(@PathVariable String chatroomName/*, UsernamePasswordAuthenticationToken token*/){
 		try {
-			User user = userService.findByUsername("username1"); // get from token
+			// fetch user from authentication token
+			User user = userService.findByUsername(/*token.getName()*/"ror9");
 			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
 			if(chatroomService.isOwner(user, chatroom)) {
 				ErrorResponder body = new ErrorResponder();
@@ -131,15 +126,10 @@ public class ChatroomController {
 	 * @return the chatroom that was created, or an error message
 	 */
 	@RequestMapping(path = "/", method = RequestMethod.POST, headers = "Accept=application/json")
-    public ResponseEntity<Object> createChatroom(@RequestBody ChatroomResponder newChatroom){
-		Boolean invalidToken = false;
-		if(invalidToken/*invalid token*/) {
-			ErrorResponder body = new ErrorResponder();
-			body.setError("Invalid token.");
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.UNAUTHORIZED);
-		}
+    public ResponseEntity<Object> createChatroom(@RequestBody ChatroomResponder newChatroom, UsernamePasswordAuthenticationToken token){
 		try {
-			User user = userService.findByUsername("username1"); // get from token
+			// fetch user from authentication token
+			User user = userService.findByUsername(token.getName());
 			// create chatroom from the payload
 			Chatroom chatroom = new Chatroom(
 					newChatroom.getChatroomName(),
@@ -165,16 +155,11 @@ public class ChatroomController {
 	 * @return: if found, return the chatroom with a status code of 200, else error message with status code of 404
 	 */
 	@RequestMapping(path = "/{chatroomName}/invite/{username}", method = RequestMethod.POST, headers = "Accept=application/json")
-    public ResponseEntity<Object> sendMemberInvitation(@PathVariable String chatroomName, @PathVariable String username){
-		Boolean invalidToken = false;
-		if(invalidToken/*invalid token*/) {
-			ErrorResponder body = new ErrorResponder();
-			body.setError("Invalid token.");
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.UNAUTHORIZED);
-		}
+    public ResponseEntity<Object> sendMemberInvitation(@PathVariable String chatroomName, @PathVariable String username, UsernamePasswordAuthenticationToken token){
 		try {
 			// the user sending the invite (the invitation will be sent by the chatroom, though)
-			User user = userService.findByUsername("username1"); // get from token
+			// fetch user from authentication token
+			User user = userService.findByUsername(token.getName());
 			// the chatroom that the invite is for
 			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
 			// the user receiving the invite
@@ -200,16 +185,10 @@ public class ChatroomController {
 	 * @return: if successful return a status code of 204, else error message with status code of 404 for not found, or 401 for unauthorized
 	 */
 	@RequestMapping(path = "/{chatroomName}/join", method = RequestMethod.POST, headers = "Accept=application/json")
-    public ResponseEntity<Object> joinChatroom(@PathVariable String chatroomName){
-		Boolean invalidToken = false;
-		if(invalidToken/*invalid token*/) {
-			ErrorResponder body = new ErrorResponder();
-			body.setError("Invalid token.");
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.UNAUTHORIZED);
-		}
+    public ResponseEntity<Object> joinChatroom(@PathVariable String chatroomName, UsernamePasswordAuthenticationToken token){
 		try {
-			// the user sending the invite (the invitation will be sent by the chatroom, though)
-			User user = userService.findByUsername("username1"); // get from token
+			// fetch user from authentication token
+			User user = userService.findByUsername(token.getName());
 			// the chatroom that the user wants to join
 			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
 			// join the room
@@ -227,16 +206,10 @@ public class ChatroomController {
 	 * @return: if found, return the chatroom with a status code of 200, else error message with status code of 404
 	 */
 	@RequestMapping(path = "/{chatroomName}/admininvite/{username}", method = RequestMethod.POST, headers = "Accept=application/json")
-    public ResponseEntity<Object> sendAdminInvitation(@PathVariable String chatroomName, @PathVariable String username){
-		Boolean invalidToken = false;
-		if(invalidToken/*invalid token*/) {
-			ErrorResponder body = new ErrorResponder();
-			body.setError("Invalid token.");
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.UNAUTHORIZED);
-		}
+    public ResponseEntity<Object> sendAdminInvitation(@PathVariable String chatroomName, @PathVariable String username, UsernamePasswordAuthenticationToken token){
 		try {
-			// the user sending the invite (the invitation will be sent by the chatroom, though)
-			User user = userService.findByUsername("username3"); // get from token
+			// fetch user from authentication token
+			User user = userService.findByUsername(token.getName());
 			// the chatroom that the invite is for
 			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
 			// the user receiving the invite
@@ -245,6 +218,11 @@ public class ChatroomController {
 			if(!chatroomService.hasAdminInvitePrivilages(user, chatroom)) {
 				ErrorResponder body = new ErrorResponder();
 				body.setError("You do not have permission to invite admins to this chatroom.");
+				return new ResponseEntity<>(body.getWrappedError(), HttpStatus.UNAUTHORIZED);
+			}
+			if(user == invitee) {
+				ErrorResponder body = new ErrorResponder();
+				body.setError("Cannot send yourself an admin invitation.");
 				return new ResponseEntity<>(body.getWrappedError(), HttpStatus.UNAUTHORIZED);
 			}
 			// send the invite
@@ -263,16 +241,10 @@ public class ChatroomController {
 	 * @return: if successful return a status code of 204, else error message with status code of 404 for not found, or 401 for unauthorized
 	 */
 	@RequestMapping(path = "/{chatroomName}/acceptadmininvite", method = RequestMethod.POST, headers = "Accept=application/json")
-    public ResponseEntity<Object> acceptAdminInvite(@PathVariable String chatroomName){
-		Boolean invalidToken = false;
-		if(invalidToken/*invalid token*/) {
-			ErrorResponder body = new ErrorResponder();
-			body.setError("Invalid token.");
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.UNAUTHORIZED);
-		}
+    public ResponseEntity<Object> acceptAdminInvite(@PathVariable String chatroomName, UsernamePasswordAuthenticationToken token){
 		try {
-			// the user sending the invite (the invitation will be sent by the chatroom, though)
-			User user = userService.findByUsername("username3"); // get from token
+			// fetch user from authentication token
+			User user = userService.findByUsername(token.getName());
 			// the chatroom that the user wants to join
 			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
 			// accept the invite
@@ -290,16 +262,10 @@ public class ChatroomController {
 	 * @return
 	 */
 	@RequestMapping(path = "/{chatroomName}/leave", method = RequestMethod.DELETE, headers = "Accept=application/json")
-	public ResponseEntity<Object> leaveChatroom(@PathVariable String chatroomName){
-		Boolean invalidToken = false;
-		if(invalidToken/*invalid token*/) {
-			ErrorResponder body = new ErrorResponder();
-			body.setError("Invalid token.");
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.UNAUTHORIZED);
-		}
+	public ResponseEntity<Object> leaveChatroom(@PathVariable String chatroomName, UsernamePasswordAuthenticationToken token){
 		try {
-			// the user sending the invite (the invitation will be sent by the chatroom, though)
-			User user = userService.findByUsername("username3"); // get from token
+			// fetch user from authentication token
+			User user = userService.findByUsername(token.getName());
 			// the chatroom that the user wants to join
 			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
 			// leave the chatroom
@@ -317,16 +283,10 @@ public class ChatroomController {
 	 * @return
 	 */
 	@RequestMapping(path = "/{chatroomName}/quitadmin", method = RequestMethod.DELETE, headers = "Accept=application/json")
-	public ResponseEntity<Object> quitAdmin(@PathVariable String chatroomName){
-		Boolean invalidToken = false;
-		if(invalidToken/*invalid token*/) {
-			ErrorResponder body = new ErrorResponder();
-			body.setError("Invalid token.");
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.UNAUTHORIZED);
-		}
+	public ResponseEntity<Object> quitAdmin(@PathVariable String chatroomName, UsernamePasswordAuthenticationToken token){
 		try {
-			// the user sending the invite (the invitation will be sent by the chatroom, though)
-			User user = userService.findByUsername("username3"); // get from token
+			// fetch user from authentication token
+			User user = userService.findByUsername(token.getName());
 			// the chatroom that the user wants to join
 			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
 			// leave the chatroom
@@ -362,18 +322,10 @@ public class ChatroomController {
 
 	// mark a chatroom as read; set when the user last read a message
 	@RequestMapping(path = "/markread", method = RequestMethod.POST, headers = "Accept=application/json")
-	public ResponseEntity<Object> markChatroomRead(@RequestBody ChatStampReceiver chatStampReceiver) {
-		Boolean invalidToken = false;
-		if(invalidToken/*invalid token*/) {
-			ErrorResponder body = new ErrorResponder();
-			body.setError("Invalid token.");
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.UNAUTHORIZED);
-		}
+	public ResponseEntity<Object> markChatroomRead(@RequestBody ChatStampReceiver chatStampReceiver, UsernamePasswordAuthenticationToken token){
 		try {
-			System.out.println(chatStampReceiver.getChatroomName());
-			System.out.println(chatStampReceiver.getTimestamp());
-			// the user sending the request
-			User user = userService.findByUsername("username3"); // get from token
+			// fetch user from authentication token
+			User user = userService.findByUsername(token.getName());
 			// fetch the user provided new timestamp
 			Long timestamp = chatStampReceiver.getTimestamp();
 			// fetch the chatroom the user wants to mark as read
@@ -396,16 +348,10 @@ public class ChatroomController {
 	// to do
 	// mark a chatroom as read; set when the user last read a message
 	@RequestMapping(path = "/markmultipleread", method = RequestMethod.POST, headers = "Accept=application/json")
-	public ResponseEntity<Object> markMultipleChatroomRead(@RequestBody List<ChatStampReceiver> chatstampReceiver) {
-		Boolean invalidToken = false;
-		if(invalidToken/*invalid token*/) {
-			ErrorResponder body = new ErrorResponder();
-			body.setError("Invalid token.");
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.UNAUTHORIZED);
-		}
+	public ResponseEntity<Object> markMultipleChatroomRead(@RequestBody List<ChatStampReceiver> chatstampReceiver, UsernamePasswordAuthenticationToken token){
 		try {
-			// the user sending the request
-			User user = userService.findByUsername("username3"); // get from token
+			// fetch user from authentication token
+			User user = userService.findByUsername(token.getName());
 			
 			List<Membership> memberships = new ArrayList<>();
 			

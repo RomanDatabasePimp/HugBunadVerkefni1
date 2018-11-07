@@ -105,8 +105,6 @@ public class ChatroomService {
 	 */
 	@Transactional(readOnly = false)
 	public void joinChatroom(User user, Chatroom chatroom) throws BadRequestException, UnauthorizedException {
-		System.out.println("user.getUsername(): " + user.getUsername());
-		System.out.println("chatroom.getChatroomName(): " + chatroom.getChatroomName());
 		// already member
 		if (isMember(user, chatroom)) {
 			throw new BadRequestException("You are already a member of this chatroom.");
@@ -116,19 +114,10 @@ public class ChatroomService {
 			throw new UnauthorizedException("You need an invite to join this chatroom.");
 		}
 		
-		System.out.println("user.getMemberOfChatrooms().size(): " + user.getMemberOfChatrooms().size());
-		System.out.println("user.getMemberships().size(): " + user.getMemberships().size());
-		System.out.println("chatroom.getMembers().size(): " + chatroom.getMembers().size());
-		
 		// delete the member invite, if there is one
 		deleteMemberInvitation(user, chatroom);
 		// create relation / send the invite
 		createMemberRelation(user, chatroom);
-		System.out.println("post insert");
-
-		System.out.println("user.getMemberOfChatrooms().size(): " + user.getMemberOfChatrooms().size());
-		System.out.println("user.getMemberships().size(): " + user.getMemberships().size());
-		System.out.println("chatroom.getMembers().size(): " + chatroom.getMembers().size());
 		
 		// save the changes
 		chatroomRepository.save(chatroom);
@@ -257,9 +246,13 @@ public class ChatroomService {
 	 * @param chatroom
 	 * @throws BadRequestException if user already has a pending admin invite
 	 */
+	@Transactional(readOnly = false)
 	public void sendAdminInvitation(User user, Chatroom chatroom) throws BadRequestException {
 		if (adminInvitationSent(user, chatroom)) {
 			throw new BadRequestException("The user already has a pending admin invitation");
+		}
+		if(isAdmin(user, chatroom)) {
+			throw new BadRequestException("The user is already an admin of the chatroom");
 		}
 		createAdminInvitation(user, chatroom);
 	}
@@ -330,6 +323,13 @@ public class ChatroomService {
 		List<Chatroom> chatrooms = user.getMemberOfChatrooms();
 		List<User> users = chatroom.getMembers();
 
+		System.out.println("---- is member ----");
+		System.out.println(user.getUsername());
+		System.out.println(chatroom.getChatroomName());
+		System.out.println(chatrooms.size());
+		System.out.println(users.size());
+		System.out.println("-------------- ----");
+
 		return chatrooms.contains(chatroom) && users.contains(user);
 	}
 
@@ -343,6 +343,13 @@ public class ChatroomService {
 	public boolean isAdmin(User user, Chatroom chatroom) {
 		List<Chatroom> chatrooms = user.getAdminOfChatrooms();
 		List<User> users = chatroom.getAdministrators();
+
+		System.out.println("---- is admin ----");
+		System.out.println(user.getUsername());
+		System.out.println(chatroom.getChatroomName());
+		System.out.println(chatrooms.size());
+		System.out.println(users.size());
+		System.out.println("------------------");
 
 		return chatrooms.contains(chatroom) && users.contains(user);
 	}
@@ -419,11 +426,18 @@ public class ChatroomService {
 	 * @param user
 	 * @param chatroom
 	 */
-	@Transactional(readOnly = false)
 	protected void createMemberRelation(User user, Chatroom chatroom) {
 		List<Chatroom> chatrooms = user.getMemberOfChatrooms();
 		List<User> users = chatroom.getMembers();
 		List<Membership> memberships = user.getMemberships();
+
+		System.out.println("---- create member relation ----");
+		System.out.println(user.getUsername());
+		System.out.println(chatroom.getChatroomName());
+		System.out.println(chatrooms.size());
+		System.out.println(users.size());
+		System.out.println(memberships.size());
+		System.out.println("------------------");
 
 		// add the chatroom to user's list of chatrooms he is member of
 		chatrooms.add(chatroom);
@@ -433,6 +447,13 @@ public class ChatroomService {
 		Membership membership = new Membership(user, chatroom);
 		memberships.add(membership);
 
+		System.out.println(user.getUsername());
+		System.out.println(chatroom.getChatroomName());
+		System.out.println(chatrooms.size());
+		System.out.println(users.size());
+		System.out.println(memberships.size());
+		System.out.println("------------------");
+		
 		// save the chatroom, and its relations
 		chatroomRepository.save(chatroom);
 		// save the user to preserve relations
