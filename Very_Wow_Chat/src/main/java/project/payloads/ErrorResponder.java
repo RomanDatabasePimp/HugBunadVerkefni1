@@ -1,4 +1,4 @@
-package project.persistance.entities;
+package project.payloads;
 
 import java.util.Map;
 import java.util.ArrayList;

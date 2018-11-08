@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import project.persistance.entities.HttpResponseBody;
-import project.persistance.entities.JwtUser;
+import project.payloads.HttpResponseBody;
+import project.payloads.JwtUser;
 import project.persistance.entities.User;
 import project.security.JwtGenerator;
 import project.services.UserService;

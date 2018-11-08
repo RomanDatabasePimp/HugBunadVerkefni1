@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import project.Errors.HttpException;
-import project.persistance.entities.HttpResponseBody;
+import project.payloads.HttpResponseBody;
+import project.payloads.UserRegistrationFormReceiver;
 import project.persistance.entities.User;
-import project.persistance.entities.UserRegistrationFormReceiver;
 import project.services.AuthenticationService;
 import project.services.RedisService;
 import project.services.UserService;

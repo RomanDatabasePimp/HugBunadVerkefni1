@@ -9,8 +9,8 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import project.payloads.JwtUser;
 import project.persistance.entities.JwtAuthenticationToken;
-import project.persistance.entities.JwtUser;
 import project.persistance.entities.JwtUserDetails;
 
 import java.util.List;

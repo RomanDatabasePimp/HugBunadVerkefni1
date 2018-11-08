@@ -17,18 +17,18 @@ import java.util.stream.Collectors;
 import project.services.ChatroomService;
 import project.services.UserService;
 import project.persistance.entities.User;
-import project.persistance.entities.UserFullResponder;
-import project.persistance.entities.UserResponder;
-import project.persistance.entities.UserUpdateReceiver;
 import project.Errors.HttpException;
+import project.payloads.ChatroomResponder;
+import project.payloads.ErrorResponder;
+import project.payloads.MembershipResponder;
+import project.payloads.RelationsResponder;
+import project.payloads.ResponderLibrary;
+import project.payloads.ResponseWrapper;
+import project.payloads.UserFullResponder;
+import project.payloads.UserResponder;
+import project.payloads.UserUpdateReceiver;
 import project.persistance.entities.Chatroom;
-import project.persistance.entities.ChatroomResponder;
-import project.persistance.entities.ErrorResponder;
 import project.persistance.entities.Membership;
-import project.persistance.entities.MembershipResponder;
-import project.persistance.entities.RelationsResponder;
-import project.persistance.entities.ResponderLibrary;
-import project.persistance.entities.ResponseWrapper;
 
 
 /**
@@ -282,6 +282,7 @@ public class UserController {
     public ResponseEntity<Object> getMemberOfChatrooms(@PathVariable String username){
 		try {
 			User user = userService.findByUsername(username);
+			System.out.println(username);
 			List<Chatroom> chatrooms = user.getMemberOfChatrooms();
 			
 			// create a list of UserResponders for json return
