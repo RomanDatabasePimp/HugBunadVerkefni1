@@ -1,7 +1,9 @@
-package project.persistance.entities;
+package project.payloads;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import project.persistance.entities.User;
 
 
 /**

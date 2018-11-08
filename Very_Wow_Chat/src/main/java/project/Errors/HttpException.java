@@ -3,7 +3,7 @@ package project.Errors;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import project.persistance.entities.ErrorResponder;
+import project.payloads.ErrorResponder;
 
 /**
  * A parent to various exceptions representing to common http errors

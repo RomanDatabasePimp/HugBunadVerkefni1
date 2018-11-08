@@ -1,7 +1,11 @@
-package project.persistance.entities;
+package project.payloads;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import project.persistance.entities.Chatroom;
+import project.persistance.entities.Membership;
+import project.persistance.entities.User;
 
 public class MembershipResponder extends ChatroomResponder{
 
@@ -44,18 +48,18 @@ public class MembershipResponder extends ChatroomResponder{
 		User user = membership.getUser();
 		Chatroom chatroom = membership.getChatroom();
 
-		List<Chatroom> o = user.getOwnedChatrooms();
-		List<Chatroom> a = user.getAdminOfChatrooms();
-		// set the user relation
-		if(o.contains(chatroom)) {
-			this.userRelation = ChatroomUserRelation.OWNER;
-		}
-		else if(a.contains(chatroom)) {
-			this.userRelation = ChatroomUserRelation.ADMIN;
-		}
-		else {
-			this.userRelation = ChatroomUserRelation.MEMBER;
-		}
+//		List<Chatroom> o = user.getOwnedChatrooms();
+//		List<Chatroom> a = user.getAdminOfChatrooms();
+//		// set the user relation
+//		if(o.contains(chatroom)) {
+//			this.userRelation = ChatroomUserRelation.OWNER;
+//		}
+//		else if(a.contains(chatroom)) {
+//			this.userRelation = ChatroomUserRelation.ADMIN;
+//		}
+//		else {
+//			this.userRelation = ChatroomUserRelation.MEMBER;
+//		}
 	}
 
 	

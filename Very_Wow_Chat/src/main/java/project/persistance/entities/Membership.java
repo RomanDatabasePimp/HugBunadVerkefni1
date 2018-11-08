@@ -63,7 +63,7 @@ public class Membership {
 	public Membership(User user, Chatroom chatroom) {
 		this.user = user;
 		this.chatroom = chatroom;
-		this.lastRead = null;
+		this.lastRead = (new Date()).getTime(); // current time
 
 		this.whenJoined = (new Date()).getTime(); // current time
 	}

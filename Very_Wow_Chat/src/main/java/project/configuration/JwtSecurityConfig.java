@@ -22,7 +22,6 @@ import project.security.JwtAuthenticationProvider;
 import project.security.JwtAuthenticationTokenFilter;
 import project.security.JwtSuccessHandler;
 
-import java.util.Arrays;
 import java.util.Collections;
 
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -35,8 +34,6 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
     private JwtAuthenticationProvider authenticationProvider; // our authenticator
     @Autowired
     private JwtAuthenticationEntryPoint entryPoint; // what happens if the authentication fails
-    
-  
     
     @Bean
     public AuthenticationManager authenticationManager() {
@@ -52,10 +49,8 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
         return filter;
     }
 
-    
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        
+    protected void configure(HttpSecurity http) throws Exception {     
         http.csrf().disable()
         .cors()
         .and()
@@ -63,11 +58,11 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
         .and()
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
         .authorizeRequests()
-        .antMatchers(HttpMethod.GET, "/user/**").authenticated()
-        .antMatchers(HttpMethod.POST, "/login", "/register").permitAll()
-        .antMatchers(HttpMethod.PUT, "/validation/**").permitAll()
-        .anyRequest().authenticated();
-
+        .antMatchers("/auth/**").authenticated()  //if user tries to access anything under /auth/+++ he needs to be authenticated
+        .antMatchers(HttpMethod.POST, "/login", "/register").permitAll() // POST Requests on login and register are allowed
+        .antMatchers(HttpMethod.PUT, "/validation/**").permitAll()  // PUT requests on validation are allowed
+        .anyRequest().permitAll();  // any other request is allowed in hopes Spring black magic will handle it
+        // authentication filter
         http.addFilterBefore(authenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         http.headers().cacheControl();
     }
@@ -89,6 +84,4 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
-    
-    
 }

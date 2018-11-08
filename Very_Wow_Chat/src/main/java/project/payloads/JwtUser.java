@@ -1,4 +1,4 @@
-package project.persistance.entities;
+package project.payloads;
 
 /* This class has several to purposes
  * 1- this act as a payload (BOTH FROM POST REQUESTS AND AS MIDDLEWARES)

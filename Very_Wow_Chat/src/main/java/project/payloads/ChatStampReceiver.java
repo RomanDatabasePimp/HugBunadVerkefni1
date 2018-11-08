@@ -1,4 +1,4 @@
-package project.persistance.entities;
+package project.payloads;
 
 /**
  * contains a chatroom name and a timestamp, used for updating when a user last visited the chatroom

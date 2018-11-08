@@ -1,4 +1,4 @@
-package project.persistance.entities;
+package project.payloads;
 
 public enum ChatroomUserRelation {
 	// The user owns the chatroom
