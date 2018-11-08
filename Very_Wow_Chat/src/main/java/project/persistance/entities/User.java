@@ -55,14 +55,14 @@ public class User {
 	protected List<Chatroom> chatroomAdminInvites;
 
 	// chatrooms the user is a member of
-	@Relationship(type="MEMBER_OF", direction=Relationship.OUTGOING)
+	@Relationship(type="HAS_MEMBER", direction=Relationship.INCOMING)
 	protected List<Chatroom> memberOfChatrooms;
 	
 	// list of all the relations to chatrooms that the user is a member of
 	//@JsonIgnoreProperties("user")
 	@Relationship(type="MEMBER_OF", direction=Relationship.OUTGOING)
 	protected List<Membership> memberships;
-
+	
 	// Empty constructor required as of Neo4j API 2.0.5
 	protected User() {};
 
