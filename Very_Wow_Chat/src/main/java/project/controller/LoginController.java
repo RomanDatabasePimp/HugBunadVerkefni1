@@ -39,6 +39,8 @@ public class LoginController {
 	public ResponseEntity<String> login(@RequestBody JwtUser payload) throws Exception {
 		HttpResponseBody clientResponse = new HttpResponseBody(); // create a instance of the response body
 
+		System.out.println(payload);
+		
 		// check if the user exists in the neo4j database if dosent exists then we
 		// respond with error and 404 not found
 		if (!this.userService.userExists(payload.getUserName())) {
