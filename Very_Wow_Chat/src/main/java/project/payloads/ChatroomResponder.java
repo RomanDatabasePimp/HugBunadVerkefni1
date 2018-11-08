@@ -1,4 +1,7 @@
-package project.persistance.entities;
+package project.payloads;
+
+import project.persistance.entities.Chatroom;
+
 /**
  * This class is for wrapping data in json objects
  * @author Vilhelm

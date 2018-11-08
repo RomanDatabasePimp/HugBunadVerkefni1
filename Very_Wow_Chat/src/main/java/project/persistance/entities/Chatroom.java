@@ -52,7 +52,7 @@ public class Chatroom {
 	@Relationship(type="ADMIN_INVITES", direction=Relationship.OUTGOING)
 	protected List<User> adminInvitees;
 
-	// users who have been invited to become administrators of the chatroom
+	// users who have requested to become a member of the chatroom
 	@Relationship(type="REQUESTS_TO_JOIN", direction=Relationship.INCOMING)
 	protected List<User> requestors;
 	

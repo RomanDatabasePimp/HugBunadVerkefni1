@@ -1,7 +1,11 @@
-package project.persistance.entities;
+package project.payloads;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
+import project.persistance.entities.User;
 
 
 /**
@@ -10,17 +14,13 @@ import java.util.Map;
  * @since 20.10.18
  *
  */
-public class UserFullResponder {
-	private String username;
-	private String displayName;
-	private String email;
-	private Long created;
+public class UserResponder {
+	protected String username;
+	protected String displayName;
 	
-	public UserFullResponder(User user) {
+	public UserResponder(User user) {
 		this.username = user.getUsername();
 		this.displayName = user.getDisplayName();
-		this.email = user.getEmail();
-		this.created = user.getCreated();
 	}
 	
 	/**
@@ -30,10 +30,9 @@ public class UserFullResponder {
 	 * @param displayName
 	 * @param email
 	 */
-	public UserFullResponder(String username, String displayName, String email) {
+	public UserResponder(String username, String displayName) {
 		this.username = username;
 		this.displayName = displayName;
-		this.email = email;
 	}
 	
 	/**
@@ -41,7 +40,7 @@ public class UserFullResponder {
 	 * @return wrapped response
 	 */
 	public Object wrapResponse() {
-		Map<String, UserFullResponder> wrapper = new HashMap<>();
+		Map<String, UserResponder> wrapper = new HashMap<>();
 		wrapper.put("GoodResp", this);
 		return wrapper;
 	}
@@ -52,17 +51,9 @@ public class UserFullResponder {
 		return username;
 	}
 
+
 	public String getDisplayName() {
 		return displayName;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public Long getCreated() {
-		return created;
-	}
-	
+	}	
 	
 }

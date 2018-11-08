@@ -17,27 +17,26 @@ import java.util.stream.Collectors;
 import project.services.ChatroomService;
 import project.services.UserService;
 import project.persistance.entities.User;
-import project.persistance.entities.UserFullResponder;
-import project.persistance.entities.UserResponder;
-import project.persistance.entities.UserUpdateReceiver;
 import project.Errors.HttpException;
+import project.payloads.ChatroomResponder;
+import project.payloads.ErrorResponder;
+import project.payloads.MembershipResponder;
+import project.payloads.RelationsResponder;
+import project.payloads.ResponderLibrary;
+import project.payloads.ResponseWrapper;
+import project.payloads.UserFullResponder;
+import project.payloads.UserResponder;
+import project.payloads.UserUpdateReceiver;
 import project.persistance.entities.Chatroom;
-import project.persistance.entities.ChatroomResponder;
-import project.persistance.entities.ErrorResponder;
 import project.persistance.entities.Membership;
-import project.persistance.entities.MembershipResponder;
-import project.persistance.entities.RelationsResponder;
-import project.persistance.entities.ResponderLibrary;
-import project.persistance.entities.ResponseWrapper;
 
 
 /**
  * 
  * @author Vilhelml
  */
-@CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/auth/user")
 public class UserController {
 
 	private final UserService userService;
@@ -47,30 +46,6 @@ public class UserController {
 		this.userService = userService;
 		this.chatroomService= chatroomService;
 	}
-	
-//	/* 
-//	 * TEMPORARY controller for debugging purposes
-//	 * creates a user
-//	*/
-//	@RequestMapping(path = "/", method = RequestMethod.POST, headers = "Accept=application/json")
-//    public ResponseEntity<Object> createUser(@RequestBody UserResponder newUser){
-//		try {
-//			User user = new User(
-//				newUser.getUsername(),
-//				newUser.getPassword(),
-//				newUser.getDisplayName(),
-//				newUser.getEmail()
-//			);
-//			userService.createUser(user);
-//			// wrap the output and return it
-//			UserResponder body = new UserResponder(user);
-//			return new ResponseEntity<>(body.wrapResponse(), HttpStatus.CREATED); // USE WRAPER INSREAD
-//		}catch(IllegalArgumentException e) {
-//			ErrorResponder body = new ErrorResponder();
-//			body.setError(e.getMessage());
-//			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.BAD_REQUEST);
-//		}
-//	}
 
 	/**
 	 * Update a user's displayName, password, and email
@@ -78,16 +53,10 @@ public class UserController {
 	 * @return
 	 */
 	@RequestMapping(path = "/", method = RequestMethod.PATCH, headers = "Accept=application/json")
-    public ResponseEntity<Object> updateUser(@RequestBody UserUpdateReceiver newUser){
-		Boolean invalidToken = false;
-		if(invalidToken/*invalid token*/) {
-			ErrorResponder body = new ErrorResponder();
-			body.setError("Invalid token.");
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.UNAUTHORIZED);
-		}
+    public ResponseEntity<Object> updateUser(@RequestBody UserUpdateReceiver newUser, UsernamePasswordAuthenticationToken token){
 		try {
-			// fetch the user
-			User user = userService.findByUsername("username1"); // get from token
+			// fetch user from authentication token
+			User user = userService.findByUsername(token.getName());
 			// if an attribute is not given, the old one is used
 			String newDisplayName = newUser.getDisplayName() != null ? newUser.getDisplayName() : user.getDisplayName();
 			String newEmail = newUser.getEmail() != null ? newUser.getEmail() : user.getEmail();
@@ -111,15 +80,10 @@ public class UserController {
 	 * @return nodata, 204 status
 	 */
 	@RequestMapping(path = "/", method = RequestMethod.DELETE, headers = "Accept=application/json")
-	public ResponseEntity<Object> deleteUser(){
-		Boolean invalidToken = false;
-		if(invalidToken/*invalid token*/) {
-			ErrorResponder body = new ErrorResponder();
-			body.setError("Invalid token.");
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.UNAUTHORIZED);
-		}
+	public ResponseEntity<Object> deleteUser(UsernamePasswordAuthenticationToken token){
 		try {
-			User user = userService.findByUsername("username1"); // get from token
+			// fetch user from authentication token
+			User user = userService.findByUsername(token.getName());
 			userService.deleteUser(user);
 			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);			
 		}catch(HttpException e) {
@@ -135,15 +99,10 @@ public class UserController {
 	 * Pæling: hafa þessa virkni í delete friend? þannig að delete friend eyði vini eða request eftir aðstæðum
 	 */
 	@RequestMapping(path = "/friendRequest/{requesteeName}", method = RequestMethod.DELETE, headers = "Accept=application/json")
-	public ResponseEntity<Object> deleteFriendRequest( @PathVariable String requesteeName){
-		Boolean invalidToken = false;
-		if(invalidToken/*invalid token*/) {
-			ErrorResponder body = new ErrorResponder();
-			body.setError("Invalid token.");
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.UNAUTHORIZED);
-		}
+	public ResponseEntity<Object> deleteFriendRequest( @PathVariable String requesteeName, UsernamePasswordAuthenticationToken token){
 		try {
-			User user = userService.findByUsername("username1"); // get from token
+			// fetch user from authentication token
+			User user = userService.findByUsername(token.getName());
 			User requestee = userService.findByUsername(requesteeName);
 
 			userService.deleteFriendRequest(user, requestee);
@@ -160,15 +119,10 @@ public class UserController {
 	 * @return no content or error
 	 */
 	@RequestMapping(path = "/friends/{friendName}", method = RequestMethod.DELETE, headers = "Accept=application/json")
-	public ResponseEntity<Object> deleteFriend( @PathVariable String friendName){
-		Boolean invalidToken = false;
-		if(invalidToken/*invalid token*/) {
-			ErrorResponder body = new ErrorResponder();
-			body.setError("Invalid token.");
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.UNAUTHORIZED);
-		}
+	public ResponseEntity<Object> deleteFriend( @PathVariable String friendName, UsernamePasswordAuthenticationToken token){
 		try {
-			User user = userService.findByUsername("username1"); // get from token
+			// fetch user from authentication token
+			User user = userService.findByUsername(token.getName());
 			User friend = userService.findByUsername(friendName);
 
 			userService.deleteFriendship(user, friend);
@@ -181,15 +135,10 @@ public class UserController {
 
 	// add friend: send friend request / accept friend request
 	@RequestMapping(path = "/friends/{friendName}", method = RequestMethod.POST, headers = "Accept=application/json")
-	public ResponseEntity<Object> addFriend(@PathVariable String friendName){
-		Boolean invalidToken = false;
-		if(invalidToken/*invalid token*/) {
-			ErrorResponder body = new ErrorResponder();
-			body.setError("Invalid token.");
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.UNAUTHORIZED);
-		}
+	public ResponseEntity<Object> addFriend(@PathVariable String friendName, UsernamePasswordAuthenticationToken token){
 		try {
-			User user = userService.findByUsername("username1"); // get from token !!!
+			// fetch user from authentication token
+			User user = userService.findByUsername(token.getName());
 			User friend = userService.findByUsername(friendName);
 			
 			userService.addFriend(user, friend);
@@ -223,15 +172,10 @@ public class UserController {
 	 * @return: if found, return the user with a status code of 200, else error message with status code of 404
 	 */
 	@RequestMapping(path = "/", method = RequestMethod.GET, headers = "Accept=application/json")
-    public ResponseEntity<Object> getSelfInfo(){
-		Boolean invalidToken = false;
-		if(invalidToken/*invalid token*/) {
-			ErrorResponder body = new ErrorResponder();
-			body.setError("Invalid token.");
-			return new ResponseEntity<>(body.getWrappedError(), HttpStatus.UNAUTHORIZED);
-		}
+    public ResponseEntity<Object> getSelfInfo(UsernamePasswordAuthenticationToken token){
 		try {
-			User user = userService.findByUsername("username1");// from token
+			// fetch user from authentication token
+			User user = userService.findByUsername(token.getName());
 			// wrap the data to send in json format
 			UserFullResponder body = new UserFullResponder(user);
 			return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
@@ -244,15 +188,10 @@ public class UserController {
 	 * @param username: username of the user to be returned
 	 * @return: if found, return the user with a status code of 200, else error message with status code of 404
 	 */
-	@CrossOrigin(origins = "http://localhost:3000")
-	@RequestMapping(
-		path = "/getallrelations",
-		method = RequestMethod.GET,
-		//headers = "Access-Control-Allow-Origin=*"
-		headers = "Accept=application/json"
-	)
+	@RequestMapping(path = "/getallrelations",method = RequestMethod.GET,headers = "Accept=application/json")
     public ResponseEntity<Object> getAllRelations(UsernamePasswordAuthenticationToken token){
 		try {
+			// fetch user from authentication token
 			User user = userService.findByUsername(token.getName());
 			
 			// get the user's relations
@@ -343,6 +282,7 @@ public class UserController {
     public ResponseEntity<Object> getMemberOfChatrooms(@PathVariable String username){
 		try {
 			User user = userService.findByUsername(username);
+			System.out.println(username);
 			List<Chatroom> chatrooms = user.getMemberOfChatrooms();
 			
 			// create a list of UserResponders for json return

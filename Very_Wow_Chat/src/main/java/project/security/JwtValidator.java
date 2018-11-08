@@ -2,7 +2,7 @@ package project.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import project.persistance.entities.JwtUser;
+import project.payloads.JwtUser;
 
 import org.springframework.stereotype.Component;
 
