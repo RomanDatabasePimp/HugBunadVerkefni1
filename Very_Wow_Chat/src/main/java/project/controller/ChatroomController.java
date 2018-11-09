@@ -390,7 +390,7 @@ public class ChatroomController {
 	//	a used banned from a chatroom cannot request to join it, cannot receive invites to it
 	
 	// -------------------------- get requests for the chatroom's various lists -------------------------
-
+	
 	@RequestMapping(path = "/{chatroomName}/members", method = RequestMethod.GET, headers = "Accept=application/json")
     public ResponseEntity<Object> getMembers(@PathVariable String chatroomName){
 		try {
