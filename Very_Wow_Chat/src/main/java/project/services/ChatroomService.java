@@ -3,7 +3,9 @@ package project.services;
 import project.persistance.entities.Chatroom;
 import project.persistance.entities.Membership;
 import project.persistance.entities.User;
+import project.persistance.entities.Tag;
 import project.persistance.repositories.ChatroomRepository;
+import project.persistance.repositories.TagRepository;
 import project.persistance.repositories.UserRepository;
 
 import org.slf4j.Logger;
@@ -25,12 +27,14 @@ public class ChatroomService {
 
 	protected final ChatroomRepository chatroomRepository;
 	protected final UserRepository userRepository;
+	protected final TagRepository tagRepository;
 
-	public ChatroomService(ChatroomRepository chatroomRepository, UserRepository userRepository) {
+	public ChatroomService(ChatroomRepository chatroomRepository, UserRepository userRepository, TagRepository tagRepository) {
 		this.chatroomRepository = chatroomRepository;
 		this.userRepository = userRepository;
+		this.tagRepository = tagRepository;
 	}
-
+	
 	/**
 	 * Check if a chatroom exists with a given chatroomName
 	 * 
@@ -80,10 +84,19 @@ public class ChatroomService {
 	 * @return
 	 */
 	public boolean hasMemberInvitePrivilages(User user, Chatroom chatroom) {
-		return isOwner(user, chatroom) || isAdmin(user, chatroom); // only the owner and admins can send member
-																	// invitation
+		return isOwner(user, chatroom) || isAdmin(user, chatroom); // only the owner and admins can send member invitation
 	}
 
+	/**
+	 * check if the user can change the tags of a chatroom
+	 * @param chatroom
+	 * @param user
+	 * @return
+	 */
+	public Boolean hasChatroomTagPrivilages(Chatroom chatroom, User user) {
+		return isOwner(user, chatroom) || isAdmin(user, chatroom); // only the owner and admins can edit tags
+	}
+	
 	/**
 	 * check if user can send admin invites from this chat
 	 * 
@@ -228,7 +241,7 @@ public class ChatroomService {
 	 * @throws BadRequestException if user is already member or already has bending
 	 *                             invite
 	 */
-	public void sendMemberInvite(User user, Chatroom chatroom) throws BadRequestException {
+	public void sendMemberInvitation(User user, Chatroom chatroom) throws BadRequestException {
 		if (isMember(user, chatroom)) {
 			throw new BadRequestException("User is already a member of this chatroom");
 		}
@@ -343,13 +356,6 @@ public class ChatroomService {
 	public boolean isAdmin(User user, Chatroom chatroom) {
 		List<Chatroom> chatrooms = user.getAdminOfChatrooms();
 		List<User> users = chatroom.getAdministrators();
-
-		System.out.println("---- is admin ----");
-		System.out.println(user.getUsername());
-		System.out.println(chatroom.getChatroomName());
-		System.out.println(chatrooms.size());
-		System.out.println(users.size());
-		System.out.println("------------------");
 
 		return chatrooms.contains(chatroom) && users.contains(user);
 	}
