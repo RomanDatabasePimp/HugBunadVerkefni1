@@ -16,6 +16,7 @@ import project.services.ChatMessageTestService;
 import project.services.ChatroomService;
 import project.services.UserService;
 
+// TODO: delete this later
 @RestController
 public class TestController {
 
