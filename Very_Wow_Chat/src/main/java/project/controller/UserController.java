@@ -6,20 +6,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
 import project.services.ChatroomService;
 import project.services.UserService;
 import project.persistance.entities.User;
 import project.Errors.HttpException;
 import project.payloads.ChatroomResponder;
-import project.payloads.ErrorResponder;
 import project.payloads.MembershipResponder;
 import project.payloads.RelationsResponder;
 import project.payloads.ResponderLibrary;

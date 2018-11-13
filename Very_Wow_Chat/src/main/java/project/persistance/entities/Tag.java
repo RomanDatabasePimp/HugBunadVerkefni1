@@ -12,13 +12,13 @@ import java.util.List;
 @NodeEntity
 public class Tag {
 
-	@Id @GeneratedValue private Long id;
+	@Id @GeneratedValue protected Long id;
 	// unique name of the tag
-	private String name;
+	protected String name;
 
 	// list of chatrooms that have a outgoing relation to the tag
 	@Relationship(type="HAS_TAG", direction=Relationship.INCOMING)
-	private List<Chatroom> chatroomsWithTag;
+	protected List<Chatroom> chatroomsWithTag;
 
 	// Empty constructor required as of Neo4j API 2.0.5
 	public Tag() {}
@@ -29,9 +29,6 @@ public class Tag {
 	 */
 	public Tag(String name) {
 		this.name = name;
-		
-		// initalize the relations
-		this.chatroomsWithTag = new ArrayList<>();
 	}
 	
 	// getters and setters
@@ -53,6 +50,9 @@ public class Tag {
 	}
 
 	public List<Chatroom> getChatroomsWithTag() {
+		if(chatroomsWithTag == null) {
+			chatroomsWithTag = new ArrayList<>();
+		}
 		return chatroomsWithTag;
 	}
 

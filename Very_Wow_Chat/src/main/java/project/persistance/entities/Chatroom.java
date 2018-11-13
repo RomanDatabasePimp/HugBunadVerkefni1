@@ -33,11 +33,11 @@ public class Chatroom {
 	protected User owner;
 
 	// the tags the chatroom is associated with
-//	@Relationship(type="HAS_TAG", direction=Relationship.OUTGOING)
-//	protected List<Tag> tags;
+	@Relationship(type="HAS_TAG", direction=Relationship.OUTGOING)
+	protected List<Tag> tags;
 	
 	// users who are members of the chatroom
-	@Relationship(type="MEMBER_OF", direction=Relationship.INCOMING)
+	@Relationship(type="HAS_MEMBER", direction=Relationship.OUTGOING)
 	protected List<User> members;
 	
 	// users who have administrative privileges of the chatroom
@@ -56,7 +56,6 @@ public class Chatroom {
 	@Relationship(type="REQUESTS_TO_JOIN", direction=Relationship.INCOMING)
 	protected List<User> requestors;
 	
-
 	// Empty constructor required as of Neo4j API 2.0.5
 	public Chatroom () {}
 	
@@ -155,13 +154,16 @@ public class Chatroom {
 	}
 
 
-//	public List<Tag> getTags() {
-//		return tags;
-//	}
-//
-//	public void setTags(List<Tag> tags) {
-//		this.tags = tags;
-//	}
+	public List<Tag> getTags() {
+		if(tags == null) {
+			tags = new ArrayList<>();
+		}
+		return tags;
+	}
+
+	public void setTags(List<Tag> tags) {
+		this.tags = tags;
+	}
 
 	public List<User> getMembers() {
 		if(members == null) {
