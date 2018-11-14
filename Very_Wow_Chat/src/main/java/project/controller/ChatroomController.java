@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -39,20 +40,16 @@ import project.services.UserService;
 @RequestMapping("/auth/chatroom")
 public class ChatroomController {
 
-	protected final ChatroomService chatroomService;
-	protected final UserService userService;
-	protected final TagService tagservice;
+	@Autowired
+	protected ChatroomService chatroomService;
 	
-<<<<<<< HEAD
+	@Autowired
+	protected UserService userService;
 	
-	public ChatroomController(ChatroomService chatroomService, UserService userService) {
-=======
-	public ChatroomController(ChatroomService chatroomService, UserService userService, TagService tagservice) {
->>>>>>> 0f5f375ad328d44e9699284dc274bb0230f7c5c8
-		this.chatroomService = chatroomService;
-		this.userService = userService;
-		this.tagservice = tagservice;
-	}
+	@Autowired
+	protected TagService tagservice;
+	
+
 	
 
 	/**
@@ -75,7 +72,7 @@ public class ChatroomController {
 			ChatroomResponder body = new ChatroomResponder(chatroom);
 			// return the payload with a status of 200
 			return new ResponseEntity<>(body, HttpStatus.OK);
-		}catch(HttpException e) {
+		} catch (HttpException e) {
 			return e.getErrorResponseEntity();
 		}
 	}

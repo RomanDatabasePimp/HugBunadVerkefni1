@@ -1,5 +1,6 @@
 package project;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -34,10 +35,6 @@ public class Application implements CommandLineRunner {
 	
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
-		
-		// applicationContext.
-		
-		
 	}
 
 	@Override
@@ -63,14 +60,29 @@ public class Application implements CommandLineRunner {
 		if (true) {
 			MongoOperations mongoOps = new MongoTemplate(new MongoClient(), "test");
 			
-			ChatMessage cm = new ChatMessage();
-			cm.setMessage("yo");
+			// ChatMessage cm = new ChatMessage();
+			// cm.setMessage("yo");
 			
 			
-			mongoOps.insert(cm);
+			// mongoOps.insert(cm);
+		}
+		
+		if (true) {
+			// Get defined beans
 			
+			String[] beanDefinitionNames = applicationContext.getBeanDefinitionNames();
 			
+			Arrays.sort(beanDefinitionNames);
 			
+			System.out.println("Defined beans");
+			for (int i = 0; i < beanDefinitionNames.length; i += 1) {
+				String beanDefinitionName = beanDefinitionNames[i];
+				System.out.println("> (" + (i + 1) + "/" + beanDefinitionNames.length + "): " + beanDefinitionName);
+			}
+			// Get defined beans
+			for (String beanDefinitionName : beanDefinitionNames) {
+				
+			}
 		}
 	}
 }

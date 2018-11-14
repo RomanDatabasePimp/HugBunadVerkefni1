@@ -5,6 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -36,6 +38,7 @@ public class LoginController {
 	 * After : Validates the Client POST request and responds with an appropriate 
 	 *         status code along with user data and  a JTW token */
 	
+	
 	/**
 	 * 
 	 * 
@@ -66,26 +69,34 @@ public class LoginController {
 		// the password is encrypted in the db so we need to decode it
 		BCryptPasswordEncoder privateInfoEncoder = new BCryptPasswordEncoder();
 		
+
+		
+		
+		
+		String encodedPassword = privateInfoEncoder.encode(payload.getPassword());
+		// System.out.println(encodedPassword);
+		
+		
+		CharSequence raw_password = payload.getPassword();
+		
 		System.out.println("Input password: [" + payload.getPassword() + "]");
+		System.out.println("Encoded input password: [" + encodedPassword + "]");
 		System.out.println("Expected password: [" + fetchedUsr.getPassword() + "]");
-		
-		
-		
-		String encodedPassword = privateInfoEncoder.encode("1234");
-		System.out.println(encodedPassword);
 
 		// check if password matches the requested login
-		if (!privateInfoEncoder.matches(payload.getPassword(), fetchedUsr.getPassword())) {
-		// if (!privateInfoEncoder.matches(encodedInputPassword, encodedExpectedPassword)) {
+		// if (!privateInfoEncoder.matches(encodedPassword, fetchedUsr.getPassword())) {
+		if (!privateInfoEncoder.matches(raw_password, fetchedUsr.getPassword())) {
 			System.out.println("Ugh oh!");
 			clientResponse.addErrorForForm("Password", "Password does not match the username");
 			return new ResponseEntity<>(clientResponse.getErrorResponse(), HttpStatus.UNAUTHORIZED);
 		}
 		
+		System.out.println("Hello world!");
+		
 		System.out.println(this.jwtGenerator.generate(payload));
-		System.out.println(this.jwtGenerator.generate(payload));
-		System.out.println(this.jwtGenerator.generate(payload));
-		System.out.println(this.jwtGenerator.generate(payload));
+		// System.out.println(this.jwtGenerator.generate(payload));
+		// System.out.println(this.jwtGenerator.generate(payload));
+		//  System.out.println(this.jwtGenerator.generate(payload));
 
 		/*
 		 * create user and jtw to store in session storage This is the obj that will be

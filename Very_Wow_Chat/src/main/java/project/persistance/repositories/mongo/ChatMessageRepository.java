@@ -3,6 +3,7 @@ package project.persistance.repositories.mongo;
 import java.util.List;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
 
 import project.persistance.entities.ChatMessage;
 
@@ -27,5 +28,5 @@ public interface ChatMessageRepository extends MongoRepository<ChatMessage, Stri
 	 * @param offset Where offset index from the tail of the chat messages.
 	 * @return
 	 */
-	List<ChatMessage> findPagedResultByChatroomId(long id, int limit, int offset);
+	List<ChatMessage> findPagedResultByChatroomName(long id, int limit, int offset);
 }
