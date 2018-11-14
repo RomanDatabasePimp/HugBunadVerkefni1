@@ -39,6 +39,7 @@ import project.services.UserService;
 @RestController
 @RequestMapping("/auth/chatroom")
 public class ChatroomController {
+	
 
 	@Autowired
 	protected ChatroomService chatroomService;

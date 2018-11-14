@@ -23,10 +23,6 @@ public class JwtGenerator {
         String base64EncodedSecretKey = TextCodec.BASE64.encode(secretKey);
         
         
-        
-        // byte[] base64EncodedSecretKey = Base64.encodeBase64(secretKey.getBytes());
-        
-        
         return Jwts.builder()
                 .setClaims(claims)
                 .signWith(SignatureAlgorithm.HS512, base64EncodedSecretKey)
