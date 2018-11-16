@@ -17,6 +17,8 @@ import project.persistance.repositories.mongo.ChatMessageRepository;
  * 
  * TODO: this class should reference ChatMessageRepository.java.
  * 
+ * TODO: this will later become ChatMessageService
+ * 
  * 
  * @author Davíð Helgason (dah38@hi.is)
  */
@@ -28,8 +30,6 @@ public class ChatMessageTestService {
 	private ChatMessageRepository chatMessageRepository;
 	
 
-
-
 	/**
 	 * TODO finish implementing
 	 * 
@@ -38,10 +38,17 @@ public class ChatMessageTestService {
 	 * @param offset
 	 * @return
 	 */
-	/*public List<ChatMessage> getChatPage(Chatroom chatroom, int limit, int offset) {
+	public List<ChatMessage> getChatPage(Chatroom chatroom, int limit, int offset) {
+		
+		// chatMessageRepository.
+		
 		long id = chatroom.getId();
-		List<ChatMessage> chatMessages = chatMessageRepository.findPagedResultByChatroomName(id, limit, offset);
+		
+		List<ChatMessage> chatMessages = chatMessageRepository.findPagedResultByChatroomId(id, limit, offset);
+		
+		
+		// List<ChatMessage> chatMessages = chatMessageRepository.findPagedResultByChatroomName(id, limit, offset);
 		return chatMessages;
-	}*/
+	}
 		
 }

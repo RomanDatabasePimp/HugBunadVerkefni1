@@ -3,6 +3,7 @@ package project.persistance.repositories.mongo;
 import java.util.List;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import project.persistance.entities.ChatMessage;
@@ -12,13 +13,13 @@ import project.persistance.entities.ChatMessage;
  * 
  * @author Davíð Helgason (dah38@hi.is)
  */
-public interface ChatMessageRepository extends MongoRepository<ChatMessage, String> {
+public interface ChatMessageRepository extends MongoRepository<ChatMessage, String>, ChatMessageRepositoryCustom {
 	
 	/**
 	 * Returns a list of chat messages 
 	 * 
 	 * TODO: doesn't this require some implementation?
-	 * 
+	 *  
 	 * 
 	 * If M[1..n] was a list of all messages for a chat room C, then this
 	 * method would return M[n - offset - limit, n - offset].
@@ -29,4 +30,22 @@ public interface ChatMessageRepository extends MongoRepository<ChatMessage, Stri
 	 * @return
 	 */
 	List<ChatMessage> findPagedResultByChatroomName(long id, int limit, int offset);
+	
+	
+	/**
+	 * Returns a paged list of chat messages.
+	 *
+	 * If M[1..n] was a list of all messages for a chat room C, then this
+	 * method would return M[n - offset - limit, n - offset].
+	 * 
+	 * NOTE: Spring is 'tarded.  If you rename 
+	 * 
+	 * @param id
+	 * @param limit
+	 * @param offset
+	 * @return
+	 */
+	List<ChatMessage> findPagedResultById(long id, int limit, int offset);
+	
+
 }

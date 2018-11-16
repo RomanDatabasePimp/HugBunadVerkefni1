@@ -41,7 +41,7 @@ public class Application implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		// TODO Auto-generated method stub
 		
-		if (true) {
+		if (false) {
 			// Some MongoDB tests
 			System.out.println("Hello world!");
 			
