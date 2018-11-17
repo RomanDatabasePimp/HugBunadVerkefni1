@@ -84,6 +84,35 @@ public class ChatroomTestController extends ChatroomController {
 			return e.getErrorResponseEntity();
 		}
 	}
+	
+	/**
+	 * 
+	 * 
+	 * @param chatroom
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+	@RequestMapping(path = "/{chatroomName}/getmessagesfromtime/{startTime}", method = RequestMethod.GET, headers = "Accept=application/json")
+	public ResponseEntity<Object> getChatroomMessagesFromStartTime(@PathVariable String chatroomName,
+			@PathVariable Long startTime, @PathVariable Long endTime, UsernamePasswordAuthenticationToken token) {
+		
+		try {
+			User user = userService.findByUsername(token.getName());
+			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
+			if (chatroomService.isMember(user, chatroom)) {
+				List<ChatMessage> results = chatMessageTestService.getChatroomMessagesBetweenTime(chatroom, startTime, System.currentTimeMillis());
+				System.out.println(results);
+				return new ResponseEntity<>(results, HttpStatus.OK);
+			} else {
+				// TODO: add more descriptive error message.
+				return new ResponseEntity<>("don't have access to this chat room", HttpStatus.OK);
+			}
+		} catch (NotFoundException e) {
+			e.printStackTrace();
+			return e.getErrorResponseEntity();
+		}
+	}
 
 
 	/**
