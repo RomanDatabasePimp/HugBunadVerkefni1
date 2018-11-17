@@ -49,18 +49,18 @@ public class MembershipResponder extends ChatroomResponder{
 		User user = membership.getUser();
 		Chatroom chatroom = membership.getChatroom();
 
-//		List<Chatroom> o = user.getOwnedChatrooms();
-//		List<Chatroom> a = user.getAdminOfChatrooms();
-//		// set the user relation
-//		if(o.contains(chatroom)) {
-//			this.userRelation = ChatroomUserRelation.OWNER;
-//		}
-//		else if(a.contains(chatroom)) {
-//			this.userRelation = ChatroomUserRelation.ADMIN;
-//		}
-//		else {
-//			this.userRelation = ChatroomUserRelation.MEMBER;
-//		}
+		List<Chatroom> o = user.getOwnedChatrooms();
+		List<Chatroom> a = user.getAdminOfChatrooms();
+		// set the user relation
+		if(o.contains(chatroom)) {
+			this.userRelation = ChatroomUserRelation.OWNER;
+		}
+		else if(a.contains(chatroom)) {
+			this.userRelation = ChatroomUserRelation.ADMIN;
+		}
+		else {
+			this.userRelation = ChatroomUserRelation.MEMBER;
+		}
 	}
 
 	
