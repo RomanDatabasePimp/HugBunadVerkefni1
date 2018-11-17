@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,9 +13,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import project.Errors.NotFoundException;
+import project.payloads.ChatMessageRequest;
 import project.persistance.entities.ChatMessage;
 import project.persistance.entities.Chatroom;
-import project.persistance.repositories.mongo.ChatMessageRepository;
+import project.persistance.entities.User;
 import project.services.ChatMessageTestService;
 
 @RestController
@@ -23,65 +25,30 @@ public class ChatroomTestController extends ChatroomController {
 
 	@Autowired
 	private ChatMessageTestService chatMessageTestService;
-	
-	@Autowired
-	private ChatMessageRepository chatMessageRepository;
-	
 
-	@RequestMapping(path = "/{chatroomName}/postMessage", method = RequestMethod.POST, headers = "Accept=application/json")
-	public ResponseEntity<Object> postMessage(@PathVariable String chatroomName, @RequestBody ChatMessage chatMessage) {
-		
-		
-		try {
-			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
-			long chatroomId = chatroom.getId();
-			chatMessage.setChatroomId(chatroomId);
-		} catch (NotFoundException e) {
-			e.printStackTrace();
-		}
-		
-		
-		// INTERCEPT MESSAGE MAH
-		chatMessage.setTimestamp(System.currentTimeMillis());
-		
-		System.out.println("Chatroom name: " + chatroomName);
-		System.out.println("Chat message: " + chatMessage);
-		
-		chatMessageRepository.postMessage(chatMessage);
-		
-		
-		return null;
-	}
-	
 
 	/**
+	 * Returns all messages of chat room `chatroomName`.
 	 * 
+	 * TODO: maybe later remove?
 	 * 
-	 * @param chatroomName
-	 * @param limit
-	 * @param offset
-	 * @return
+	 * @param chatroomName Name of chat room.
+	 * @return All messages of chat room.
 	 */
 	@RequestMapping(path = "/{chatroomName}/log", method = RequestMethod.GET, headers = "Accept=application/json")
-	public ResponseEntity<Object> getChatlogPage(@PathVariable String chatroomName) {
-		try {
-						
-			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
+	public ResponseEntity<Object> getChatlogPage(@PathVariable String chatroomName, UsernamePasswordAuthenticationToken token) {
 
-			List<ChatMessage> chatMessages = chatMessageTestService.getAllMessages(chatroomName);
-			
-			System.out.println(chatMessages);
+		// TODO: what if the chat room doesn't exist?
+		
+		List<ChatMessage> chatMessages = chatMessageTestService.getAllMessages(chatroomName);
 
-			List<ChatMessage> body = chatMessages;
+		List<ChatMessage> body = chatMessages;
 
-			return new ResponseEntity<>(body, HttpStatus.OK);
-		} catch (NotFoundException e) {
-			return e.getErrorResponseEntity();
-		}
+		return new ResponseEntity<>(body, HttpStatus.OK);
 	}
 
 	/**
-	 * 
+	 * Returns all messages of chat room ...
 	 * 
 	 * @param chatroomName
 	 * @param limit
@@ -90,35 +57,104 @@ public class ChatroomTestController extends ChatroomController {
 	 */
 	@RequestMapping(path = "/{chatroomName}/log/{offset}/{limit}", method = RequestMethod.GET, headers = "Accept=application/json")
 	public ResponseEntity<Object> getChatlogPage(@PathVariable String chatroomName, @PathVariable int limit,
-			@PathVariable int offset) {
-		
-		System.out.println("THIS IS EXECUTING...");
-		
+			@PathVariable int offset, UsernamePasswordAuthenticationToken token) {
+
+		System.out.println("Get chat messages at offset and limited.");
+		System.out.println("Not implemented!");
+
 		try {
 			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
-			
-			System.out.println(chatroom);
-
-			// TODO: figure out which user has sent the request.
-
-			// TODO: ensure some that no some random user can get the chat log
-			// of any chat room he or she desires.
 
 			List<ChatMessage> chatMessages = chatMessageTestService.getChatPage(chatroom, limit, offset);
-			
-			System.out.println(chatMessages);
-
-			// TODO: this is only temporary. Figure out how to do this
-			// correctly.
 
 			List<ChatMessage> body = chatMessages;
 
 			return new ResponseEntity<>(body, HttpStatus.OK);
 
 		} catch (NotFoundException e) {
-			// e.printStackTrace();
+			e.printStackTrace();
 			return e.getErrorResponseEntity();
 		}
 	}
 
+
+	/**
+	 * 
+	 * 
+	 * @param chatroom
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+	@RequestMapping(path = "/{chatroomName}/getmessagesbetweentime/{startTime}/{endTime}", method = RequestMethod.GET, headers = "Accept=application/json")
+	public ResponseEntity<Object> getChatroomMessagesBetweenTime(@PathVariable String chatroomName,
+			@PathVariable Long startTime, @PathVariable Long endTime, UsernamePasswordAuthenticationToken token) {
+		
+		try {
+			User user = userService.findByUsername(token.getName());
+			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
+			if (chatroomService.isMember(user, chatroom)) {
+				List<ChatMessage> results = chatMessageTestService.getChatroomMessagesBetweenTime(chatroom, startTime, endTime);
+				System.out.println(results);
+				return new ResponseEntity<>(results, HttpStatus.OK);
+			} else {
+				// TODO: add more descriptive error message.
+				return new ResponseEntity<>("don't have access to this chat room", HttpStatus.OK);
+			}
+		} catch (NotFoundException e) {
+			e.printStackTrace();
+			return e.getErrorResponseEntity();
+		}
+	}
+
+	/**
+	 * 
+	 * http://localhost:9090/auth/chatroom2/c2/addchatmessage
+	 * 
+	 * JSON body
+	 * {
+	 * 	"message": "Hello world!"
+	 * }
+	 * 
+	 * @param chatroom
+	 * @param chatMessage
+	 * @return
+	 * @throws NotFoundException 
+	 */
+	@RequestMapping(path = "/{chatroomName}/addchatmessage", method = RequestMethod.POST, headers = "Accept=application/json")
+	public ResponseEntity<Object> addChatMessage(@PathVariable String chatroomName,
+			@RequestBody ChatMessageRequest chatMessageRequest, UsernamePasswordAuthenticationToken token) {
+
+		try {
+			User user = userService.findByUsername(token.getName());
+			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
+			
+			if (chatroomService.isMember(user, chatroom)) {
+				
+				long timestamp = System.currentTimeMillis();
+				
+				String chatroomMessage = chatMessageRequest.getMessage();
+				
+				ChatMessage chatMessage = new ChatMessage(
+						null, 
+						chatroom.getId(), 
+						chatroomName, 
+						user.getId(), 
+						user.getUsername(), 
+						chatroomMessage, 
+						timestamp
+				);
+				
+				chatMessageTestService.addChatMessage(chatMessage);
+				
+				return new ResponseEntity<>(timestamp, HttpStatus.OK);
+			} else {
+				// TODO: return something more informative.
+				return new ResponseEntity<>("error", HttpStatus.OK);
+			}
+		} catch (NotFoundException e) {
+			e.printStackTrace();
+			return e.getErrorResponseEntity();
+		}
+	}
 }

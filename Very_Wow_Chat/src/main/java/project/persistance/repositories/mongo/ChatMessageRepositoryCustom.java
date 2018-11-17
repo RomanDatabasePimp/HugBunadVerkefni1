@@ -26,4 +26,11 @@ public interface ChatMessageRepositoryCustom {
 	// void postMessage()
 	
 	void postMessage(ChatMessage message);
+	
+	void deleteAllChatMessagesOfChatroom(String chatroomName);
+	
+	List<ChatMessage> getChatroomMessagesBetweenTime(String chatroomName, long startTime, long endTime);
+	
+	void addChatMessage(ChatMessage message);
+	
 }

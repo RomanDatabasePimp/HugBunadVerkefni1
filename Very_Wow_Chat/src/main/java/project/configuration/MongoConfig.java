@@ -6,9 +6,12 @@ import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
 
 import com.mongodb.MongoClient;
 
+public class MongoConfig {}
+
 // @Configuration
 // @EnableMongoRepositories(basePackages = "project.persistance.repositories.mongo")
-public class MongoConfig extends AbstractMongoConfiguration {
+
+/*public class MongoConfig extends AbstractMongoConfiguration {
 
 	@Override
 	public MongoClient mongoClient() {
@@ -25,3 +28,4 @@ public class MongoConfig extends AbstractMongoConfiguration {
 	}
 
 }
+*/

@@ -62,4 +62,17 @@ public class ChatMessageTestService {
 	public void postMessage(ChatMessage message) {
 		chatMessageRepository.postMessage(message);
 	}
+	
+	public void deleteAllChatMessagesOfChatroom(Chatroom chatroom) {
+		chatMessageRepository.deleteAllChatMessagesOfChatroom(chatroom.getChatroomName());
+		
+	}
+	
+	public List<ChatMessage> getChatroomMessagesBetweenTime(Chatroom chatroom, Long startTime, Long endTime) {
+		return chatMessageRepository.getChatroomMessagesBetweenTime(chatroom.getChatroomName(), startTime, endTime);
+	}
+	
+	public void addChatMessage(ChatMessage chatMessage) {
+		chatMessageRepository.addChatMessage(chatMessage);
+	}
 }

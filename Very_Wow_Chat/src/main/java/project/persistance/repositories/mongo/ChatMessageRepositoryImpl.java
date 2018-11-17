@@ -31,17 +31,48 @@ public class ChatMessageRepositoryImpl implements ChatMessageRepositoryCustom {
 
 	@Override
 	public void postMessage(ChatMessage message) {
-		mongoTemplate.insert(message);		
+		mongoTemplate.insert(message);	
 	}
 
 	@Override
 	public List<ChatMessage> getAllMessages(String chatroomName) {
+		
+		// db.chatMessage.find({"chatroomName": "c2"} 
 		Criteria criteria = Criteria.where("chatroomName").is(chatroomName);
 		Query query = new Query(criteria);
 		
 		List<ChatMessage> results = mongoTemplate.find(query, ChatMessage.class);
 		
 		return results;
+	}
+
+	@Override
+	public void deleteAllChatMessagesOfChatroom(String chatroomName) {
+		// TODO: test
+		//  db.chatMessage.find({chatroomName: "c6", timestamp: { $gte: 1542462067973, $lte: 1542462082416 }}) 
+		
+		Criteria criteria = Criteria.where("chatroomName").is("c2");
+		
+		Query query = new Query(criteria);
+		
+		mongoTemplate.remove(query);
+	}
+
+	@Override
+	public List<ChatMessage> getChatroomMessagesBetweenTime(String chatroomName, long startTime, long endTime) {
+		// db.chatMessage.find({timestamp: { $gte: 1542458691498, $lt: 1542458702913 }})
+		
+		Query query = new Query();
+		query.addCriteria(Criteria.where("chatroomName").is(chatroomName));
+		query.addCriteria(Criteria.where("timestamp").gte(startTime).lte(endTime));
+		
+		List<ChatMessage> results = mongoTemplate.find(query, ChatMessage.class);
+		return results;
+	}
+
+	@Override
+	public void addChatMessage(ChatMessage message) {
+		mongoTemplate.insert(message);
 	}
 
 }
