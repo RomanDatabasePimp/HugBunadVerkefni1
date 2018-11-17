@@ -1,19 +1,16 @@
 package project.services;
 
-import project.persistance.entities.User;
-import project.persistance.repositories.UserRepository;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import project.Errors.UnauthorizedException;
 import project.Errors.BadRequestException;
 import project.Errors.NotFoundException;
+import project.persistance.entities.User;
+import project.persistance.repositories.UserRepository;
 
 @Service
 public class UserService {
