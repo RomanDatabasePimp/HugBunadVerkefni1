@@ -21,11 +21,7 @@ import project.services.UserService;
 /* This class handles http POST, PUT for registration  of a new user  */
 @RestController
 public class RegisterController {
-	
-	private final boolean DEBUG_1 = true;
-	
-	
-	private final boolean ENABLE_EMAIL = true;
+
 	
 	
 	private final boolean VERBOSE = true;
@@ -67,11 +63,6 @@ public class RegisterController {
 	@RequestMapping(value = "/register", method = RequestMethod.POST, headers = "Accept=application/json")
 	public ResponseEntity<String> register(@RequestBody UserRegistrationFormReceiver payload) throws Exception {
 		
-		System.out.println("DO YOU EVEN LIFT BRO?");
-		
-		if (DEBUG_1) {
-			System.out.println("This works!");
-		}
 		
 		HttpResponseBody clientResponse = new HttpResponseBody(); // create a instance of the response body
 		AuthenticationService authenticator = new AuthenticationService(this.userService);// authenticator
@@ -137,23 +128,14 @@ public class RegisterController {
 		// insert the data into Redis for 30 min
 		this.redisService.insertUser(payload.getUserName(), newUser);
 		
-		System.out.println("Pending user...");
 		
-		if (ENABLE_EMAIL) {
-			// the mailMan who will call the webServer to send a validation email
-			MailController mailMan = new MailController(payload.getEmail(), payload.getUserName()); // create the mail																								
-			mailMan.send(); // send the email to the user
+		
+		// the mailMan who will call the webServer to send a validation email
+		MailController mailMan = new MailController(payload.getEmail(), payload.getUserName()); // create the mail																								
+		mailMan.send(); // send the email to the user
 
-			/* we responde with that the register was successful and dont send any content back */
-			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
-		} else {
-			// DEBUGGING
-			
-			// System.out.println(x);
-			System.out.println("Key: " + payload.getUserName());
-			
-			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
-		}
+		/* we responde with that the register was successful and dont send any content back */
+		return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
 
 
 	}
