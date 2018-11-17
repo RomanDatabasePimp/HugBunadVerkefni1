@@ -63,6 +63,8 @@ public class User {
 	@Relationship(type="MEMBER_OF", direction=Relationship.OUTGOING)
 	protected List<Membership> memberships;
 	
+	// ATH when getting the chatrooms, their tag arrays will be empty, to get the tags, use findChatroomBychatroomName!!!
+	
 	// Empty constructor required as of Neo4j API 2.0.5
 	protected User() {};
 
