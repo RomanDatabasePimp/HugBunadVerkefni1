@@ -94,6 +94,26 @@ public class ChatroomController {
 			return e.getErrorResponseEntity();
 		}
 	}
+
+	/**
+	 * @param chatroomName: chatroomName of the chatroom of the membership to be returned
+	 * @return: if found, return the membership with a status code of 200, else error message with status code of 404
+	 */
+	@RequestMapping(path = "/{chatroomName}/membership", method = RequestMethod.GET, headers = "Accept=application/json")
+    public ResponseEntity<Object> getMembership(@PathVariable String chatroomName, UsernamePasswordAuthenticationToken token){
+		try {
+			// fetch user from authentication token
+			User user = userService.findByUsername(token.getName());
+			// fetch the chatroom
+			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
+			Membership membership = this.chatroomService.getUserMembershipOfChatroom(user, chatroom);
+			// wrap the data to send in json format
+			ChatroomResponder body = new MembershipResponder(membership);
+			return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
+		}catch(HttpException e) {
+			return e.getErrorResponseEntity();
+		}
+	}
 	
 	/**
 	 * @param username: chatroomName of the chatroom to be returned
@@ -373,7 +393,7 @@ public class ChatroomController {
 			// get the membership to update
 			Membership membership = chatroomService.getUserMembershipOfChatroom(user, chatroom);
 			// update the lastRead timestamp
-			membership.setLastReadNow();
+			membership.setLastRead((new Date()).getTime());
 			// save the changes
 			userService.saveUser(user);
 			// prepare the payload
