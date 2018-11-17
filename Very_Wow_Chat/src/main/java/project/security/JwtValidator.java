@@ -2,6 +2,7 @@ package project.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.impl.TextCodec;
 import project.payloads.JwtUser;
 
 import org.springframework.stereotype.Component;
@@ -13,10 +14,15 @@ public class JwtValidator {
   private String secret = "mydicktasteslikelemons";
   
   public JwtUser validate(String token) {
+	  
+      String secretKey = "mydicktasteslikelemons";
+      
+      String base64EncodedSecretKey = TextCodec.BASE64.encode(secretKey);
+	  
      JwtUser jwtUser = null;
      try { // get the tokens information 
             Claims body = Jwts.parser()
-                    .setSigningKey(secret)
+                    .setSigningKey(base64EncodedSecretKey)
                     .parseClaimsJws(token)
                     .getBody();
              // create a token user for further validation

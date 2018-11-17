@@ -22,8 +22,13 @@ import project.services.UserService;
 @RestController
 public class RegisterController {
 
+	
+	
+	private final boolean VERBOSE = true;
+
 	private final RedisService redisService; // redis services to insert the user into temp storage
 	private final UserService userService; // connect to neo4j db
+	
 
 	public RegisterController(UserService userService) {
 		this.redisService = new RedisService();
@@ -32,17 +37,33 @@ public class RegisterController {
 
 	/*--------------------------------------------CONTROLLERS START---------------------------------------------------------*/
 
-	/*
-	 * Usage : url/register 
-	 *   For : POST request Should contain a json obj of a form {"userName":"shitufkc", 
-	 *                                                           "displayName":"shitCUCK", 
-	 *                                                           "password":"123123",
-	 *                                                           "passwordReap":"123123", 
-	 *                                                           "email":"shitufck@gmail.com"} 
-	 * After : Validates the Client POST request and responds with an appropriate status code along with  data
+	
+	/**
+	 * Usage: url/regiseter
+	 * 
+	 * NOTE: POST request should contain a JSON object of the form
+	 * <pre>
+	 * {
+	 * 	   "userName": "john",
+	 * 	   "displayName": "gladwell",
+	 *     "password": "AveryLong$ecurePassword123",
+	 *     "passwordReap": "AveryLong$ecurePassword123",
+	 *     "email": "john.gladwell@gmail.com" 
+	 * }
+	 * </pre>
+	 * 
+	 * Validates the client's POST request and responds with an appropriate 
+	 * status code along with the data.
+	 * 
+	 * 
+	 * @param payload
+	 * @return
+	 * @throws Exception
 	 */
 	@RequestMapping(value = "/register", method = RequestMethod.POST, headers = "Accept=application/json")
 	public ResponseEntity<String> register(@RequestBody UserRegistrationFormReceiver payload) throws Exception {
+		
+		
 		HttpResponseBody clientResponse = new HttpResponseBody(); // create a instance of the response body
 		AuthenticationService authenticator = new AuthenticationService(this.userService);// authenticator
 																						
@@ -106,13 +127,17 @@ public class RegisterController {
 
 		// insert the data into Redis for 30 min
 		this.redisService.insertUser(payload.getUserName(), newUser);
-
+		
+		
+		
 		// the mailMan who will call the webServer to send a validation email
 		MailController mailMan = new MailController(payload.getEmail(), payload.getUserName()); // create the mail																								
 		mailMan.send(); // send the email to the user
 
 		/* we responde with that the register was successful and dont send any content back */
 		return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+
+
 	}
 
 	/*
@@ -139,11 +164,15 @@ public class RegisterController {
 
 		// create the user in our neo4j database
 	    try {
-	    	this.userService.createUser(newuser);    	
+	    		this.userService.createUser(newuser);    	
 	    }catch(HttpException e) {
 	        clientResponse.addSingleError("error", e.getMessage());
 	        return new ResponseEntity<>(clientResponse.getErrorResponse(), HttpStatus.BAD_REQUEST);
 		}
+	    
+	    if (VERBOSE) {
+	    		System.out.println("Successfully registrated!");
+	    }
 		
 		/* we responde with that the validation was successful and dont send any content back */
 		return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);

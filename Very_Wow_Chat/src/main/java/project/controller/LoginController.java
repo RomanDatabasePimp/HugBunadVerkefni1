@@ -5,6 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -32,13 +34,29 @@ public class LoginController {
 
 	/* Usage : url/login 
 	 *   For : METHOD TYPE POST Should contain a json obj of a form 
-	 *         {"username":"shitufkc","password":"123123"} 
+	 *         {"userName":"shitufkc","password":"123123"} 
 	 * After : Validates the Client POST request and responds with an appropriate 
 	 *         status code along with user data and  a JTW token */
+	
+	
+	/**
+	 * 
+	 * 
+	 * 
+	 * <pre class="code">
+	 * { "userName": "yourNameHere", "password": "yourPasswordHere" }
+	 * </pre>
+	 * 
+	 * @param payload
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/login", method = RequestMethod.POST, headers = "Accept=application/json")
 	public ResponseEntity<String> login(@RequestBody JwtUser payload) throws Exception {
 		HttpResponseBody clientResponse = new HttpResponseBody(); // create a instance of the response body
 
+		System.out.println("Login: " + payload.getUserName());
+		
 		// check if the user exists in the neo4j database if dosent exists then we
 		// respond with error and 404 not found
 		if (!this.userService.userExists(payload.getUserName())) {
@@ -50,12 +68,35 @@ public class LoginController {
 		User fetchedUsr = this.userService.findByUsername(payload.getUserName());
 		// the password is encrypted in the db so we need to decode it
 		BCryptPasswordEncoder privateInfoEncoder = new BCryptPasswordEncoder();
+		
+
+		
+		
+		
+		String encodedPassword = privateInfoEncoder.encode(payload.getPassword());
+		// System.out.println(encodedPassword);
+		
+		
+		CharSequence raw_password = payload.getPassword();
+		
+		System.out.println("Input password: [" + payload.getPassword() + "]");
+		System.out.println("Encoded input password: [" + encodedPassword + "]");
+		System.out.println("Expected password: [" + fetchedUsr.getPassword() + "]");
 
 		// check if password matches the requested login
-		if (!privateInfoEncoder.matches(payload.getPassword(), fetchedUsr.getPassword())) {
+		// if (!privateInfoEncoder.matches(encodedPassword, fetchedUsr.getPassword())) {
+		if (!privateInfoEncoder.matches(raw_password, fetchedUsr.getPassword())) {
+			System.out.println("Ugh oh!");
 			clientResponse.addErrorForForm("Password", "Password does not match the username");
 			return new ResponseEntity<>(clientResponse.getErrorResponse(), HttpStatus.UNAUTHORIZED);
 		}
+		
+		System.out.println("Hello world!");
+		
+		System.out.println(this.jwtGenerator.generate(payload));
+		// System.out.println(this.jwtGenerator.generate(payload));
+		// System.out.println(this.jwtGenerator.generate(payload));
+		//  System.out.println(this.jwtGenerator.generate(payload));
 
 		/*
 		 * create user and jtw to store in session storage This is the obj that will be
