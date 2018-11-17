@@ -41,11 +41,18 @@ public class ChatroomTestController extends ChatroomController {
 
 		// TODO: what if the chat room doesn't exist?
 		
-		List<ChatMessage> chatMessages = chatMessageTestService.getAllMessages(chatroomName);
+		try {
+			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
+			List<ChatMessage> chatMessages = chatMessageTestService.getAllMessages(chatroom);
 
-		List<ChatMessage> body = chatMessages;
+			List<ChatMessage> body = chatMessages;
 
-		return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
+			return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
+		} catch (NotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return e.getErrorResponseEntity();
+		}
 	}
 
 	/**
@@ -136,15 +143,8 @@ public class ChatroomTestController extends ChatroomController {
 				
 				String chatroomMessage = chatMessageRequest.getMessage();
 				
-				ChatMessage chatMessage = new ChatMessage(
-						null, 
-						chatroom.getId(), 
-						chatroomName, 
-						user.getId(), 
-						user.getUsername(), 
-						chatroomMessage, 
-						timestamp
-				);
+				
+				ChatMessage chatMessage = new ChatMessage(null, chatroomName, user.getId(), user.getUsername(), user.getDisplayName(), chatroomMessage, timestamp);
 				
 				chatMessageTestService.addChatMessage(chatMessage);
 				
