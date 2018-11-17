@@ -22,9 +22,6 @@ import project.services.UserService;
 @RestController
 public class RegisterController {
 
-	
-	
-	private final boolean VERBOSE = true;
 
 	private final RedisService redisService; // redis services to insert the user into temp storage
 	private final UserService userService; // connect to neo4j db
@@ -170,9 +167,6 @@ public class RegisterController {
 	        return new ResponseEntity<>(clientResponse.getErrorResponse(), HttpStatus.BAD_REQUEST);
 		}
 	    
-	    if (VERBOSE) {
-	    		System.out.println("Successfully registrated!");
-	    }
 		
 		/* we responde with that the validation was successful and dont send any content back */
 		return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);

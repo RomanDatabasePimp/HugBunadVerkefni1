@@ -1,7 +1,6 @@
 package project;
 
 import java.util.Arrays;
-import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -10,14 +9,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
-import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import com.mongodb.MongoClient;
-
-import project.persistance.entities.ChatMessage;
-import project.persistance.repositories.mongo.ChatMessageRepository;
 import project.services.CryptographyService;
 
 /**

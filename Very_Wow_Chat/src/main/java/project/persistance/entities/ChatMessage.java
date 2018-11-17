@@ -1,12 +1,8 @@
 package project.persistance.entities;
 
-import java.util.Date;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 /**
  * TODO: finish implementing...
