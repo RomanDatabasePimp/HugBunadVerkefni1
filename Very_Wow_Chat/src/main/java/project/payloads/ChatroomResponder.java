@@ -54,13 +54,14 @@ public class ChatroomResponder {
 	 * @param listed
 	 * @param invited_only
 	 */
-	public ChatroomResponder(String chatroomName, String displayName, String description, Boolean listed, Boolean invited_only, Long lastMessageReceived) {
+	public ChatroomResponder(String chatroomName, String displayName, String description, Boolean listed, Boolean invited_only, Long lastMessageReceived, List<String> tags) {
 		this.chatroomName = chatroomName;
 		this.displayName = displayName;
 		this.description = description;
 		this.listed = listed;
 		this.invited_only = invited_only;
 		this.lastMessageReceived = lastMessageReceived;
+		this.tags = tags;
 	}
 	// getters
 

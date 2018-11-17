@@ -5,6 +5,18 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import project.Errors.UnauthorizedException;
+import project.payloads.ChatStampReceiver;
+import project.payloads.ChatroomResponder;
+import project.payloads.ErrorResponder;
+import project.payloads.MembershipResponder;
+import project.payloads.ResponderLibrary;
+import project.payloads.UserResponder;
+import project.Errors.BadRequestException;
+import project.Errors.NotFoundException;
+import project.Errors.HttpException;
+import project.payloads.ResponseWrapper;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,15 +55,10 @@ public class ChatroomController {
 
 	@Autowired
 	protected ChatroomService chatroomService;
-	
 	@Autowired
 	protected UserService userService;
-	
 	@Autowired
-	protected TagService tagservice;
-	
-
-	
+	protected TagService tagService;	
 
 	/**
 	 * 
@@ -88,11 +95,12 @@ public class ChatroomController {
 			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
 			// wrap the data to send in json format
 			ChatroomResponder body = new ChatroomResponder(chatroom);
-			return new ResponseEntity<>(body, HttpStatus.OK);
+			return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
 		}catch(HttpException e) {
 			return e.getErrorResponseEntity();
 		}
 	}
+	
 	/**
 	 * @param username: chatroomName of the chatroom to be returned
 	 * @return: if chatroom not found: return 404 not found
@@ -141,10 +149,48 @@ public class ChatroomController {
 			);
 			// create the chatroom
 			Chatroom result = chatroomService.createChatroom(user, chatroom);
+			// add the tags to the chatroom
+			this.tagService.setTags(chatroom, newChatroom.getTags());
 			// wrap the chatroom data
 			ChatroomResponder body = new ChatroomResponder(result);
 			// return the chatroom and a 201 status code
-			return new ResponseEntity<>(body, HttpStatus.CREATED);
+			return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.CREATED);
+		}catch(HttpException e) {
+			return e.getErrorResponseEntity();
+		}
+	}
+
+	/*
+	 * @param newChatroom, a wrapper for the chatroom data
+	 * @return the chatroom that was created, or an error message
+	 */
+	@RequestMapping(path = "/{chatroomName}", method = RequestMethod.PATCH, headers = "Accept=application/json")
+    public ResponseEntity<Object> UpdateChatroom(@RequestBody ChatroomResponder newChatroom, UsernamePasswordAuthenticationToken token, @PathVariable String chatroomName){
+		try {
+			// fetch user from authentication token
+			User user = userService.findByUsername(token.getName());
+			// fetch the chatroom to update
+			Chatroom chatroom = this.chatroomService.findByChatname(chatroomName);
+			// get the new attributes, if provided
+			String newDisplayName = newChatroom.getDisplayName() != null ? newChatroom.getDisplayName() : chatroom.getDisplayName();
+			String newDescription = newChatroom.getDescription() != null ? newChatroom.getDescription() : chatroom.getDescription();
+			Boolean newListed = newChatroom.getListed() != null ? newChatroom.getListed() : chatroom.getListed();
+			Boolean newInvited_only = newChatroom.getInvited_only() != null ? newChatroom.getInvited_only() : chatroom.getInvited_only();
+			// apply the new attributes
+			chatroom.setDisplayName(newDisplayName);
+			chatroom.setDescription(newDescription);
+			chatroom.setListed(newListed);
+			chatroom.setInvited_only(newInvited_only);
+			// save the changes to the chatroom
+			this.chatroomService.saveChatroom(chatroom);
+			// fetch the new tags
+			List<String> newTags = newChatroom.getTags();
+			// apply the new tags
+			this.tagService.setTags(chatroom, newTags);
+			// wrap the chatroom data
+			ChatroomResponder body = new ChatroomResponder(chatroom);
+			// return the chatroom and a 201 status code
+			return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
 		}catch(HttpException e) {
 			return e.getErrorResponseEntity();
 		}
@@ -307,7 +353,7 @@ public class ChatroomController {
 		// create a list of ChatroomResponders for json return
 		List<ChatroomResponder> body = chatrooms.stream().map(x -> new ChatroomResponder(x)).collect(Collectors.toList());
 		
-		return new ResponseEntity<>(body, HttpStatus.OK);
+		return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
 
 	}
 	
@@ -340,7 +386,7 @@ public class ChatroomController {
 			// prepare the payload
 			MembershipResponder body = new MembershipResponder(membership);
 			// return the payload with a status of 200
-			return new ResponseEntity<>(body, HttpStatus.OK);
+			return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
 		}catch(HttpException e) {
 			return e.getErrorResponseEntity();
 		}
@@ -376,15 +422,12 @@ public class ChatroomController {
 			// convert the memberships into responders for return
 			List<MembershipResponder> body = ResponderLibrary.toMembershipResponderList(memberships);
 			// return the payload with a status of 200
-			return new ResponseEntity<>(body, HttpStatus.OK);
+			return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
 		}catch(HttpException e) {
 			return e.getErrorResponseEntity();
 		}
 	}
 	
-	// update chatroom
-	
-	// invite user to chatroom !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	
 	// add/replace tags (?)
 	// search for chatrroms with a tag
@@ -405,22 +448,23 @@ public class ChatroomController {
 			// collect the name of the tags
 			List<String> body = tags.stream().map(x -> x.getName()).collect(Collectors.toList());
 			// return the data with a 200 status
-			return new ResponseEntity<>(body, HttpStatus.OK);
+			return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
 		}catch(HttpException e) {
 			return e.getErrorResponseEntity();
 		}
 	}
 
 	@RequestMapping(path = "/tag/{tagName}", method = RequestMethod.GET, headers = "Accept=application/json")
-	public ResponseEntity<Object> getListedChatroomsWithTags(@PathVariable String tagName) {
-		System.out.println("tagName: "+tagName);
+	public ResponseEntity<Object> getListedChatroomsWithTag(@PathVariable String tagName) {
 		// fetch the chatroom
-		List<Chatroom> chatrooms = this.tagservice.findListedChatroomsWithTag(tagName);
+		List<Chatroom> chatrooms = this.tagService.findListedChatroomsWithTag(tagName);
+		
+		System.out.println(chatrooms.get(0).getTags().size());
 		
 		// create a list of ChatroomResponders for json return
-		List<ChatroomResponder> body = chatrooms.stream().map(x -> new ChatroomResponder(x)).collect(Collectors.toList());
+		List<ChatroomResponder> body = ResponderLibrary.toChatroomResponderList(chatrooms);
 		
-		return new ResponseEntity<>(body, HttpStatus.OK);
+		return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
 	}
 	
 	// set tags
@@ -442,10 +486,10 @@ public class ChatroomController {
 			}
 			
 			// overwrite the tags
-			this.tagservice.setTags(chatroom, tagNames);
+			this.tagService.setTags(chatroom, tagNames);
 			// return the updates chatroom
 			ChatroomResponder body = new ChatroomResponder(chatroom);
-			return new ResponseEntity<>(body, HttpStatus.OK);
+			return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
 		}catch(HttpException e) {
 			return e.getErrorResponseEntity();
 		} 
@@ -462,7 +506,7 @@ public class ChatroomController {
 			// create a list of ChatroomResponders for json return
 			List<UserResponder> body = users.stream().map(x -> new UserResponder(x)).collect(Collectors.toList());
 			
-			return new ResponseEntity<>(body, HttpStatus.OK);
+			return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
 		}catch(HttpException e) {
 			return e.getErrorResponseEntity();
 		}
@@ -477,7 +521,7 @@ public class ChatroomController {
 			// create a list of ChatroomResponders for json return
 			List<UserResponder> body = users.stream().map(x -> new UserResponder(x)).collect(Collectors.toList());
 			
-			return new ResponseEntity<>(body, HttpStatus.OK);
+			return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
 		}catch(HttpException e) {
 			return e.getErrorResponseEntity();
 		}
@@ -492,7 +536,7 @@ public class ChatroomController {
 			// create a list of ChatroomResponders for json return
 			List<UserResponder> body = users.stream().map(x -> new UserResponder(x)).collect(Collectors.toList());
 			
-			return new ResponseEntity<>(body, HttpStatus.OK);
+			return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
 		}catch(HttpException e) {
 			return e.getErrorResponseEntity();
 		}
@@ -507,7 +551,7 @@ public class ChatroomController {
 			// create a list of ChatroomResponders for json return
 			List<UserResponder> body = users.stream().map(x -> new UserResponder(x)).collect(Collectors.toList());
 			
-			return new ResponseEntity<>(body, HttpStatus.OK);
+			return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
 		}catch(HttpException e) {
 			return e.getErrorResponseEntity();
 		}
