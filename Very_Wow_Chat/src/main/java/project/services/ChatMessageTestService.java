@@ -50,7 +50,8 @@ public class ChatMessageTestService {
 	 * @param chatroomName
 	 * @return
 	 */
-	public List<ChatMessage> getAllMessages(String chatroomName) {
+	public List<ChatMessage> getAllMessages(Chatroom chatroom) {
+		String chatroomName = chatroom.getChatroomName();
 		List<ChatMessage> results = chatMessageRepository.getAllMessages(chatroomName);
 		return results;
 	}

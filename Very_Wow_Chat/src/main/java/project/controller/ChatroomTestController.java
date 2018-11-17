@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import project.Errors.NotFoundException;
 import project.payloads.ChatMessageRequest;
+import project.payloads.ResponseWrapper;
 import project.persistance.entities.ChatMessage;
 import project.persistance.entities.Chatroom;
 import project.persistance.entities.User;
@@ -44,7 +45,7 @@ public class ChatroomTestController extends ChatroomController {
 
 		List<ChatMessage> body = chatMessages;
 
-		return new ResponseEntity<>(body, HttpStatus.OK);
+		return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
 	}
 
 	/**
