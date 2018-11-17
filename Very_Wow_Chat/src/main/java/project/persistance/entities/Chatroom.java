@@ -75,8 +75,10 @@ public class Chatroom {
 		this.listed = listed;
 		this.invited_only = invited_only;
 		
-		this.lastMessageReceived = null;
-		this.created = (new Date()).getTime(); // current time
+		Long now = (new Date()).getTime();
+		
+		this.lastMessageReceived = now;
+		this.created = now;
 	}
 
 	// getters and setters
