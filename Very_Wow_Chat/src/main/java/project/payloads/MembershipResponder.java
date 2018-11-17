@@ -30,9 +30,10 @@ public class MembershipResponder extends ChatroomResponder{
 			Boolean invited_only,
 			Long lastRead,
 			ChatroomUserRelation userRelation,
-			Long lastMessageReceived
+			Long lastMessageReceived,
+			List<String> tags
 			) {
-		super(chatroomName, displayName, description, listed, invited_only, lastMessageReceived);
+		super(chatroomName, displayName, description, listed, invited_only, lastMessageReceived, tags);
 		this.lastRead = lastRead;
 		this.userRelation = userRelation;
 	}
