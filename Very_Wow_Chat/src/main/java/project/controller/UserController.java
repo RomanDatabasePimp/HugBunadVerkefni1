@@ -3,6 +3,7 @@ package project.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -35,13 +36,10 @@ import project.persistance.entities.Membership;
 @RequestMapping("/auth/user")
 public class UserController {
 
-	private final UserService userService;
-	private final ChatroomService chatroomService;
-	
-	public UserController(UserService userService, ChatroomService chatroomService) {
-		this.userService = userService;
-		this.chatroomService= chatroomService;
-	}
+	@Autowired
+	private UserService userService;
+	@Autowired
+	private ChatroomService chatroomService;
 
 	/**
 	 * Update a user's displayName, password, and email
@@ -198,6 +196,8 @@ public class UserController {
 			List<Chatroom> chatroomInvites = user.getChatroomInvites();
 			List<Chatroom> chatroomRequests = user.getChatroomRequests();
 			List<Membership> memberships = user.getMemberships(); // memberOfChatrooms, adminOfChatrooms, and ownedChatrooms are combined into this list
+
+			System.out.println(chatroomAdminInvites.get(0).getTags().size());
 			
 			// convert the users and chatrooms lists to responder lists
 			List<UserResponder> friendsResponderList = ResponderLibrary.toUserResponderList(friends);
@@ -206,7 +206,7 @@ public class UserController {
 			List<ChatroomResponder> chatroomAdminInvitesResponderList = ResponderLibrary.toChatroomResponderList(chatroomAdminInvites);
 			List<ChatroomResponder> chatroomInvitesResponderList = ResponderLibrary.toChatroomResponderList(chatroomInvites);
 			List<ChatroomResponder> chatroomRequestsResponderList = ResponderLibrary.toChatroomResponderList(chatroomRequests);
-			List<MembershipResponder> membershpsResponderList = ResponderLibrary.toMembershipResponderList(memberships);
+			List<MembershipResponder> membershipsResponderList = ResponderLibrary.toMembershipResponderList(memberships);
 
 			// wrap the responders in a container responder
 			RelationsResponder body = new RelationsResponder();
@@ -216,7 +216,7 @@ public class UserController {
 			body.add("chatroomAdminInvites", chatroomAdminInvitesResponderList);
 			body.add("chatroomInvites", chatroomInvitesResponderList);
 			body.add("chatroomRequests", chatroomRequestsResponderList);
-			body.add("chatrooms", membershpsResponderList);
+			body.add("chatrooms", membershipsResponderList);
 
 			// return the responder with a 201 status
 			return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
