@@ -1,5 +1,8 @@
 package project.payloads;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import project.persistance.entities.Chatroom;
 
 /**
@@ -24,6 +27,8 @@ public class ChatroomResponder {
 	protected Long created;
 	// timestamp of when the latest message was received
 	protected Long lastMessageReceived;
+	// the chatroom's tags
+	protected List<String> tags;
 	
 	/**
 	 * Create a responder from a chatroom
@@ -38,6 +43,7 @@ public class ChatroomResponder {
 		this.ownerUsername = chatroom.getOwner() != null ? chatroom.getOwner().getUsername() : "";
 		this.created = chatroom.getCreated();
 		this.lastMessageReceived = chatroom.getLastMessageReceived();
+		this.tags = chatroom.getTags().stream().map(x -> x.getName()).collect(Collectors.toList());
 	}
 	
 	/**
@@ -93,5 +99,10 @@ public class ChatroomResponder {
 	public void setLastMessageReceived(Long lastMessageReceived) {
 		this.lastMessageReceived = lastMessageReceived;
 	}
+
+	public List<String> getTags() {
+		return tags;
+	}
+	
 	
 }

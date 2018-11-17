@@ -28,9 +28,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import project.persistance.entities.Membership;
+import project.persistance.entities.Tag;
 import project.persistance.entities.User;
 import project.persistance.entities.Chatroom;
 import project.services.ChatroomService;
+import project.services.TagService;
 import project.services.UserService;
 
 
@@ -45,10 +47,12 @@ public class ChatroomController {
 
 	protected final ChatroomService chatroomService;
 	protected final UserService userService;
+	protected final TagService tagservice;
 	
-	public ChatroomController(ChatroomService chatroomService, UserService userService) {
+	public ChatroomController(ChatroomService chatroomService, UserService userService, TagService tagservice) {
 		this.chatroomService = chatroomService;
 		this.userService = userService;
+		this.tagservice = tagservice;
 	}
 	
 
@@ -171,7 +175,7 @@ public class ChatroomController {
 				return new ResponseEntity<>(body.getWrappedError(), HttpStatus.UNAUTHORIZED);
 			}
 			// send the invite
-			chatroomService.sendMemberInvite(invitee, chatroom);
+			chatroomService.sendMemberInvitation(invitee, chatroom);
 			// return successful, no content 
 			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
 		}catch(HttpException e) {
@@ -198,7 +202,7 @@ public class ChatroomController {
 		}catch(HttpException e) {
 			return e.getErrorResponseEntity();
 		}
-	}	
+	}
 	
 	/**
 	 * Send an iadmin nvite from chatroom to user
@@ -383,14 +387,75 @@ public class ChatroomController {
 	
 	// update chatroom
 	
+	// invite user to chatroom !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	
 	// add/replace tags (?)
 	// search for chatrroms with a tag
 	
 	// ban user, unban user (need to add banned user list)
 	//	a used banned from a chatroom cannot request to join it, cannot receive invites to it
 	
-	// -------------------------- get requests for the chatroom's various lists -------------------------
 
+	// ------------------------------------------ tag related requests ---------------------------------
+	
+	@RequestMapping(path = "/{chatroomName}/tags", method = RequestMethod.GET, headers = "Accept=application/json")
+	public ResponseEntity<Object> getChatroomTags(@PathVariable String chatroomName) {
+		try {
+			// fetch the chatroom
+			Chatroom chatroom = this.chatroomService.findByChatname(chatroomName);
+			// get the tags
+			List<Tag> tags = chatroom.getTags();
+			// collect the name of the tags
+			List<String> body = tags.stream().map(x -> x.getName()).collect(Collectors.toList());
+			// return the data with a 200 status
+			return new ResponseEntity<>(body, HttpStatus.OK);
+		}catch(HttpException e) {
+			return e.getErrorResponseEntity();
+		}
+	}
+
+	@RequestMapping(path = "/tag/{tagName}", method = RequestMethod.GET, headers = "Accept=application/json")
+	public ResponseEntity<Object> getListedChatroomsWithTags(@PathVariable String tagName) {
+		System.out.println("tagName: "+tagName);
+		// fetch the chatroom
+		List<Chatroom> chatrooms = this.tagservice.findListedChatroomsWithTag(tagName);
+		
+		// create a list of ChatroomResponders for json return
+		List<ChatroomResponder> body = chatrooms.stream().map(x -> new ChatroomResponder(x)).collect(Collectors.toList());
+		
+		return new ResponseEntity<>(body, HttpStatus.OK);
+	}
+	
+	// set tags
+	@RequestMapping(path = "/{chatroomName}/tags", method = RequestMethod.PATCH, headers = "Accept=application/json")
+	public ResponseEntity<Object> SetChatroomTags(@PathVariable String chatroomName, @RequestBody List<String> tagNames, UsernamePasswordAuthenticationToken token){
+		try {
+			// fetch user from authentication token
+			User user = userService.findByUsername(token.getName());
+			// fetch the chatroom
+			Chatroom chatroom = this.chatroomService.findByChatname(chatroomName);
+			// check if the user has the privileges to perform this action
+			
+			System.out.println(user.getUsername());
+			
+			if(!this.chatroomService.hasChatroomTagPrivilages(chatroom, user)) {
+				ErrorResponder body = new ErrorResponder();
+				body.setError("You do not have the privileges to edit this chatroom's tags.");
+				return new ResponseEntity<>(body.getWrappedError(), HttpStatus.UNAUTHORIZED);
+			}
+			
+			// overwrite the tags
+			this.tagservice.setTags(chatroom, tagNames);
+			// return the updates chatroom
+			ChatroomResponder body = new ChatroomResponder(chatroom);
+			return new ResponseEntity<>(body, HttpStatus.OK);
+		}catch(HttpException e) {
+			return e.getErrorResponseEntity();
+		} 
+	}
+	
+	// -------------------------- get requests for the chatroom's various lists -------------------------
+	
 	@RequestMapping(path = "/{chatroomName}/members", method = RequestMethod.GET, headers = "Accept=application/json")
     public ResponseEntity<Object> getMembers(@PathVariable String chatroomName){
 		try {
