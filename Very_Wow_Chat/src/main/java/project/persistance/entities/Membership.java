@@ -82,8 +82,8 @@ public class Membership {
 		return chatroom;
 	}
 
-	public void setLastRead(Long lastRead) {
-		this.lastRead = lastRead;
+	public void setLastReadNow() {
+		this.lastRead = (new Date()).getTime();
 	}
 
 	public Long getLastRead() {

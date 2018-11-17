@@ -106,6 +106,7 @@ public class ChatroomController {
 	 * @return: if chatroom not found: return 404 not found
 	 * 			if user is not the owner: return 401 unauthorized
 	 * 			if successful: return 204 no content
+	 * TODO: delete messages
 	 */
 	@RequestMapping(path = "/{chatroomName}", method = RequestMethod.DELETE, headers = "Accept=application/json")
     public ResponseEntity<Object> deleteChatroom(@PathVariable String chatroomName/*, UsernamePasswordAuthenticationToken token*/){
@@ -368,59 +369,21 @@ public class ChatroomController {
 	}
 
 	// mark a chatroom as read; set when the user last read a message
-	@RequestMapping(path = "/markread", method = RequestMethod.POST, headers = "Accept=application/json")
-	public ResponseEntity<Object> markChatroomRead(@RequestBody ChatStampReceiver chatStampReceiver, UsernamePasswordAuthenticationToken token){
+	@RequestMapping(path = "/{chatroomName}/markread", method = RequestMethod.POST, headers = "Accept=application/json")
+	public ResponseEntity<Object> markChatroomRead(UsernamePasswordAuthenticationToken token, @PathVariable String chatroomName){
 		try {
 			// fetch user from authentication token
 			User user = userService.findByUsername(token.getName());
-			// fetch the user provided new timestamp
-			Long timestamp = chatStampReceiver.getTimestamp();
 			// fetch the chatroom the user wants to mark as read
-			Chatroom chatroom = chatroomService.findByChatname(chatStampReceiver.getChatroomName());
+			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
 			// get the membership to update
 			Membership membership = chatroomService.getUserMembershipOfChatroom(user, chatroom);
 			// update the lastRead timestamp
-			membership.setLastRead(timestamp);
+			membership.setLastReadNow();
 			// save the changes
 			userService.saveUser(user);
 			// prepare the payload
 			MembershipResponder body = new MembershipResponder(membership);
-			// return the payload with a status of 200
-			return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
-		}catch(HttpException e) {
-			return e.getErrorResponseEntity();
-		}
-	}
-	
-	// to do
-	// mark a chatroom as read; set when the user last read a message
-	@RequestMapping(path = "/markmultipleread", method = RequestMethod.POST, headers = "Accept=application/json")
-	public ResponseEntity<Object> markMultipleChatroomRead(@RequestBody List<ChatStampReceiver> chatstampReceiver, UsernamePasswordAuthenticationToken token){
-		try {
-			// fetch user from authentication token
-			User user = userService.findByUsername(token.getName());
-			
-			List<Membership> memberships = new ArrayList<>();
-			
-			// update all the chatrooms supplied by user
-			for(ChatStampReceiver x : chatstampReceiver) {
-				// fetch the user provided new timestamp
-				Long timestamp = x.getTimestamp();
-				// fetch the chatroom the user wants to mark as read
-				Chatroom chatroom = chatroomService.findByChatname(x.getChatroomName());
-				// get the membership to update
-				Membership membership = chatroomService.getUserMembershipOfChatroom(user, chatroom);
-				// update the lastRead timestamp
-				membership.setLastRead(timestamp);
-				// collect the payloads
-				memberships.add(membership);
-			}
-			
-			// save the changes
-			userService.saveUser(user);
-			
-			// convert the memberships into responders for return
-			List<MembershipResponder> body = ResponderLibrary.toMembershipResponderList(memberships);
 			// return the payload with a status of 200
 			return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
 		}catch(HttpException e) {
@@ -458,8 +421,6 @@ public class ChatroomController {
 	public ResponseEntity<Object> getListedChatroomsWithTag(@PathVariable String tagName) {
 		// fetch the chatroom
 		List<Chatroom> chatrooms = this.tagService.findListedChatroomsWithTag(tagName);
-		
-		System.out.println(chatrooms.get(0).getTags().size());
 		
 		// create a list of ChatroomResponders for json return
 		List<ChatroomResponder> body = ResponderLibrary.toChatroomResponderList(chatrooms);
