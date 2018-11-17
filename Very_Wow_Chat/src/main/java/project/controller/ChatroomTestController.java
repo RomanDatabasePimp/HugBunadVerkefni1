@@ -35,10 +35,8 @@ public class ChatroomTestController extends ChatroomController {
 		try {
 			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
 			long chatroomId = chatroom.getId();
-			
 			chatMessage.setChatroomId(chatroomId);
 		} catch (NotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -54,6 +52,33 @@ public class ChatroomTestController extends ChatroomController {
 		
 		return null;
 	}
+	
+
+	/**
+	 * 
+	 * 
+	 * @param chatroomName
+	 * @param limit
+	 * @param offset
+	 * @return
+	 */
+	@RequestMapping(path = "/{chatroomName}/log", method = RequestMethod.GET, headers = "Accept=application/json")
+	public ResponseEntity<Object> getChatlogPage(@PathVariable String chatroomName) {
+		try {
+						
+			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
+
+			List<ChatMessage> chatMessages = chatMessageTestService.getAllMessages(chatroomName);
+			
+			System.out.println(chatMessages);
+
+			List<ChatMessage> body = chatMessages;
+
+			return new ResponseEntity<>(body, HttpStatus.OK);
+		} catch (NotFoundException e) {
+			return e.getErrorResponseEntity();
+		}
+	}
 
 	/**
 	 * 
@@ -67,9 +92,7 @@ public class ChatroomTestController extends ChatroomController {
 	public ResponseEntity<Object> getChatlogPage(@PathVariable String chatroomName, @PathVariable int limit,
 			@PathVariable int offset) {
 		
-	
 		System.out.println("THIS IS EXECUTING...");
-		
 		
 		try {
 			Chatroom chatroom = chatroomService.findByChatname(chatroomName);

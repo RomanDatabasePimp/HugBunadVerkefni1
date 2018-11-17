@@ -20,6 +20,9 @@ public interface ChatMessageRepositoryCustom {
 	 */
 	List<ChatMessage> findPagedResultByChatroomId(long id, int limit, int offset);
 	
+	
+	List<ChatMessage> getAllMessages(String chatroomName);
+	
 	// void postMessage()
 	
 	void postMessage(ChatMessage message);

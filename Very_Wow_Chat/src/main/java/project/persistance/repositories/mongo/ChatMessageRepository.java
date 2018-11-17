@@ -29,23 +29,5 @@ public interface ChatMessageRepository extends MongoRepository<ChatMessage, Stri
 	 * @param offset Where offset index from the tail of the chat messages.
 	 * @return
 	 */
-	List<ChatMessage> findPagedResultByChatroomName(long id, int limit, int offset);
-	
-	
-	/**
-	 * Returns a paged list of chat messages.
-	 *
-	 * If M[1..n] was a list of all messages for a chat room C, then this
-	 * method would return M[n - offset - limit, n - offset].
-	 * 
-	 * NOTE: Spring is 'tarded.  If you rename 
-	 * 
-	 * @param id
-	 * @param limit
-	 * @param offset
-	 * @return
-	 */
-	List<ChatMessage> findPagedResultById(long id, int limit, int offset);
-	
-
+	List<ChatMessage> findPagedResultByChatroomName(long id, int limit, int offset);	
 }

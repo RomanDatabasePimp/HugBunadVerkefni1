@@ -25,7 +25,6 @@ import project.persistance.repositories.mongo.ChatMessageRepository;
 @Service
 public class ChatMessageTestService {
 	
-	// TODO: should this be autowired or?
 	@Autowired
 	private ChatMessageRepository chatMessageRepository;
 	
@@ -38,17 +37,29 @@ public class ChatMessageTestService {
 	 * @param offset
 	 * @return
 	 */
-	public List<ChatMessage> getChatPage(Chatroom chatroom, int limit, int offset) {
-		
-		// chatMessageRepository.
-		
+	public List<ChatMessage> getChatPage(Chatroom chatroom, int limit, int offset) {		
 		long id = chatroom.getId();
 		
 		List<ChatMessage> chatMessages = chatMessageRepository.findPagedResultByChatroomId(id, limit, offset);
 		
-		
-		// List<ChatMessage> chatMessages = chatMessageRepository.findPagedResultByChatroomName(id, limit, offset);
 		return chatMessages;
 	}
-		
+	
+	/**
+	 * 
+	 * @param chatroomName
+	 * @return
+	 */
+	public List<ChatMessage> getAllMessages(String chatroomName) {
+		List<ChatMessage> results = chatMessageRepository.getAllMessages(chatroomName);
+		return results;
+	}
+	
+	/**
+	 * 
+	 * @param message
+	 */
+	public void postMessage(ChatMessage message) {
+		chatMessageRepository.postMessage(message);
+	}
 }

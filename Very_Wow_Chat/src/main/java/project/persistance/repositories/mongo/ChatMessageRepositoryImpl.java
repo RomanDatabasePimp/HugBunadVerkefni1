@@ -13,41 +13,35 @@ import project.persistance.entities.ChatMessage;
 @Repository
 public class ChatMessageRepositoryImpl implements ChatMessageRepositoryCustom {
 	
-	
 	@Autowired
-	private MongoTemplate mongoTemplate;
-	
+	private MongoTemplate mongoTemplate;	
 
 	@Override
 	public List<ChatMessage> findPagedResultByChatroomId(long id, int limit, int offset) {
 		
-		System.out.println("GREAT!: findPagedResultByChatroomId");
-		
-		System.out.println("Chatroom ID: " + id);
-		System.out.println("Limit: " + limit);
-		System.out.println("Offset: " + offset);
-		
-		
 		Criteria criteria = Criteria.where("chatroomId").is(id);
 		Query query = new Query(criteria);
-		// query.skip(offset);
-		// query.limit(limit);
+		query.skip(offset);
+		query.limit(limit);
 		
 		List<ChatMessage> results = mongoTemplate.find(query, ChatMessage.class);
 		
-		System.out.println(results);
-		
-		// TODO Auto-generated method stub
 		return results;
 	}
 
-
 	@Override
 	public void postMessage(ChatMessage message) {
-		// TODO Auto-generated method stub
+		mongoTemplate.insert(message);		
+	}
+
+	@Override
+	public List<ChatMessage> getAllMessages(String chatroomName) {
+		Criteria criteria = Criteria.where("chatroomName").is(chatroomName);
+		Query query = new Query(criteria);
 		
-		mongoTemplate.insert(message);
+		List<ChatMessage> results = mongoTemplate.find(query, ChatMessage.class);
 		
+		return results;
 	}
 
 }
