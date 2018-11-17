@@ -196,8 +196,6 @@ public class UserController {
 			List<Chatroom> chatroomInvites = user.getChatroomInvites();
 			List<Chatroom> chatroomRequests = user.getChatroomRequests();
 			List<Membership> memberships = user.getMemberships(); // memberOfChatrooms, adminOfChatrooms, and ownedChatrooms are combined into this list
-
-			System.out.println(chatroomAdminInvites.get(0).getTags().size());
 			
 			// convert the users and chatrooms lists to responder lists
 			List<UserResponder> friendsResponderList = ResponderLibrary.toUserResponderList(friends);
@@ -278,7 +276,6 @@ public class UserController {
     public ResponseEntity<Object> getMemberOfChatrooms(@PathVariable String username){
 		try {
 			User user = userService.findByUsername(username);
-			System.out.println(username);
 			List<Chatroom> chatrooms = user.getMemberOfChatrooms();
 			
 			// create a list of UserResponders for json return

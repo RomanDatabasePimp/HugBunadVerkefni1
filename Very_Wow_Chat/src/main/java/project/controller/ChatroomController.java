@@ -100,6 +100,7 @@ public class ChatroomController {
 	 * @return: if chatroom not found: return 404 not found
 	 * 			if user is not the owner: return 401 unauthorized
 	 * 			if successful: return 204 no content
+	 * TODO: delete messages
 	 */
 	@RequestMapping(path = "/{chatroomName}", method = RequestMethod.DELETE, headers = "Accept=application/json")
     public ResponseEntity<Object> deleteChatroom(@PathVariable String chatroomName/*, UsernamePasswordAuthenticationToken token*/){
@@ -452,8 +453,6 @@ public class ChatroomController {
 	public ResponseEntity<Object> getListedChatroomsWithTag(@PathVariable String tagName) {
 		// fetch the chatroom
 		List<Chatroom> chatrooms = this.tagService.findListedChatroomsWithTag(tagName);
-		
-		System.out.println(chatrooms.get(0).getTags().size());
 		
 		// create a list of ChatroomResponders for json return
 		List<ChatroomResponder> body = ResponderLibrary.toChatroomResponderList(chatrooms);
