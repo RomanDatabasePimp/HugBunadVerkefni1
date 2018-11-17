@@ -26,7 +26,7 @@ public class ChatMessage {
 	// Rel. to neo4j
 	protected long senderUsernameId;
 	protected String senderUsername;
-	protected String senderdsplayName;
+	protected String senderDisplayName;
 	
 	private String message;
 	
@@ -66,11 +66,11 @@ public class ChatMessage {
 	}
 
 	public String getSenderdsplayName() {
-		return senderdsplayName;
+		return senderDisplayName;
 	}
 
 	public void setSenderdsplayName(String senderdsplayName) {
-		this.senderdsplayName = senderdsplayName;
+		this.senderDisplayName = senderdsplayName;
 	}
 
 	public String getMessage() {
@@ -92,7 +92,7 @@ public class ChatMessage {
 	@Override
 	public String toString() {
 		return "ChatMessage [id=" + id + ", chatroomName=" + chatroomName + ", senderUsernameId=" + senderUsernameId
-				+ ", senderUsername=" + senderUsername + ", senderdsplayName=" + senderdsplayName + ", message="
+				+ ", senderUsername=" + senderUsername + ", senderdsplayName=" + senderDisplayName + ", message="
 				+ message + ", timestamp=" + timestamp + "]";
 	}
 
@@ -103,7 +103,7 @@ public class ChatMessage {
 		this.chatroomName = chatroomName;
 		this.senderUsernameId = senderUsernameId;
 		this.senderUsername = senderUsername;
-		this.senderdsplayName = senderdsplayName;
+		this.senderDisplayName = senderdsplayName;
 		this.message = message;
 		this.timestamp = timestamp;
 	}

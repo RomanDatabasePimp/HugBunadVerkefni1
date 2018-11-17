@@ -7,6 +7,19 @@ Application: Very Wow Chat
 Prerequisites
 
 * neo4j: <https://neo4j.com>
+* mongodb
+* redis
+
+## RESET
+
+MONGO
+```js
+use very_wow_chat
+db.dropDatabase()
+```
+
+NEO4j
+
 
 ## Git
 
