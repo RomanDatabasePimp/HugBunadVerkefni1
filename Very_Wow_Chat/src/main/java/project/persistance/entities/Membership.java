@@ -63,9 +63,11 @@ public class Membership {
 	public Membership(User user, Chatroom chatroom) {
 		this.user = user;
 		this.chatroom = chatroom;
-		this.lastRead = (new Date()).getTime(); // current time
 
-		this.whenJoined = (new Date()).getTime(); // current time
+		Long now = (new Date()).getTime(); // current time
+		
+		this.lastRead = now;
+		this.whenJoined = now;
 	}
 	
 	// getters and setters
@@ -82,8 +84,8 @@ public class Membership {
 		return chatroom;
 	}
 
-	public void setLastRead(Long lastRead) {
-		this.lastRead = lastRead;
+	public void setLastReadNow() {
+		this.lastRead = (new Date()).getTime();
 	}
 
 	public Long getLastRead() {
