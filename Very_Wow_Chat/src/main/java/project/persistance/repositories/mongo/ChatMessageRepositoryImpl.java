@@ -15,7 +15,12 @@ public class ChatMessageRepositoryImpl implements ChatMessageRepositoryCustom {
 	
 	@Autowired
 	private MongoTemplate mongoTemplate;	
+	
+	
 
+	/**
+	 * 
+	 */
 	@Override
 	public List<ChatMessage> findPagedResultByChatroomId(long id, int limit, int offset) {
 		
@@ -73,6 +78,14 @@ public class ChatMessageRepositoryImpl implements ChatMessageRepositoryCustom {
 	@Override
 	public void addChatMessage(ChatMessage message) {
 		mongoTemplate.insert(message);
+	}
+
+	@Override
+	public long getNrOfMessage(String chatroomName) {
+		Query query = new Query();
+		query.addCriteria(Criteria.where("chatroomName").is(chatroomName));
+		long count = mongoTemplate.count(query, ChatMessage.class);
+		return count;
 	}
 
 }
