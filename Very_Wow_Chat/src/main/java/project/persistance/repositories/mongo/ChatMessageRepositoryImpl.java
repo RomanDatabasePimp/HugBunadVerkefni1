@@ -22,9 +22,9 @@ public class ChatMessageRepositoryImpl implements ChatMessageRepositoryCustom {
 	 * 
 	 */
 	@Override
-	public List<ChatMessage> findPagedResultByChatroomId(long id, int limit, int offset) {
+	public List<ChatMessage> findPagedResultByChatroomName(String chatroomName, int limit, int offset) {
 		
-		Criteria criteria = Criteria.where("chatroomId").is(id);
+		Criteria criteria = Criteria.where("chatroomName").is(chatroomName);
 		Query query = new Query(criteria);
 		query.skip(offset);
 		query.limit(limit);
