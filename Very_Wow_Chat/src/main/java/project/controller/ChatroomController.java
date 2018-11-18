@@ -26,6 +26,7 @@ import project.persistance.entities.Membership;
 import project.persistance.entities.Tag;
 import project.persistance.entities.User;
 import project.services.ChatroomService;
+import project.services.MessageService;
 import project.services.TagService;
 import project.services.UserService;
 
@@ -45,7 +46,8 @@ public class ChatroomController {
 	@Autowired
 	protected UserService userService;
 	@Autowired
-	protected TagService tagService;	
+	protected TagService tagService;
+	
 
 	/**
 	 * 
@@ -129,6 +131,8 @@ public class ChatroomController {
 			// wrap the data to send in json format
 			
 			// DELETE ALL CHAT MESSAGES BEFORE DELETING THE CHATROOM!!!!
+			
+			
 			
 			chatroomService.deleteChatroom(chatroom);
 			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);

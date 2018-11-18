@@ -1,38 +1,32 @@
-package project.persistance.entities;
+package project.payloads;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.stereotype.Component;
-
+import project.persistance.entities.ChatMessage;
 import project.services.CryptographyService;
 
-/**
- * TODO: finish implementing...
- * 
- * @author Davíð Helgason (dah38@hi.is)
- */
-@Document(collection = "chatMessage")
-public class ChatMessage {
-	
+public class MessageResponse {
 
 	// MongoDB ID
-	@Id
-	protected String id;
+	private String id;
 	
 	// Rel. to neo4j
-	protected String chatroomName;
+	private String chatroomName;
 	
 	// Rel. to neo4j
-	protected long senderUsernameId;
-	protected String senderUsername;
-	protected String senderDisplayName;
+	private long senderUsernameId;
+	private String senderUsername;
+	private String senderDisplayName;
 	
 	private String message;
 	
-	@Indexed
-	private Long timestamp;
+	private long timestamp;
+	
+	public long getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(long timestamp) {
+		this.timestamp = timestamp;
+	}
 
 	public String getId() {
 		return id;
@@ -79,35 +73,37 @@ public class ChatMessage {
 	}
 
 	public void setMessage(String message) {
-		this.message = message;
-	}
-
-	public Long getTimestamp() {
-		return timestamp;
-	}
-
-	public void setTimestamp(Long timestamp) {
-		this.timestamp = timestamp;
+		this.message = CryptographyService.getPlaintext(message);
 	}
 
 	@Override
 	public String toString() {
-		return "ChatMessage [id=" + id + ", chatroomName=" + chatroomName + ", senderUsernameId=" + senderUsernameId
+		return "MessageResponse [id=" + id + ", chatroomName=" + chatroomName + ", senderUsernameId=" + senderUsernameId
 				+ ", senderUsername=" + senderUsername + ", senderDisplayName=" + senderDisplayName + ", message="
-				+ message + ", timestamp=" + timestamp + "]";
+				+ message + "]";
+	}
+	
+	public MessageResponse() {
+		this(null, null, 0, null, null, null, 0);
+	}
+	
+	public MessageResponse(String message) {
+		this(null, null, 0, null, null, message, 0);
 	}
 
-	public ChatMessage(String id, String chatroomName, long senderUsernameId, String senderUsername,
-			String senderDisplayName, String message, Long timestamp) {
+	public MessageResponse(String id, String chatroomName, long senderUsernameId, String senderUsername,
+			String senderDisplayName, String message, long timestamp) {
 		super();
 		this.id = id;
 		this.chatroomName = chatroomName;
 		this.senderUsernameId = senderUsernameId;
 		this.senderUsername = senderUsername;
 		this.senderDisplayName = senderDisplayName;
-		this.message = message;
+		this.message = CryptographyService.getPlaintext(message);
 		this.timestamp = timestamp;
 	}
-
-
+	
+	public MessageResponse(ChatMessage chatMessage) {
+		this(chatMessage.getId(), chatMessage.getChatroomName(), chatMessage.getSenderUsernameId(), chatMessage.getSenderUsername(), chatMessage.getSenderDisplayName(), chatMessage.getMessage(), chatMessage.getTimestamp());
+	}
 }
