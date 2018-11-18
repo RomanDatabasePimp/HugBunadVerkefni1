@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,19 +18,30 @@ public class UserService {
 
 	// logs all neo4j calls
 	protected final static Logger LOG = LoggerFactory.getLogger(UserService.class);
+
+	@Autowired
+	protected UserRepository userRepository;
 	
-	protected final UserRepository userRepository;
-	
-	public UserService(UserRepository userRepository) {
-		this.userRepository = userRepository;
-	}
 	
 	/**
-	 * Check if a user exists with a given username
+	 * Check if a user exists with a given username and is active
 	 * @param username	a user's userName
 	 * @return true if userName is in use, else false
 	 */
-	public boolean userExists(String username) {
+	public Boolean userExistsAndActive(String username) {
+		User user = this.userRepository.findByUsername(username);
+		if(user != null && user.getIsActive()) {
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * check if the username is available
+	 * @param username
+	 * @return
+	 */
+	public Boolean usernameTaken(String username) {
 		User user = this.userRepository.findByUsername(username);
 		return user != null;
 	}
@@ -52,7 +64,7 @@ public class UserService {
 	 */
 	public User createUser(User newUser) throws BadRequestException{
 		// throw error if username is taken
-		if(userExists(newUser.getUsername())) {
+		if(usernameTaken(newUser.getUsername())) {
 			throw new BadRequestException("Username is already in use.");
 		}
 		User user = userRepository.save(newUser);
@@ -69,7 +81,7 @@ public class UserService {
 	@Transactional(readOnly = true)
     public User findByUsername(String username) throws NotFoundException{
 		// throw error if user doesn't exist
-		if(!userExists(username)) {
+		if(!userExistsAndActive(username)) {
 			throw new NotFoundException("User not found");
 		}
 		
@@ -79,14 +91,20 @@ public class UserService {
     }
 	
 	/**
-	 * delete a user and all its relations
+	 * disable the user and delete all their relations
 	 * @param user: user to be deleted
 	 */
 	@Transactional(readOnly = false)
 	public void deleteUser(User user) {
-		userRepository.delete(user);
+		// disable the user
+		user.setIsActive(false);
+		String username = user.getUsername();
+		
+		// delete all the user's relations
+		this.userRepository.deleteUserRelations(username);
+		userRepository.save(user);
 	}
-
+	
 	
 	/**
 	 * Add a friend: sends a friend request, or creates a friend relation if requestee has already sent a friend request
