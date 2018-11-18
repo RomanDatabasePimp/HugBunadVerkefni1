@@ -16,8 +16,10 @@ import org.springframework.data.neo4j.annotation.Query;
 public interface UserRepository extends Neo4jRepository<User, Long>{
 	// Return a User NodeEntity if userName exists
 	User findByUsername(@Param("username") String username);
+	
 	// save a user in databse, for creates and updates
 	User save(User user);
+
 	// delete a user
 	void delete(User user);
 }

@@ -51,6 +51,9 @@ public class UserService {
 	 * @throws BadRequestException if username is taken
 	 */
 	public User createUser(User newUser) throws BadRequestException{
+		
+		// TODO: encrypt here!
+		
 		// throw error if username is taken
 		if(userExists(newUser.getUsername())) {
 			throw new BadRequestException("Username is already in use.");

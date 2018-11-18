@@ -1,7 +1,7 @@
 package project.controller;
 
-import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,13 +14,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import project.Errors.NotFoundException;
-import project.payloads.ChatMessageRequest;
+import project.payloads.MessageRequest;
+import project.payloads.MessageResponse;
 import project.payloads.ResponseWrapper;
 import project.persistance.entities.ChatMessage;
 import project.persistance.entities.Chatroom;
 import project.persistance.entities.User;
-import project.services.MessageService;
 import project.services.ChatroomService;
+import project.services.MessageService;
 import project.services.UserService;
 
 /**
@@ -61,11 +62,11 @@ public class MessageController {
 			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
 			
 			if (chatroomService.isMember(user, chatroom)) {
-				List<ChatMessage> chatMessages = messageService.getAllMessages(chatroom);
-				List<ChatMessage> body = chatMessages;
+				List<ChatMessage> messages = messageService.getAllMessages(chatroom);
+				List<MessageResponse> body = messages.stream().map(x -> new MessageResponse(x)).collect(Collectors.toList());
 				return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);	
 			} else {
-				return new ResponseEntity<>("don't have access to this chat room", HttpStatus.UNAUTHORIZED);
+				return new ResponseEntity<>(ResponseWrapper.badWrap("Offset and limit have to be non-negative integers."), HttpStatus.UNAUTHORIZED);
 			}
 		} catch (NotFoundException e) {
 			e.printStackTrace();
@@ -93,8 +94,8 @@ public class MessageController {
 			
 			if (chatroomService.isMember(user, chatroom)) {
 				if (offset >= 0) {
-					List<ChatMessage> chatMessages = messageService.getChatPage(chatroom, offset);
-					List<ChatMessage> body = chatMessages;
+					List<ChatMessage> messages = messageService.getChatPage(chatroom, offset);
+					List<MessageResponse> body = messages.stream().map(x -> new MessageResponse(x)).collect(Collectors.toList());
 					return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
 				} else {
 					return new ResponseEntity<>(ResponseWrapper.badWrap("Offset and limit have to be non-negative integers."), HttpStatus.UNAUTHORIZED);
@@ -131,8 +132,8 @@ public class MessageController {
 			
 			if (chatroomService.isMember(user, chatroom)) {
 				if (limit >= 0 && offset >= 0) {
-					List<ChatMessage> chatMessages = messageService.getChatPage(chatroom, offset, limit);
-					List<ChatMessage> body = chatMessages;
+					List<ChatMessage> messages = messageService.getChatPage(chatroom, offset, limit);
+					List<MessageResponse> body = messages.stream().map(x -> new MessageResponse(x)).collect(Collectors.toList());
 					return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
 				} else {
 					return new ResponseEntity<>(ResponseWrapper.badWrap("Offset and limit have to be non-negative integers."), HttpStatus.UNAUTHORIZED);
@@ -163,9 +164,13 @@ public class MessageController {
 			User user = userService.findByUsername(token.getName());
 			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
 			if (chatroomService.isMember(user, chatroom)) {
-				List<ChatMessage> results = messageService.getChatroomMessagesBetweenTime(chatroom, startTime,
+				List<ChatMessage> messages = messageService.getChatroomMessagesBetweenTime(chatroom, startTime,
 						System.currentTimeMillis());
-				return new ResponseEntity<>(ResponseWrapper.wrap(results), HttpStatus.OK);
+				
+				
+				List<MessageResponse> body = messages.stream().map(x -> new MessageResponse(x)).collect(Collectors.toList());
+				
+				return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
 			} else {
 				return new ResponseEntity<>(ResponseWrapper.badWrap("You don't have access to this chat room."), HttpStatus.UNAUTHORIZED);
 			}
@@ -192,8 +197,14 @@ public class MessageController {
 			User user = userService.findByUsername(token.getName());
 			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
 			if (chatroomService.isMember(user, chatroom)) {
-				List<ChatMessage> results = messageService.getChatroomMessagesBetweenTime(chatroom, startTime, endTime);
-				return new ResponseEntity<>(ResponseWrapper.wrap(results), HttpStatus.OK);
+				
+				List<ChatMessage> messages = messageService.getChatroomMessagesBetweenTime(chatroom, startTime, endTime);
+				
+				List<MessageResponse> body = messages.stream().map(x -> new MessageResponse(x)).collect(Collectors.toList());
+				
+				
+				
+				return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
 			} else {
 				return new ResponseEntity<>(ResponseWrapper.badWrap("You don't have access to this chat room."), HttpStatus.UNAUTHORIZED);
 			}
@@ -244,7 +255,7 @@ public class MessageController {
 	 */
 	@RequestMapping(path = "/{chatroomName}/message", method = RequestMethod.POST, headers = "Accept=application/json")
 	public ResponseEntity<Object> addChatMessage(@PathVariable String chatroomName,
-			@RequestBody ChatMessageRequest chatMessageRequest, UsernamePasswordAuthenticationToken token) {
+			@RequestBody MessageRequest chatMessageRequest, UsernamePasswordAuthenticationToken token) {
 		try {
 			User user = userService.findByUsername(token.getName());
 			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
@@ -260,9 +271,7 @@ public class MessageController {
 				
 				
 				chatroomService.updateLastMessageReceived(chatroomName);
-				
 
-				
 				return new ResponseEntity<>(ResponseWrapper.wrap(timestamp), HttpStatus.OK);
 			} else {
 				return new ResponseEntity<>(ResponseWrapper.badWrap("You don't have access to this chat room."), HttpStatus.UNAUTHORIZED);
