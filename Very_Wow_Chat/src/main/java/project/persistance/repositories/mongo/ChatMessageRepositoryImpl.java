@@ -16,18 +16,32 @@ public class ChatMessageRepositoryImpl implements ChatMessageRepositoryCustom {
 	@Autowired
 	private MongoTemplate mongoTemplate;	
 	
-	
 
 	/**
 	 * 
 	 */
 	@Override
-	public List<ChatMessage> findPagedResultByChatroomName(String chatroomName, int limit, int offset) {
+	public List<ChatMessage> findPagedResultByChatroomName(String chatroomName, int offset, int limit) {
 		
 		Criteria criteria = Criteria.where("chatroomName").is(chatroomName);
 		Query query = new Query(criteria);
 		query.skip(offset);
 		query.limit(limit);
+		
+		List<ChatMessage> results = mongoTemplate.find(query, ChatMessage.class);
+		
+		return results;
+	}
+	
+	/**
+	 * 
+	 */
+	@Override
+	public List<ChatMessage> findPagedResultByChatroomName(String chatroomName, int offset) {
+		
+		Criteria criteria = Criteria.where("chatroomName").is(chatroomName);
+		Query query = new Query(criteria);
+		query.skip(offset);
 		
 		List<ChatMessage> results = mongoTemplate.find(query, ChatMessage.class);
 		
