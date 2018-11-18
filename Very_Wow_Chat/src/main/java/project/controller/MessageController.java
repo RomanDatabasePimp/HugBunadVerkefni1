@@ -25,8 +25,8 @@ import project.services.UserService;
 /**
  * Message controller
  * 
- * NOTE: it's always OK to use this methods even though the user is not a 
- * member of a chat room.
+ * NOTE: it's always OK to use this methods even though the user is not a member
+ * of a chat room.
  * 
  * @author Davíð Helgason (dah38@hi.is)
  */
@@ -47,7 +47,7 @@ public class MessageController {
 	 * Returns all messages of chat room `chatroomName`.
 	 * 
 	 * @param chatroomName Name of chat room.
-	 * @param token User name & password authentication token.
+	 * @param token        User name & password authentication token.
 	 * 
 	 * @return All messages of chat room.
 	 */
@@ -67,14 +67,14 @@ public class MessageController {
 		}
 	}
 
-	/** 
-	 * Returns `limit` messages from chat room `chatroomName` starting from 
+	/**
+	 * Returns `limit` messages from chat room `chatroomName` starting from
 	 * `offset`.
 	 * 
 	 * @param chatroomName Name of chat room.
-	 * @param limit How many messages at most to retrieve.
-	 * @param offset Where to start retrieving messages.
-	 * @param token User name & password authentication token.
+	 * @param limit        How many messages at most to retrieve.
+	 * @param offset       Where to start retrieving messages.
+	 * @param token        User name & password authentication token.
 	 * @return
 	 */
 	@RequestMapping(path = "/{chatroomName}/messages/{offset}/{limit}", method = RequestMethod.GET, headers = "Accept=application/json")
@@ -92,12 +92,12 @@ public class MessageController {
 	}
 
 	/**
-	 * Returns all message from chat room `chatroomName` from time `startTime`
-	 * until now.
+	 * Returns all message from chat room `chatroomName` from time `startTime` until
+	 * now.
 	 * 
 	 * @param chatroomName Name of chat room.
-	 * @param startTime Start Unix time in milliseconds.
-	 * @param token User name & password authentication token. 
+	 * @param startTime    Start Unix time in milliseconds.
+	 * @param token        User name & password authentication token.
 	 * @return
 	 */
 	@RequestMapping(path = "/{chatroomName}/messages/time/{startTime}", method = RequestMethod.GET, headers = "Accept=application/json")
@@ -125,9 +125,9 @@ public class MessageController {
 	 * `startTime` until time `endTime`.
 	 * 
 	 * @param chatroomName Name of chat room.
-	 * @param startTime Start Unix time in milliseconds.
-	 * @param endTime End Unix time in milliseconds.
-	 * @param token User name & password authentication token.
+	 * @param startTime    Start Unix time in milliseconds.
+	 * @param endTime      End Unix time in milliseconds.
+	 * @param token        User name & password authentication token.
 	 * @return
 	 */
 	@RequestMapping(path = "/{chatroomName}/messages/time/{startTime}/{endTime}", method = RequestMethod.GET, headers = "Accept=application/json")
@@ -137,8 +137,7 @@ public class MessageController {
 			User user = userService.findByUsername(token.getName());
 			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
 			if (chatroomService.isMember(user, chatroom)) {
-				List<ChatMessage> results = messageService.getChatroomMessagesBetweenTime(chatroom, startTime,
-						endTime);
+				List<ChatMessage> results = messageService.getChatroomMessagesBetweenTime(chatroom, startTime, endTime);
 				System.out.println(results);
 				return new ResponseEntity<>(results, HttpStatus.OK);
 			} else {
@@ -155,11 +154,13 @@ public class MessageController {
 	 * 
 	 * The format of the JSON message should be like,
 	 * 
-	 * <pre>{ "message": "Hello world!" }</pre>
+	 * <pre>
+	 * { "message": "Hello world!" }
+	 * </pre>
 	 * 
-	 * @param chatroomName Name of chat room.
+	 * @param chatroomName       Name of chat room.
 	 * @param chatMessageRequest The message that is being sent.
-	 * @param token User name & password authentication token.
+	 * @param token              User name & password authentication token.
 	 * @return
 	 * @throws NotFoundException
 	 */
@@ -175,7 +176,8 @@ public class MessageController {
 				ChatMessage chatMessage = new ChatMessage(null, chatroomName, user.getId(), user.getUsername(),
 						user.getDisplayName(), chatroomMessage, timestamp);
 				messageService.addChatMessage(chatMessage);
-				return new ResponseEntity<>(timestamp, HttpStatus.OK);
+
+				return new ResponseEntity<>(ResponseWrapper.wrap(timestamp), HttpStatus.OK);
 			} else {
 				return new ResponseEntity<>("error", HttpStatus.OK);
 			}

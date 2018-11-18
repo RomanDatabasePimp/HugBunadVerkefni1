@@ -5,17 +5,17 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.impl.TextCodec;
 import project.payloads.JwtUser;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /* this class has to validate user jtw tokens that is has been passed */
 @Component
 public class JwtValidator {
-	
-  private String secret = "mydicktasteslikelemons";
+  
+  @Value("${cryptography.security.password}")
+  private String secretKey;
   
   public JwtUser validate(String token) {
-	  
-      String secretKey = "mydicktasteslikelemons";
       
       String base64EncodedSecretKey = TextCodec.BASE64.encode(secretKey);
 	  

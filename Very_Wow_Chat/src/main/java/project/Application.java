@@ -37,6 +37,16 @@ public class Application implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		// TODO Auto-generated method stub
+		
+		if (true) {
+			String plaintext = "hello";
+			String ciphertext = cryptographyService.getCiphertext(plaintext);
+			String reconstructedPlaintext = cryptographyService.getPlaintext(ciphertext);
+			
+			System.out.println(plaintext);
+			System.out.println(ciphertext);
+			System.out.println(reconstructedPlaintext);
+		}
 
 		if (true) {
 			// Get defined beans
@@ -55,19 +65,6 @@ public class Application implements CommandLineRunner {
 				
 			}
 		}
-		
-		if (false) {
-			
-			System.out.println("Generated salt: " + cryptographyService.generateSalt());
-			
-			
-			String originalPlaintext = "This is super secret!";
-			String ciphertext = cryptographyService.getCiphertext(originalPlaintext);
-			String reconstructedPlaintext = cryptographyService.getPlaintext(ciphertext);
-			
-			System.out.println("Original plaintext: " + originalPlaintext);
-			System.out.println("Ciphertext: " + ciphertext);
-			System.out.println("Reconstructed plaintext: " + reconstructedPlaintext);
-		}
+
 	}
 }
