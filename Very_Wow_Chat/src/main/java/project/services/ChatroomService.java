@@ -25,7 +25,7 @@ import project.Errors.NotFoundException;
 @Service
 public class ChatroomService {
 	// logs all neo4j calls
-	protected final static Logger LOG = LoggerFactory.getLogger(UserService.class);
+	// protected final static Logger LOG = LoggerFactory.getLogger(UserService.class);
 
 	protected final ChatroomRepository chatroomRepository;
 	protected final UserRepository userRepository;
