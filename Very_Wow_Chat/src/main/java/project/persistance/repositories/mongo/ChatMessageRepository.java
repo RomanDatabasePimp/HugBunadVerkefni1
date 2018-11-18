@@ -12,22 +12,5 @@ import project.persistance.entities.ChatMessage;
  * @author Davíð Helgason (dah38@hi.is)
  */
 public interface ChatMessageRepository extends MongoRepository<ChatMessage, String>, ChatMessageRepositoryCustom {
-	
-	/**
-	 * Returns a list of chat messages 
-	 * 
-	 * TODO: doesn't this require some implementation?
-	 * 
-	 * TODO: I don't even know if this works or not :/
-	 * 
-	 * 
-	 * If M[1..n] was a list of all messages for a chat room C, then this
-	 * method would return M[n - offset - limit, n - offset].
-	 * 
-	 * @param id The ID of the chat room.
-	 * @param limit How many messages to get.
-	 * @param offset Where offset index from the tail of the chat messages.
-	 * @return
-	 */
-	List<ChatMessage> findPagedResultByChatroomName(long id, int limit, int offset);	
+		
 }

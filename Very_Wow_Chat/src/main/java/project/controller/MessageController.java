@@ -71,6 +71,44 @@ public class MessageController {
 			return e.getErrorResponseEntity();
 		}
 	}
+	
+	/**
+	 * Returns `limit` messages from chat room `chatroomName` starting from
+	 * `offset`.
+	 * 
+	 * @param chatroomName Name of chat room.
+	 * @param limit        How many messages at most to retrieve.
+	 * @param offset       Where to start retrieving messages.
+	 * @param token        User name & password authentication token.
+	 * @return
+	 */
+	@RequestMapping(path = "/{chatroomName}/messages/{offset}", method = RequestMethod.GET, headers = "Accept=application/json")
+	public ResponseEntity<Object> getChatlogPage(@PathVariable String chatroomName, 
+			@PathVariable int offset, UsernamePasswordAuthenticationToken token) {
+		try {
+
+			User user = userService.findByUsername(token.getName());
+			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
+			
+			if (chatroomService.isMember(user, chatroom)) {
+				if (offset >= 0) {
+					List<ChatMessage> chatMessages = messageService.getChatPage(chatroom, offset);
+					List<ChatMessage> body = chatMessages;
+					return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
+				} else {
+					return new ResponseEntity<>(ResponseWrapper.badWrap("Offset and limit have to be non-negative integers."), HttpStatus.UNAUTHORIZED);
+				}
+					
+			} else {
+				return new ResponseEntity<>(ResponseWrapper.badWrap("You don't have access to this chat room."), HttpStatus.UNAUTHORIZED);
+			}
+		} catch (NotFoundException e) {
+			e.printStackTrace();
+			return e.getErrorResponseEntity();
+		}
+	}
+	
+	
 
 	/**
 	 * Returns `limit` messages from chat room `chatroomName` starting from
@@ -91,11 +129,16 @@ public class MessageController {
 			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
 			
 			if (chatroomService.isMember(user, chatroom)) {
-				List<ChatMessage> chatMessages = messageService.getChatPage(chatroom, limit, offset);
-				List<ChatMessage> body = chatMessages;
-				return new ResponseEntity<>(body, HttpStatus.OK);	
+				if (limit >= 0 && offset >= 0) {
+					List<ChatMessage> chatMessages = messageService.getChatPage(chatroom, offset, limit);
+					List<ChatMessage> body = chatMessages;
+					return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
+				} else {
+					return new ResponseEntity<>(ResponseWrapper.badWrap("Offset and limit have to be non-negative integers."), HttpStatus.UNAUTHORIZED);
+				}
+					
 			} else {
-				return new ResponseEntity<>("don't have access to this chat room", HttpStatus.UNAUTHORIZED);
+				return new ResponseEntity<>(ResponseWrapper.badWrap("You don't have access to this chat room."), HttpStatus.UNAUTHORIZED);
 			}
 		} catch (NotFoundException e) {
 			e.printStackTrace();
@@ -121,10 +164,9 @@ public class MessageController {
 			if (chatroomService.isMember(user, chatroom)) {
 				List<ChatMessage> results = messageService.getChatroomMessagesBetweenTime(chatroom, startTime,
 						System.currentTimeMillis());
-				System.out.println(results);
-				return new ResponseEntity<>(results, HttpStatus.OK);
+				return new ResponseEntity<>(ResponseWrapper.wrap(results), HttpStatus.OK);
 			} else {
-				return new ResponseEntity<>("don't have access to this chat room", HttpStatus.UNAUTHORIZED);
+				return new ResponseEntity<>(ResponseWrapper.badWrap("You don't have access to this chat room."), HttpStatus.UNAUTHORIZED);
 			}
 		} catch (NotFoundException e) {
 			e.printStackTrace();
@@ -150,9 +192,9 @@ public class MessageController {
 			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
 			if (chatroomService.isMember(user, chatroom)) {
 				List<ChatMessage> results = messageService.getChatroomMessagesBetweenTime(chatroom, startTime, endTime);
-				return new ResponseEntity<>(results, HttpStatus.OK);
+				return new ResponseEntity<>(ResponseWrapper.wrap(results), HttpStatus.OK);
 			} else {
-				return new ResponseEntity<>("don't have access to this chat room", HttpStatus.UNAUTHORIZED);
+				return new ResponseEntity<>(ResponseWrapper.badWrap("You don't have access to this chat room."), HttpStatus.UNAUTHORIZED);
 			}
 		} catch (NotFoundException e) {
 			e.printStackTrace();
@@ -176,7 +218,7 @@ public class MessageController {
 				long count = messageService.getNrOfMessage(chatroom);
 				return new ResponseEntity<>(ResponseWrapper.wrap(count), HttpStatus.OK);
 			} else {
-				return new ResponseEntity<>("don't have access to this chat room", HttpStatus.UNAUTHORIZED);
+				return new ResponseEntity<>(ResponseWrapper.badWrap("You don't have access to this chat room."), HttpStatus.UNAUTHORIZED);
 			}
 		} catch (NotFoundException e) {
 			e.printStackTrace();
@@ -211,10 +253,9 @@ public class MessageController {
 				ChatMessage chatMessage = new ChatMessage(null, chatroomName, user.getId(), user.getUsername(),
 						user.getDisplayName(), chatroomMessage, timestamp);
 				messageService.addChatMessage(chatMessage);
-
 				return new ResponseEntity<>(ResponseWrapper.wrap(timestamp), HttpStatus.OK);
 			} else {
-				return new ResponseEntity<>("error", HttpStatus.UNAUTHORIZED);
+				return new ResponseEntity<>(ResponseWrapper.badWrap("You don't have access to this chat room."), HttpStatus.UNAUTHORIZED);
 			}
 		} catch (NotFoundException e) {
 			e.printStackTrace();

@@ -18,7 +18,13 @@ public interface ChatMessageRepositoryCustom {
 	 * @param offset
 	 * @return
 	 */
-	List<ChatMessage> findPagedResultByChatroomName(String chatroomName, int limit, int offset);
+	List<ChatMessage> findPagedResultByChatroomName(String chatroomName, int offset, int limit);
+	
+	
+	List<ChatMessage> findPagedResultByChatroomName(String chatroomName, int offset);
+	
+	
+	
 	
 	
 	/**
