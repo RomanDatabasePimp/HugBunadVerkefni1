@@ -31,8 +31,8 @@ public class MessageService {
 	 * @return
 	 */
 	public List<ChatMessage> getChatPage(Chatroom chatroom, int limit, int offset) {
-		long id = chatroom.getId();
-		List<ChatMessage> chatMessages = chatMessageRepository.findPagedResultByChatroomId(id, limit, offset);
+		String chatroomName = chatroom.getChatroomName();
+		List<ChatMessage> chatMessages = chatMessageRepository.findPagedResultByChatroomName(chatroomName, limit, offset);
 		return chatMessages;
 	}
 
