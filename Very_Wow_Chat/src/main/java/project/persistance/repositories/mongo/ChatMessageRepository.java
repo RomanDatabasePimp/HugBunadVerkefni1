@@ -17,7 +17,9 @@ public interface ChatMessageRepository extends MongoRepository<ChatMessage, Stri
 	 * Returns a list of chat messages 
 	 * 
 	 * TODO: doesn't this require some implementation?
-	 *  
+	 * 
+	 * TODO: I don't even know if this works or not :/
+	 * 
 	 * 
 	 * If M[1..n] was a list of all messages for a chat room C, then this
 	 * method would return M[n - offset - limit, n - offset].

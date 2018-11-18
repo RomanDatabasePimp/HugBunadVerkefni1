@@ -21,16 +21,38 @@ public interface ChatMessageRepositoryCustom {
 	List<ChatMessage> findPagedResultByChatroomId(long id, int limit, int offset);
 	
 	
+	/**
+	 * 
+	 * @param chatroomName
+	 * @return
+	 */
 	List<ChatMessage> getAllMessages(String chatroomName);
 	
-	// void postMessage()
-	
+	/**
+	 * 
+	 * @param message
+	 */
 	void postMessage(ChatMessage message);
 	
+	/**
+	 * 
+	 * @param chatroomName
+	 */
 	void deleteAllChatMessagesOfChatroom(String chatroomName);
 	
+	/**
+	 * 
+	 * @param chatroomName
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
 	List<ChatMessage> getChatroomMessagesBetweenTime(String chatroomName, long startTime, long endTime);
 	
+	/**
+	 * 
+	 * @param message
+	 */
 	void addChatMessage(ChatMessage message);
 	
 }

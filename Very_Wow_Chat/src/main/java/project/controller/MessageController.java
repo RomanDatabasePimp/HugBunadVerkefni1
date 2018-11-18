@@ -54,9 +54,6 @@ public class MessageController {
 	@RequestMapping(path = "/{chatroomName}/messages/all", method = RequestMethod.GET, headers = "Accept=application/json")
 	public ResponseEntity<Object> getChatlogPage(@PathVariable String chatroomName,
 			UsernamePasswordAuthenticationToken token) {
-
-		// TODO: what if the chat room doesn't exist?
-
 		try {
 			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
 			List<ChatMessage> chatMessages = messageService.getAllMessages(chatroom);
@@ -65,7 +62,6 @@ public class MessageController {
 
 			return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
 		} catch (NotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return e.getErrorResponseEntity();
 		}
@@ -84,19 +80,11 @@ public class MessageController {
 	@RequestMapping(path = "/{chatroomName}/messages/{offset}/{limit}", method = RequestMethod.GET, headers = "Accept=application/json")
 	public ResponseEntity<Object> getChatlogPage(@PathVariable String chatroomName, @PathVariable int limit,
 			@PathVariable int offset, UsernamePasswordAuthenticationToken token) {
-
-		System.out.println("Get chat messages at offset and limited.");
-		System.out.println("Not implemented!");
-
 		try {
 			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
-
 			List<ChatMessage> chatMessages = messageService.getChatPage(chatroom, limit, offset);
-
 			List<ChatMessage> body = chatMessages;
-
 			return new ResponseEntity<>(body, HttpStatus.OK);
-
 		} catch (NotFoundException e) {
 			e.printStackTrace();
 			return e.getErrorResponseEntity();
@@ -115,7 +103,6 @@ public class MessageController {
 	@RequestMapping(path = "/{chatroomName}/messages/time/{startTime}", method = RequestMethod.GET, headers = "Accept=application/json")
 	public ResponseEntity<Object> getChatroomMessagesFromStartTime(@PathVariable String chatroomName,
 			@PathVariable Long startTime, @PathVariable Long endTime, UsernamePasswordAuthenticationToken token) {
-
 		try {
 			User user = userService.findByUsername(token.getName());
 			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
@@ -125,7 +112,6 @@ public class MessageController {
 				System.out.println(results);
 				return new ResponseEntity<>(results, HttpStatus.OK);
 			} else {
-				// TODO: add more descriptive error message.
 				return new ResponseEntity<>("don't have access to this chat room", HttpStatus.OK);
 			}
 		} catch (NotFoundException e) {
@@ -147,7 +133,6 @@ public class MessageController {
 	@RequestMapping(path = "/{chatroomName}/messages/time/{startTime}/{endTime}", method = RequestMethod.GET, headers = "Accept=application/json")
 	public ResponseEntity<Object> getChatroomMessagesBetweenTime(@PathVariable String chatroomName,
 			@PathVariable Long startTime, @PathVariable Long endTime, UsernamePasswordAuthenticationToken token) {
-
 		try {
 			User user = userService.findByUsername(token.getName());
 			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
@@ -157,7 +142,6 @@ public class MessageController {
 				System.out.println(results);
 				return new ResponseEntity<>(results, HttpStatus.OK);
 			} else {
-				// TODO: add more descriptive error message.
 				return new ResponseEntity<>("don't have access to this chat room", HttpStatus.OK);
 			}
 		} catch (NotFoundException e) {
@@ -182,25 +166,17 @@ public class MessageController {
 	@RequestMapping(path = "/{chatroomName}/message", method = RequestMethod.POST, headers = "Accept=application/json")
 	public ResponseEntity<Object> addChatMessage(@PathVariable String chatroomName,
 			@RequestBody ChatMessageRequest chatMessageRequest, UsernamePasswordAuthenticationToken token) {
-
 		try {
 			User user = userService.findByUsername(token.getName());
 			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
-
 			if (chatroomService.isMember(user, chatroom)) {
-
 				long timestamp = System.currentTimeMillis();
-
 				String chatroomMessage = chatMessageRequest.getMessage();
-
 				ChatMessage chatMessage = new ChatMessage(null, chatroomName, user.getId(), user.getUsername(),
 						user.getDisplayName(), chatroomMessage, timestamp);
-
 				messageService.addChatMessage(chatMessage);
-
 				return new ResponseEntity<>(timestamp, HttpStatus.OK);
 			} else {
-				// TODO: return something more informative.
 				return new ResponseEntity<>("error", HttpStatus.OK);
 			}
 		} catch (NotFoundException e) {
