@@ -11,8 +11,10 @@ import project.persistance.repositories.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Date;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,11 +30,31 @@ public class ChatroomService {
 	protected final ChatroomRepository chatroomRepository;
 	protected final UserRepository userRepository;
 	protected final TagRepository tagRepository;
+	
+
+	@Autowired
+	protected MessageService messageService;
 
 	public ChatroomService(ChatroomRepository chatroomRepository, UserRepository userRepository, TagRepository tagRepository) {
 		this.chatroomRepository = chatroomRepository;
 		this.userRepository = userRepository;
 		this.tagRepository = tagRepository;
+		
+
+		
+		
+	}
+	
+	
+	public void updateLastMessageReceived(String chatroomName) {
+		try {
+			Chatroom chatroom = findByChatname(chatroomName);
+			chatroom.setLastMessageReceived((new Date()).getTime());
+			saveChatroom(chatroom);
+		} catch (NotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -422,6 +444,8 @@ public class ChatroomService {
 				return m;
 			}
 		}
+		
+		messageService.deleteAllChatMessagesOfChatroom(chatroom);
 		// if not found, throw an exception
 		throw new NotFoundException("User is not a member of the chatroom " + chatroom.getChatroomName());
 	}

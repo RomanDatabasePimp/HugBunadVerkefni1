@@ -1,5 +1,6 @@
 package project.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -247,12 +248,21 @@ public class MessageController {
 		try {
 			User user = userService.findByUsername(token.getName());
 			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
+			
+
+			
 			if (chatroomService.isMember(user, chatroom)) {
 				long timestamp = System.currentTimeMillis();
 				String chatroomMessage = chatMessageRequest.getMessage();
 				ChatMessage chatMessage = new ChatMessage(null, chatroomName, user.getId(), user.getUsername(),
 						user.getDisplayName(), chatroomMessage, timestamp);
 				messageService.addChatMessage(chatMessage);
+				
+				
+				chatroomService.updateLastMessageReceived(chatroomName);
+				
+
+				
 				return new ResponseEntity<>(ResponseWrapper.wrap(timestamp), HttpStatus.OK);
 			} else {
 				return new ResponseEntity<>(ResponseWrapper.badWrap("You don't have access to this chat room."), HttpStatus.UNAUTHORIZED);
