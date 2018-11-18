@@ -30,9 +30,25 @@ public class MessageService {
 	 * @param offset
 	 * @return
 	 */
-	public List<ChatMessage> getChatPage(Chatroom chatroom, int limit, int offset) {
+	public List<ChatMessage> getChatPage(Chatroom chatroom, int offset, int limit) {
 		String chatroomName = chatroom.getChatroomName();
-		List<ChatMessage> chatMessages = chatMessageRepository.findPagedResultByChatroomName(chatroomName, limit, offset);
+		List<ChatMessage> chatMessages = chatMessageRepository.findPagedResultByChatroomName(chatroomName, offset, limit);
+		return chatMessages;
+	}
+	
+	/**
+	 * TODO finish implementing
+	 * 
+	 * Returns `limit` messages from chat room `chatroom` starting from `offset`.
+	 * 
+	 * @param chatroom
+	 * @param limit
+	 * @param offset
+	 * @return
+	 */
+	public List<ChatMessage> getChatPage(Chatroom chatroom, int offset) {
+		String chatroomName = chatroom.getChatroomName();
+		List<ChatMessage> chatMessages = chatMessageRepository.findPagedResultByChatroomName(chatroomName, offset);
 		return chatMessages;
 	}
 
