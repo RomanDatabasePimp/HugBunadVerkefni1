@@ -23,8 +23,6 @@ public class Application implements CommandLineRunner {
 	
 	private static final Log log = LogFactory.getLog(Application.class);
 	
-	@Autowired
-	private CryptographyService cryptographyService;
 	
 	// So we have access to application context (for test purposes)
 	@Autowired
@@ -40,8 +38,8 @@ public class Application implements CommandLineRunner {
 		
 		if (true) {
 			String plaintext = "hello";
-			String ciphertext = cryptographyService.getCiphertext(plaintext);
-			String reconstructedPlaintext = cryptographyService.getPlaintext(ciphertext);
+			String ciphertext = CryptographyService.getCiphertext(plaintext);
+			String reconstructedPlaintext = CryptographyService.getPlaintext(ciphertext);
 			
 			System.out.println(plaintext);
 			System.out.println(ciphertext);
