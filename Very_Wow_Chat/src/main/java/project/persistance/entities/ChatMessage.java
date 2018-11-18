@@ -61,12 +61,12 @@ public class ChatMessage {
 		this.senderUsername = senderUsername;
 	}
 
-	public String getSenderdsplayName() {
+	public String getSenderDisplayName() {
 		return senderDisplayName;
 	}
 
-	public void setSenderdsplayName(String senderdsplayName) {
-		this.senderDisplayName = senderdsplayName;
+	public void setSenderDisplayName(String senderDisplayName) {
+		this.senderDisplayName = senderDisplayName;
 	}
 
 	public String getMessage() {
@@ -88,25 +88,21 @@ public class ChatMessage {
 	@Override
 	public String toString() {
 		return "ChatMessage [id=" + id + ", chatroomName=" + chatroomName + ", senderUsernameId=" + senderUsernameId
-				+ ", senderUsername=" + senderUsername + ", senderdsplayName=" + senderDisplayName + ", message="
+				+ ", senderUsername=" + senderUsername + ", senderDisplayName=" + senderDisplayName + ", message="
 				+ message + ", timestamp=" + timestamp + "]";
 	}
 
 	public ChatMessage(String id, String chatroomName, long senderUsernameId, String senderUsername,
-			String senderdsplayName, String message, Long timestamp) {
+			String senderDisplayName, String message, Long timestamp) {
 		super();
 		this.id = id;
 		this.chatroomName = chatroomName;
 		this.senderUsernameId = senderUsernameId;
 		this.senderUsername = senderUsername;
-		this.senderDisplayName = senderdsplayName;
+		this.senderDisplayName = senderDisplayName;
 		this.message = message;
 		this.timestamp = timestamp;
 	}
-	
 
-	
-	
-	
-	
+
 }
