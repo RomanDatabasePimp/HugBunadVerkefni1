@@ -78,6 +78,13 @@ public class UserController {
 		try {
 			// fetch user from authentication token
 			User user = userService.findByUsername(token.getName());
+			
+			// delete all the user's chatrooms
+			List<Chatroom> chatrooms = user.getOwnedChatrooms();
+			for(Chatroom chatroom : chatrooms) {
+				this.chatroomService.deleteChatroom(chatroom);
+			}
+			// delete the user
 			userService.deleteUser(user);
 			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);			
 		}catch(HttpException e) {

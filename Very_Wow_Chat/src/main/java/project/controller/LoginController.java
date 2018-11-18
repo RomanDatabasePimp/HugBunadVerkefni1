@@ -55,7 +55,7 @@ public class LoginController {
 		
 		// check if the user exists in the neo4j database if dosent exists then we
 		// respond with error and 404 not found
-		if (!this.userService.userExists(payload.getUserName())) {
+		if (!this.userService.userExistsAndActive(payload.getUserName())) {
 			clientResponse.addErrorForForm("Username", "Username not found");
 			return new ResponseEntity<>(clientResponse.getErrorResponse(), HttpStatus.NOT_FOUND);
 		}

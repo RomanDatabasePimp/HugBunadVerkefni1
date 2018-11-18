@@ -21,6 +21,7 @@ public class User {
 	protected String displayName;
 	protected String email;
 	protected Long created;
+	protected Boolean isActive;
 
 	// The User's friends
 	@Relationship(type="FRIENDS", direction=Relationship.UNDIRECTED)
@@ -81,6 +82,7 @@ public class User {
 		this.email = email;
 		
 		this.created = (new Date()).getTime(); // current time
+		this.isActive = true;
 	}
 
 	public Long getId() {
@@ -241,5 +243,15 @@ public class User {
 	public void setMemberships(List<Membership> memberships) {
 		this.memberships = memberships;
 	}
+
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
+	}
+	
+	
 	
 }
