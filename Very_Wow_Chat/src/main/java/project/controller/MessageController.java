@@ -55,12 +55,17 @@ public class MessageController {
 	public ResponseEntity<Object> getChatlogPage(@PathVariable String chatroomName,
 			UsernamePasswordAuthenticationToken token) {
 		try {
+
+			User user = userService.findByUsername(token.getName());
 			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
-			List<ChatMessage> chatMessages = messageService.getAllMessages(chatroom);
-
-			List<ChatMessage> body = chatMessages;
-
-			return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
+			
+			if (chatroomService.isMember(user, chatroom)) {
+				List<ChatMessage> chatMessages = messageService.getAllMessages(chatroom);
+				List<ChatMessage> body = chatMessages;
+				return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);	
+			} else {
+				return new ResponseEntity<>("don't have access to this chat room", HttpStatus.UNAUTHORIZED);
+			}
 		} catch (NotFoundException e) {
 			e.printStackTrace();
 			return e.getErrorResponseEntity();
@@ -81,10 +86,17 @@ public class MessageController {
 	public ResponseEntity<Object> getChatlogPage(@PathVariable String chatroomName, @PathVariable int limit,
 			@PathVariable int offset, UsernamePasswordAuthenticationToken token) {
 		try {
+
+			User user = userService.findByUsername(token.getName());
 			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
-			List<ChatMessage> chatMessages = messageService.getChatPage(chatroom, limit, offset);
-			List<ChatMessage> body = chatMessages;
-			return new ResponseEntity<>(body, HttpStatus.OK);
+			
+			if (chatroomService.isMember(user, chatroom)) {
+				List<ChatMessage> chatMessages = messageService.getChatPage(chatroom, limit, offset);
+				List<ChatMessage> body = chatMessages;
+				return new ResponseEntity<>(body, HttpStatus.OK);	
+			} else {
+				return new ResponseEntity<>("don't have access to this chat room", HttpStatus.UNAUTHORIZED);
+			}
 		} catch (NotFoundException e) {
 			e.printStackTrace();
 			return e.getErrorResponseEntity();
@@ -112,7 +124,7 @@ public class MessageController {
 				System.out.println(results);
 				return new ResponseEntity<>(results, HttpStatus.OK);
 			} else {
-				return new ResponseEntity<>("don't have access to this chat room", HttpStatus.OK);
+				return new ResponseEntity<>("don't have access to this chat room", HttpStatus.UNAUTHORIZED);
 			}
 		} catch (NotFoundException e) {
 			e.printStackTrace();
@@ -138,10 +150,33 @@ public class MessageController {
 			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
 			if (chatroomService.isMember(user, chatroom)) {
 				List<ChatMessage> results = messageService.getChatroomMessagesBetweenTime(chatroom, startTime, endTime);
-				System.out.println(results);
 				return new ResponseEntity<>(results, HttpStatus.OK);
 			} else {
-				return new ResponseEntity<>("don't have access to this chat room", HttpStatus.OK);
+				return new ResponseEntity<>("don't have access to this chat room", HttpStatus.UNAUTHORIZED);
+			}
+		} catch (NotFoundException e) {
+			e.printStackTrace();
+			return e.getErrorResponseEntity();
+		}
+	}
+	
+	/**
+	 * Returns the number of messages in chat room `chatroomName`.
+	 * 
+	 * @param chatroomName Name of chat room.
+	 * @param token        User name & password authentication token.
+	 * @return
+	 */
+	@RequestMapping(path = "/{chatroomName}/messages/count", method = RequestMethod.GET, headers = "Accept=application/json")
+	public ResponseEntity<Object> getChatroomMessagesBetweenTime(@PathVariable String chatroomName, UsernamePasswordAuthenticationToken token) {
+		try {
+			User user = userService.findByUsername(token.getName());
+			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
+			if (chatroomService.isMember(user, chatroom)) {
+				long count = messageService.getNrOfMessage(chatroom);
+				return new ResponseEntity<>(ResponseWrapper.wrap(count), HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>("don't have access to this chat room", HttpStatus.UNAUTHORIZED);
 			}
 		} catch (NotFoundException e) {
 			e.printStackTrace();
@@ -179,7 +214,7 @@ public class MessageController {
 
 				return new ResponseEntity<>(ResponseWrapper.wrap(timestamp), HttpStatus.OK);
 			} else {
-				return new ResponseEntity<>("error", HttpStatus.OK);
+				return new ResponseEntity<>("error", HttpStatus.UNAUTHORIZED);
 			}
 		} catch (NotFoundException e) {
 			e.printStackTrace();

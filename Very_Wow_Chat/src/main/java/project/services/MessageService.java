@@ -78,4 +78,14 @@ public class MessageService {
 	public void addChatMessage(ChatMessage chatMessage) {
 		chatMessageRepository.addChatMessage(chatMessage);
 	}
+	
+	/**
+	 * Returns the nr. of messages in chat room `chatroom`
+	 * 
+	 * @param chatroom
+	 * @return
+	 */
+	public long getNrOfMessage(Chatroom chatroom) {
+		return chatMessageRepository.getNrOfMessage(chatroom.getChatroomName());
+	}
 }
