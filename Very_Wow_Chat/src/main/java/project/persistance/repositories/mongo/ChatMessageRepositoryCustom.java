@@ -55,4 +55,11 @@ public interface ChatMessageRepositoryCustom {
 	 */
 	void addChatMessage(ChatMessage message);
 	
+	
+	/**
+	 * 
+	 * @return
+	 */
+	long getNrOfMessage(String chatroomName);
+	
 }
