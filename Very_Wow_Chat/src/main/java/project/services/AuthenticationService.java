@@ -30,7 +30,7 @@ public class AuthenticationService {
 		 * dosent really care for douplicate nodes
 		 */
 		boolean redisRes = this.redisService.userNameExists(userName);
-		boolean neo4Res = this.userService.userExists(userName);
+		boolean neo4Res = this.userService.usernameTaken(userName);
 		return redisRes || neo4Res; // one of these has to be true for us to abort
 	}
 

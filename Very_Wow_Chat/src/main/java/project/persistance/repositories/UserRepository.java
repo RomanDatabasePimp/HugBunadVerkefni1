@@ -22,4 +22,7 @@ public interface UserRepository extends Neo4jRepository<User, Long>{
 
 	// delete a user
 	void delete(User user);
+	// delete user relations
+	@Query("MATCH (a:User)-[r]-(b) WHERE a.username = \"vilhelml\" DELETE r;")
+	void deleteUserRelations(@Param("username") String username);
 }
