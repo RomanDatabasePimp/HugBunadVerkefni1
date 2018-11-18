@@ -1,5 +1,6 @@
 package project.payloads;
 
+// Encrypt email
 public class UserRegistrationFormReceiver {
 
 	private final String userName;
