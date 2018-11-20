@@ -25,26 +25,17 @@ import project.Errors.NotFoundException;
 @Service
 public class ChatroomService {
 	// logs all neo4j calls
-	protected final static Logger LOG = LoggerFactory.getLogger(UserService.class);
+	// protected final static Logger LOG = LoggerFactory.getLogger(UserService.class);
 
-	protected final ChatroomRepository chatroomRepository;
-	protected final UserRepository userRepository;
-	protected final TagRepository tagRepository;
-	
 
 	@Autowired
+	protected ChatroomRepository chatroomRepository;
+	@Autowired
+	protected UserRepository userRepository;
+	@Autowired
+	protected TagRepository tagRepository;
+	@Autowired
 	protected MessageService messageService;
-
-	public ChatroomService(ChatroomRepository chatroomRepository, UserRepository userRepository, TagRepository tagRepository) {
-		this.chatroomRepository = chatroomRepository;
-		this.userRepository = userRepository;
-		this.tagRepository = tagRepository;
-		
-
-		
-		
-	}
-	
 	
 	public void updateLastMessageReceived(String chatroomName) {
 		try {
@@ -358,13 +349,6 @@ public class ChatroomService {
 		List<Chatroom> chatrooms = user.getMemberOfChatrooms();
 		List<User> users = chatroom.getMembers();
 
-		System.out.println("---- is member ----");
-		System.out.println(user.getUsername());
-		System.out.println(chatroom.getChatroomName());
-		System.out.println(chatrooms.size());
-		System.out.println(users.size());
-		System.out.println("-------------- ----");
-
 		return chatrooms.contains(chatroom) && users.contains(user);
 	}
 
@@ -461,14 +445,6 @@ public class ChatroomService {
 		List<User> users = chatroom.getMembers();
 		List<Membership> memberships = user.getMemberships();
 
-		System.out.println("---- create member relation ----");
-		System.out.println(user.getUsername());
-		System.out.println(chatroom.getChatroomName());
-		System.out.println(chatrooms.size());
-		System.out.println(users.size());
-		System.out.println(memberships.size());
-		System.out.println("------------------");
-
 		// add the chatroom to user's list of chatrooms he is member of
 		chatrooms.add(chatroom);
 		// add user to chatrooms list of members
@@ -476,13 +452,6 @@ public class ChatroomService {
 		// create a membership relation entity for the user
 		Membership membership = new Membership(user, chatroom);
 		memberships.add(membership);
-
-		System.out.println(user.getUsername());
-		System.out.println(chatroom.getChatroomName());
-		System.out.println(chatrooms.size());
-		System.out.println(users.size());
-		System.out.println(memberships.size());
-		System.out.println("------------------");
 		
 		// save the chatroom, and its relations
 		chatroomRepository.save(chatroom);

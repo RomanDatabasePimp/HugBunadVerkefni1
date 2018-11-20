@@ -163,8 +163,10 @@ public class ChatroomController {
 			Chatroom result = chatroomService.createChatroom(user, chatroom);
 			// add the tags to the chatroom
 			this.tagService.setTags(chatroom, newChatroom.getTags());
-			// wrap the chatroom data
-			ChatroomResponder body = new ChatroomResponder(result);
+			// prepare membership for return
+			Membership membership = this.chatroomService.getUserMembershipOfChatroom(user, chatroom);
+			// wrap the data to send in json format
+			ChatroomResponder body = new MembershipResponder(membership);
 			// return the chatroom and a 201 status code
 			return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.CREATED);
 		}catch(HttpException e) {
@@ -448,8 +450,6 @@ public class ChatroomController {
 			// fetch the chatroom
 			Chatroom chatroom = this.chatroomService.findByChatname(chatroomName);
 			// check if the user has the privileges to perform this action
-			
-			System.out.println(user.getUsername());
 			
 			if(!this.chatroomService.hasChatroomTagPrivilages(chatroom, user)) {
 				ErrorResponder body = new ErrorResponder();
