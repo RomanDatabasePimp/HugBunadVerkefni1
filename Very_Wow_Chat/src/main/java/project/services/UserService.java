@@ -5,6 +5,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,63 @@ public class UserService {
 
 	@Autowired
 	protected UserRepository userRepository;
+	
+	
+	/**
+	 * Updates user with user name `username`.  Use null for those properties
+	 * you don't want to update.
+	 * 
+	 * @param username in plaintext
+	 * @param displayName in plaintext
+	 * @param email in plaintext
+	 * @param password in plaintext
+	 * @throws NotFoundException 
+	 */
+	public void updateUser(String username, String displayName, String email, String password) throws NotFoundException {
+		
+		User user = findByUsername(username);
+		BCryptPasswordEncoder bcpe = new BCryptPasswordEncoder();
+		
+		if (displayName != null) {
+			user.setDisplayName(displayName);
+		}
+		
+		if (email != null) {
+			String emailEncrypted = CryptographyService.getCiphertext(email);
+			user.setEmail(emailEncrypted);
+		}
+		
+		if (password != null) {
+			String passwordDigest = bcpe.encode(password);
+			user.setPassword(passwordDigest);
+		}
+		
+		saveUser(user);
+	}
+	
+	
+	/**
+	 * Updates user `existingUser` with information/attributes/properties
+	 * from user `newUserInfo`.
+	 * 
+	 * @param existingUser
+	 * @param newUserInfo
+	 */
+	public void updateUser(User existingUser, User newUserInfo) {
+		
+		String newDisplayName = newUserInfo.getDisplayName() != null ? newUserInfo.getDisplayName() : existingUser.getDisplayName();
+		String newEmail = newUserInfo.getEmail() != null ? newUserInfo.getEmail() : existingUser.getEmail();
+		String newPassword = newUserInfo.getPassword() != null ? newUserInfo.getPassword() : existingUser.getPassword();
+		
+		// apply the new attributes
+		existingUser.setDisplayName(newDisplayName);
+		existingUser.setPassword(newPassword);
+		existingUser.setEmail(newEmail);
+		
+		// save the changes
+		saveUser(existingUser);
+	}
+	
 	
 	
 	/**

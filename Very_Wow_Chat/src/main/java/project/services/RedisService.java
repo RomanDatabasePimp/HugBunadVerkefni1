@@ -35,7 +35,22 @@ public class RedisService {
 		this.RedisRepository.insertData(key, data.toString());
 		return key;
 	}
-
+	
+	public void insertString(String key, String string) {
+		RedisRepository.insertString(key, string);
+	}
+	
+	public String getString(String key) {
+		return RedisRepository.getString(key);
+	}
+	
+	
+	public String getAndDestroyString(String key) {
+		String string = RedisRepository.getString(key);
+		RedisRepository.destroyData(key);
+		return string;
+	}
+	
 	/*
 	 * Usage : Redser.getAndDestroyData(key) 
 	 *   For : Redser is RedisService class 

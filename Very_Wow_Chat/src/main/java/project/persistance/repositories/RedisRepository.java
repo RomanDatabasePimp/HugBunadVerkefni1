@@ -19,6 +19,25 @@ public class RedisRepository {
 		this.redisConn.setHostName("localhost");
 		this.redisConn.setPort(6379);
 	}
+	
+	/**
+	 * Insert string
+	 * 
+	 * @param key
+	 * @param string
+	 */
+	public void insertString(String key, String string) {
+		RedisConnection con = this.redisConn.getConnection();
+		con.setEx(key.getBytes(), 1800, string.getBytes());
+		con.close();
+	}
+	
+	public String getString(String key) {
+		RedisConnection con = this.redisConn.getConnection();
+		String string = new String(con.get(key.getBytes()));
+		con.close();
+		return string;
+	}
 
 	/*
 	 * Usage : red.insertData(key,data)

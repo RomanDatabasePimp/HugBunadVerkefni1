@@ -40,14 +40,14 @@ import project.services.UserService;
 @RequestMapping("/auth/chatroom")
 public class ChatroomController {
 	
-
 	@Autowired
 	protected ChatroomService chatroomService;
+	
 	@Autowired
 	protected UserService userService;
+	
 	@Autowired
 	protected TagService tagService;
-	
 
 	/**
 	 * 
