@@ -129,11 +129,6 @@ public class ChatroomController {
 				return new ResponseEntity<>(body.getWrappedError(), HttpStatus.UNAUTHORIZED);
 			}
 			// wrap the data to send in json format
-			
-			// DELETE ALL CHAT MESSAGES BEFORE DELETING THE CHATROOM!!!!
-			
-			
-			
 			chatroomService.deleteChatroom(chatroom);
 			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
 		}catch(HttpException e) {
