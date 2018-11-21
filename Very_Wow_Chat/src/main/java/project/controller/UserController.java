@@ -100,16 +100,15 @@ public class UserController {
 	 * @param friendName
 	 * @return no content or error
 	 * 
-	 * Pæling: hafa þessa virkni í delete friend? þannig að delete friend eyði vini eða request eftir aðstæðum
 	 */
-	@RequestMapping(path = "/friendRequest/{requesteeName}", method = RequestMethod.DELETE, headers = "Accept=application/json")
-	public ResponseEntity<Object> deleteFriendRequest( @PathVariable String requesteeName, UsernamePasswordAuthenticationToken token){
+	@RequestMapping(path = "/friendRequest/{requestorName}", method = RequestMethod.DELETE, headers = "Accept=application/json")
+	public ResponseEntity<Object> deleteFriendRequest( @PathVariable String requestorName, UsernamePasswordAuthenticationToken token){
 		try {
 			// fetch user from authentication token
 			User user = userService.findByUsername(token.getName());
-			User requestee = userService.findByUsername(requesteeName);
+			User requestor = userService.findByUsername(requestorName);
 
-			userService.deleteFriendRequest(user, requestee);
+			userService.deleteFriendRequest(requestor, user);
 			
 			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
 		}catch(HttpException e) {
