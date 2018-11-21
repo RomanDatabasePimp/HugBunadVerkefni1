@@ -10,5 +10,5 @@ import project.persistance.entities.ChatMessage;
  * @author Davíð Helgason (dah38@hi.is)
  */
 public interface ChatMessageRepository extends MongoRepository<ChatMessage, String>, ChatMessageRepositoryCustom {
-		
+
 }

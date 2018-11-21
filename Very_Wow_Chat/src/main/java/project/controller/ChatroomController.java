@@ -116,7 +116,6 @@ public class ChatroomController {
 	 * @param username: chatroomName of the chatroom to be returned
 	 * @return: if chatroom not found: return 404 not found if user is not the
 	 *          owner: return 401 unauthorized if successful: return 204 no content
-	 *          TODO: delete messages
 	 */
 	@RequestMapping(path = "/{chatroomName}", method = RequestMethod.DELETE, headers = "Accept=application/json")
 	public ResponseEntity<Object> deleteChatroom(

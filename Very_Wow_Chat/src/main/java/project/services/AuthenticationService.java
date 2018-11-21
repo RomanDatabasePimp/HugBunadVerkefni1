@@ -15,7 +15,6 @@ public class AuthenticationService {
 	private UserService userService;// our neo4j service
 
 	
-
 	/*
 	 * Usage : auth.userNameExists(userName) 
 	 *   For : auth is AuthenticationService

@@ -7,19 +7,19 @@ public class MessageResponse {
 
 	// MongoDB ID
 	private String id;
-	
+
 	// Rel. to neo4j
 	private String chatroomName;
-	
+
 	// Rel. to neo4j
 	private long senderUsernameId;
 	private String senderUsername;
 	private String senderDisplayName;
-	
+
 	private String message;
-	
+
 	private long timestamp;
-	
+
 	public long getTimestamp() {
 		return timestamp;
 	}
@@ -68,11 +68,22 @@ public class MessageResponse {
 		this.senderDisplayName = senderDisplayName;
 	}
 
+	/**
+	 * Returns the message decrypted.
+	 * 
+	 * @return Decrypted message.
+	 */
 	public String getMessage() {
 		return message;
 	}
-
+	
+	/**
+	 * Decrypts the encrypted message and stores it.
+	 * 
+	 * @param message Encrypted message.
+	 */
 	public void setMessage(String message) {
+		// NOTE: Decrypt message 
 		this.message = CryptographyService.getPlaintext(message);
 	}
 
@@ -82,15 +93,27 @@ public class MessageResponse {
 				+ ", senderUsername=" + senderUsername + ", senderDisplayName=" + senderDisplayName + ", message="
 				+ message + "]";
 	}
-	
+
 	public MessageResponse() {
 		this(null, null, 0, null, null, null, 0);
 	}
-	
+
 	public MessageResponse(String message) {
 		this(null, null, 0, null, null, message, 0);
 	}
 
+	/**
+	 * 
+	 * Decrypts the encrypted message.
+	 * 
+	 * @param id
+	 * @param chatroomName
+	 * @param senderUsernameId
+	 * @param senderUsername
+	 * @param senderDisplayName
+	 * @param message Encrypted message.
+	 * @param timestamp
+	 */
 	public MessageResponse(String id, String chatroomName, long senderUsernameId, String senderUsername,
 			String senderDisplayName, String message, long timestamp) {
 		super();
@@ -99,12 +122,14 @@ public class MessageResponse {
 		this.senderUsernameId = senderUsernameId;
 		this.senderUsername = senderUsername;
 		this.senderDisplayName = senderDisplayName;
-		// TODO: decrypt message
-		this.message = message;
+		// NOTE: decrypt message here.
+		this.message = CryptographyService.getPlaintext(message);
 		this.timestamp = timestamp;
 	}
-	
+
 	public MessageResponse(ChatMessage chatMessage) {
-		this(chatMessage.getId(), chatMessage.getChatroomName(), chatMessage.getSenderUsernameId(), chatMessage.getSenderUsername(), chatMessage.getSenderDisplayName(), chatMessage.getMessage(), chatMessage.getTimestamp());
+		this(chatMessage.getId(), chatMessage.getChatroomName(), chatMessage.getSenderUsernameId(),
+				chatMessage.getSenderUsername(), chatMessage.getSenderDisplayName(), chatMessage.getMessage(),
+				chatMessage.getTimestamp());
 	}
 }

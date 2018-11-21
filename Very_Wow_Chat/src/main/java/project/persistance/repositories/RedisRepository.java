@@ -5,9 +5,10 @@ import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.stereotype.Repository;
 
-/* Class creates a connection to the redis server and oversees all the 
- * of the sending and reciving of data between the Spring Server and Redis server */
-
+/**
+ * Class creates a connection to the Redis server and oversees all the of the 
+ * sending and receiving of data between the Spring Server and Redis server.
+ */
 @Repository
 public class RedisRepository {
 	
@@ -43,7 +44,7 @@ public class RedisRepository {
 		return string;
 	}
 
-	/*
+	/**
 	 * Usage : red.insertData(key,data)
 	 *   For : red is a RedisServices class 
 	 *         key is the key to the data  in our case the username of the new user 
@@ -62,7 +63,7 @@ public class RedisRepository {
 		con.close();
 	}
 
-	/*
+	/**
 	 * Usage : red.checkIfKeyExists(key) 
 	 *   For : red is a RedisServices class key is point to the data in redis 
 	 *  After: returns true if the key is associated with data in redis
@@ -74,7 +75,7 @@ public class RedisRepository {
 		return exists;
 	}
 
-	/*
+	/**
 	 * Usage : red.checkIfKeyExists(key) 
 	 *   For : red is a RedisServices class key is point to the data in redis 
 	 *  After: returns a json object of a form {username:, password: , email: }
@@ -94,7 +95,7 @@ public class RedisRepository {
 		return user; // return the json obj
 	}
 
-	/*
+	/**
 	 * Usage : red.destroyData(key) 
 	 *   For : red is a RedisServices class 
 	 *         key is point  to the data in redis 

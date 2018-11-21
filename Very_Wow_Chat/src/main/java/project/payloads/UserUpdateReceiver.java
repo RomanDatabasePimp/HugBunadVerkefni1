@@ -10,6 +10,7 @@ import project.persistance.entities.User;
  *
  */
 public class UserUpdateReceiver {
+	
 	private String password;
 	private String displayName;
 	private String email;
