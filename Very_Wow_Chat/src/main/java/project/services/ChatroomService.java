@@ -193,6 +193,36 @@ public class ChatroomService {
 		// delete admin relation
 		deleteAdminship(user, chatroom);
 	}
+	
+	/**
+	 * delete the 
+	 * @param user the invitee
+	 * @param chatroom the chatroom
+	 * @throws BadRequestException
+	 */
+	public void rejectChatroomInvitation(User user, Chatroom chatroom) throws BadRequestException{
+		// if there is no invite
+		if(!this.memberInvitationSent(user, chatroom)) {
+			throw new BadRequestException("There is no invite to decline");
+		}
+		// delete the relation
+		this.deleteMemberInvitation(user, chatroom);
+	}
+	
+	/**
+	 * delete the 
+	 * @param user the invitee
+	 * @param chatroom the chatroom
+	 * @throws BadRequestException
+	 */
+	public void rejectAdminInvitation(User user, Chatroom chatroom) throws BadRequestException{
+		// if there is no invite
+		if(!this.adminInvitationSent(user, chatroom)) {
+			throw new BadRequestException("There is no invite to decline");
+		}
+		// delete the relation
+		this.deleteAdminInvitation(user, chatroom);
+	}
 
 	/**
 	 * stop being an administrator of a chatroom
