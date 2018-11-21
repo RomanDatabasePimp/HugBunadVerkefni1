@@ -331,7 +331,7 @@ public class ChatroomController {
 	 *          status code of 404 for not found, or 401 for unauthorized
 	 */
 	@RequestMapping(path = "/{chatroomName}/rejectchatroominvite", method = RequestMethod.DELETE, headers = "Accept=application/json")
-	public ResponseEntity<Object> acceptMemberInvite(@PathVariable String chatroomName,
+	public ResponseEntity<Object> rejectMemberInvite(@PathVariable String chatroomName,
 			UsernamePasswordAuthenticationToken token) {
 		try {
 			// fetch user from authentication token

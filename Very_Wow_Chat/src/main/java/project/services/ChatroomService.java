@@ -180,6 +180,7 @@ public class ChatroomService {
 	 * @param chatroom
 	 * @throws BadRequestException
 	 */
+	@Transactional(readOnly = false)
 	public void leaveChatroom(User user, Chatroom chatroom) throws BadRequestException {
 		if (isOwner(user, chatroom)) {
 			throw new BadRequestException(
@@ -195,11 +196,12 @@ public class ChatroomService {
 	}
 	
 	/**
-	 * delete the 
+	 * delete the member invitation, and the admin invitation if there is one
 	 * @param user the invitee
 	 * @param chatroom the chatroom
 	 * @throws BadRequestException
 	 */
+	@Transactional(readOnly = false)
 	public void rejectChatroomInvitation(User user, Chatroom chatroom) throws BadRequestException{
 		// if there is no invite
 		if(!this.memberInvitationSent(user, chatroom)) {
@@ -207,6 +209,8 @@ public class ChatroomService {
 		}
 		// delete the relation
 		this.deleteMemberInvitation(user, chatroom);
+		// delete the admin invite if it is there
+		this.deleteAdminInvitation(user, chatroom);
 	}
 	
 	/**
@@ -215,6 +219,7 @@ public class ChatroomService {
 	 * @param chatroom the chatroom
 	 * @throws BadRequestException
 	 */
+	@Transactional(readOnly = false)
 	public void rejectAdminInvitation(User user, Chatroom chatroom) throws BadRequestException{
 		// if there is no invite
 		if(!this.adminInvitationSent(user, chatroom)) {
@@ -231,6 +236,7 @@ public class ChatroomService {
 	 * @param chatroom
 	 * @throws BadRequestException
 	 */
+	@Transactional(readOnly = false)
 	public void quitAdmin(User user, Chatroom chatroom) throws BadRequestException {
 		if (isOwner(user, chatroom)) {
 			throw new BadRequestException(
