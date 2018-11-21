@@ -70,7 +70,7 @@ public class HttpResponseBody {
 	}
 
 	/*
-	 * YES OVERLOAD !!!! so you can even insert your own custom made jsonobject omg i am so hard !
+	 * YES OVERLOAD !!!! so you can even insert your own custom made jsonobject
 	 */
 
 	/*

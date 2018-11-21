@@ -1,9 +1,6 @@
 package project.payloads;
 
-// Encrypt email
 /**
- * 
- * 
  * NOTE: field <code>userName<code> is converted to lower case.
  */
 public class UserRegistrationFormReceiver {

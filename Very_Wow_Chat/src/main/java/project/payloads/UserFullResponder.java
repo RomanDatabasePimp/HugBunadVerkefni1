@@ -10,7 +10,6 @@ import project.persistance.entities.User;
  * This class is for wrapping data in json objects
  * @author Vilhelml
  * @since 20.10.18
- *
  */
 public class UserFullResponder {
 	private String username;

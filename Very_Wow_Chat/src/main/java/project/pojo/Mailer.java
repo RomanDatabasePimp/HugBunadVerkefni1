@@ -32,7 +32,7 @@ public class Mailer {
 		}
 	}
 
-	/*
+	/**
 	 * Usage : tryToSend() For : nothing After : create a json obj with parameters
 	 * toMail,content,seckey that will be sent to the webserver
 	 */

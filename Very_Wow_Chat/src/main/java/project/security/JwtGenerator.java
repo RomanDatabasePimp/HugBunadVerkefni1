@@ -15,7 +15,9 @@ public class JwtGenerator {
 	@Value("${cryptography.security.password}")
 	private String secretKey;
 
-	/* This will return the json webtoken */
+	/**
+	 *  This will return the json webtoken
+	 */
 	public String generate(JwtUser jwtUser) {
 		Claims claims = Jwts.claims().setSubject(jwtUser.getUserName());
 		claims.put("role", jwtUser.getRole());

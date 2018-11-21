@@ -12,7 +12,6 @@ import project.persistance.entities.Chatroom;
  * Repository interface for neo4j and chatrooms
  * 
  * @author Vilhelml
- *
  */
 public interface ChatroomRepository extends Neo4jRepository<Chatroom, Long> {
 	/**

@@ -10,7 +10,6 @@ import project.persistance.entities.User;
  * Repository interface for neo4j and users
  * 
  * @author Vilhelml
- *
  */
 public interface UserRepository extends Neo4jRepository<User, Long> {
 
