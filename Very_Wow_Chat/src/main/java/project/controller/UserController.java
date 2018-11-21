@@ -45,6 +45,9 @@ public class UserController {
 
 	/**
 	 * Update a user's displayName, password, and email
+	 * 
+	 * NOTE: email in <code>newUser</code> is assumed to be unencrypted.
+	 * 
 	 * @param newUser: container for the properties to update
 	 * @return
 	 */

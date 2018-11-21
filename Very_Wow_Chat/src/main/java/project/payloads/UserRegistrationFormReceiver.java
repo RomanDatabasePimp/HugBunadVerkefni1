@@ -2,6 +2,8 @@ package project.payloads;
 
 /**
  * NOTE: field <code>userName<code> is converted to lower case.
+ * 
+ * NOTE: email here is assumed to be unencrypted.
  */
 public class UserRegistrationFormReceiver {
 
@@ -18,7 +20,6 @@ public class UserRegistrationFormReceiver {
 		this.displayName = displayName;
 		this.password = password;
 		this.passwordReap = passwordReap;
-		// NOTE: (maybe) encrypt email.
 		this.email = email;
 	}
 

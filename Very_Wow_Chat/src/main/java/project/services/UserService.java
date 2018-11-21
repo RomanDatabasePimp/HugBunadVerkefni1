@@ -43,6 +43,7 @@ public class UserService {
 		}
 
 		if (email != null) {
+			// NOTE: encrypt email here.
 			String emailEncrypted = CryptographyService.getCiphertext(email);
 			user.setEmail(emailEncrypted);
 		}
@@ -59,14 +60,20 @@ public class UserService {
 	 * Updates user `existingUser` with information/attributes/properties from user
 	 * `newUserInfo`.
 	 * 
-	 * @param existingUser
+	 * NOTE: email of <code>existingUser</code> is assumed to be encrypted,
+	 * BUT email of <code>newUserInfo</code> is assumed to be unencrypted.
+	 * 
+	 * @param existingUser 
 	 * @param newUserInfo
 	 */
 	public void updateUser(User existingUser, User newUserInfo) {
 
 		String newDisplayName = newUserInfo.getDisplayName() != null ? newUserInfo.getDisplayName()
 				: existingUser.getDisplayName();
-		String newEmail = newUserInfo.getEmail() != null ? newUserInfo.getEmail() : existingUser.getEmail();
+		
+		
+		
+		String newEmail = newUserInfo.getEmail() != null ? CryptographyService.getCiphertext(newUserInfo.getEmail()) : existingUser.getEmail();
 		String newPassword = newUserInfo.getPassword() != null ? newUserInfo.getPassword() : existingUser.getPassword();
 
 		// apply the new attributes
@@ -106,6 +113,8 @@ public class UserService {
 	/**
 	 * save a user, used to apply updates
 	 * 
+	 * NOTE: email of user is assumed to be encrypted.
+	 * 
 	 * @param user the user to be updated
 	 * @return
 	 */
@@ -116,6 +125,8 @@ public class UserService {
 
 	/**
 	 * create a a user
+	 * 
+	 * NOTE: assumes email of <code>newUser<code> is encrypted.
 	 * 
 	 * @param newUser
 	 * @return the new user

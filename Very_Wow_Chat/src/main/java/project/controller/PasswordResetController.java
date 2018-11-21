@@ -60,6 +60,7 @@ public class PasswordResetController {
 			
 			String username = prr.getUsername();
 			User user = userService.findByUsername(username);
+			// NOTE: email of user is assumed to be encrypted so it needs to be decrypted.
 			String recipientEmail = CryptographyService.getPlaintext(user.getEmail());
 			String randomKey = CryptographyService.getRandomHexString(64);
 			
