@@ -1,8 +1,10 @@
 package project.payloads;
 
-/* Since java is a little bitch we need to make a class
- * that will serve as out json obj when reciving Json data from the client */
+/**
+ * Class to receive JSON object from client.
+ */
 public class LoginFormReciver {
+
 	// The username and password recived
 	private final String username;
 	private final String password;
@@ -13,9 +15,6 @@ public class LoginFormReciver {
 		this.password = pass;
 	}
 
-	/*
-	 * ------------------------ AUTO GEN GETTERS AND SETTERS --------------------------
-	 */
 	public String getUsername() {
 		return username;
 	}

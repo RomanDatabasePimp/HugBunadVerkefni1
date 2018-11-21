@@ -19,8 +19,6 @@ import project.persistance.repositories.UserRepository;
 
 @Service
 public class ChatroomService {
-	// logs all neo4j calls
-	// protected final static Logger LOG = LoggerFactory.getLogger(UserService.class);
 
 	@Autowired
 	private ChatroomRepository chatroomRepository;
@@ -40,7 +38,6 @@ public class ChatroomService {
 			chatroom.setLastMessageReceived((new Date()).getTime());
 			saveChatroom(chatroom);
 		} catch (NotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -437,9 +434,10 @@ public class ChatroomService {
 	}
 
 	/**
-	 * delete a chatroom (and all its relations)
+	 * Delete chatroom <code>chatroom</code> and all its relations, also
+	 * all associated chat messages.
 	 * 
-	 * @param chatroom
+	 * @param chatroom The chat room to delete.
 	 */
 	@Transactional(readOnly = false)
 	public void deleteChatroom(Chatroom chatroom) {

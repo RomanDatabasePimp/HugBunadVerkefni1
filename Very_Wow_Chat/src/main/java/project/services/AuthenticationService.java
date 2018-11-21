@@ -4,7 +4,9 @@ import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-/* class that handles Authentication and encryption of different types of data */
+/** 
+ * class that handles Authentication and encryption of different types of data 
+ */
 @Service
 public class AuthenticationService {
 	
@@ -15,8 +17,7 @@ public class AuthenticationService {
 	private UserService userService;// our neo4j service
 
 	
-
-	/*
+	/**
 	 * Usage : auth.userNameExists(userName) 
 	 *   For : auth is AuthenticationService
 	 *        userName is a String 
@@ -33,7 +34,7 @@ public class AuthenticationService {
 		return redisRes || neo4Res; // one of these has to be true for us to abort
 	}
 
-	/*
+	/**
 	 * Usage : auth.passwordsMach(p1,p2) 
 	 *   For : auth is AuthenticationService p1,p2 Strings 
 	 *  After: returns if p1 and p2 are identical
@@ -42,25 +43,24 @@ public class AuthenticationService {
 		return p1.equals(p2);
 	}
 
-	/*
+	/**
 	 * Usage : auth.validEmail(email) 
 	 *   For : auth is AuthenticationService email is a String that is of a form xxx@xxx.com/org/... 
 	 *  After: returns if the email is of valid form
 	 */
 	public boolean validEmail(String email) {
-		// since i am a lazy cunt and i dont want to write regex i will have a class
+		// since i am lazy and i dont want to write regex i will have a class
 		// that will do this for me
 		EmailValidator eValidator = EmailValidator.getInstance(true);
 		return eValidator.isValid(email);
 	}
 
-	/*
+	/**
 	 * Usage : auth.validatePass(pass) 
 	 *  From : auth is AuthenticationService password is a string 
 	 *  After: checks if the password fullils certain requirements
 	 */
 	public boolean validatePass(String password) {
-		/* Well fck my nutsack.... i still have to do regex .... */
 		/*
 		 * Regex explained for those who want to fresh up 
 		 * ^                = indicates start of string

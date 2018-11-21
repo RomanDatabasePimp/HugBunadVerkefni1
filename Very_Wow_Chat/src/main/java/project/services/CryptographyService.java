@@ -21,13 +21,10 @@ public class CryptographyService {
 	private static String spw;
 	private static String ss;
 	
-	// private static final String PASSWORD_ALPHABET_1 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~`!@#$%^&*()-_=+[{]}\\|;:\'\",<.>/?";
 	
-	// "comfortable" alphabet to type in.
-	private static final String PASSWORD_ALPHABET_2 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&*()-_=+[{]}|;:,<.>?";
+	private static final String PASSWORD_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&*()-_=+[{]}|;:,<.>?";
 	
-	// private static final char[] PASSWORD_ALPHABET_1_CHARS = (new String(PASSWORD_ALPHABET_1)).toCharArray();
-	private static final char[] PASSWORD_ALPHABET_2_CHARS = (new String(PASSWORD_ALPHABET_2)).toCharArray();
+	private static final char[] PASSWORD_ALPHABET_CHARS = (new String(PASSWORD_ALPHABET)).toCharArray();
 
 	@PostConstruct
 	public void init() {
@@ -35,24 +32,30 @@ public class CryptographyService {
 		ss = salt;
 	}
 	
+	/**
+	 * Returns a random "strong" password of length <code>n</code>
+	 * 
+	 * @param n Length of password.
+	 * @return Random "strong" password of length <code>n</code>
+	 */
 	public static String getStrongRandomPassword(int n) {
-		
-		
-		final char[] alphabet = PASSWORD_ALPHABET_2_CHARS;
-		
+		final char[] alphabet = PASSWORD_ALPHABET_CHARS;
 		String s = RandomStringUtils.random( n, 0, alphabet.length-1, false, false, alphabet, new SecureRandom() );
 		return s;
 	}
 
-	
+	/**
+	 * Returns a random hexadecimal string of length <code>n</code>.
+	 * 
+	 * @param n Length of hexadecimal string.
+	 * @return A random hexadecimal string of length <code>n</code>.
+	 */
 	public static String getRandomHexString(int n) {
-
 		SecureRandom r = new SecureRandom();
 		StringBuffer sb = new StringBuffer();
 		while (sb.length() < n) {
 			sb.append(Integer.toHexString(r.nextInt()));
 		}
-
 		return sb.toString().substring(0, n);
 	}
 

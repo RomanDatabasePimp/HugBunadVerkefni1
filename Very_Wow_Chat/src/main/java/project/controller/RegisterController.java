@@ -121,11 +121,12 @@ public class RegisterController {
 		JSONObject newUser = new JSONObject();
 		newUser.put("userName", payload.getUserName());
 		newUser.put("displayName", payload.getDisplayName());
+		// NOTE: password is hashed here.
 		newUser.put("password", privateInfoEncoder.encode(payload.getPassword()));
 		// reason why we encode email is cuz of the new privacy policies any data that
 		// can lead to the user(as a person) has to be secured
 		
-		
+		// NOTE: email is encrypted here.
 		newUser.put("email", CryptographyService.getCiphertext(payload.getEmail()));
 
 		// insert the data into Redis for 30 min
@@ -159,6 +160,7 @@ public class RegisterController {
 		}
 		
 		// now that we know the data exists we fetch it and move it into long term
+		// NOTE: we assume the email of this JSON object is encrypted.
 		JSONObject tempUrs = this.redisService.getAndDestroyData(key); // fetch the data and remove it from json
 
 		// create a new User that will be insert into neo4j
