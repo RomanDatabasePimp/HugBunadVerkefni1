@@ -451,8 +451,6 @@ public class ChatroomController {
 			Chatroom chatroom = this.chatroomService.findByChatname(chatroomName);
 			// check if the user has the privileges to perform this action
 			
-			System.out.println(user.getUsername());
-			
 			if(!this.chatroomService.hasChatroomTagPrivilages(chatroom, user)) {
 				ErrorResponder body = new ErrorResponder();
 				body.setError("You do not have the privileges to edit this chatroom's tags.");
