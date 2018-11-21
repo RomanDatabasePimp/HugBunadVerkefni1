@@ -15,8 +15,7 @@ public class Mailer {
 	private final String recipientEmail;
 	private final String emailContent;
 	private final String serverUrl;
-	private final String secretKey;
-	
+	private final String secretKey;	
 
 	public Mailer(String recipientEmail, String emailContent, String serverUrl, String secretKey) {
 		this.recipientEmail = recipientEmail;

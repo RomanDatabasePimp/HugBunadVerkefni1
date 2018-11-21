@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class RedisRepository {
+	
 	private final JedisConnectionFactory redisConn; // define our connection
 
 	public RedisRepository() {

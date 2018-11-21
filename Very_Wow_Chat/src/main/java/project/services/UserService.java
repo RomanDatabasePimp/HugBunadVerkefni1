@@ -20,7 +20,7 @@ public class UserService {
 	// LoggerFactory.getLogger(UserService.class);
 
 	@Autowired
-	protected UserRepository userRepository;
+	private UserRepository userRepository;
 
 	/**
 	 * Updates user with user name `username`. Use null for those properties you
@@ -267,6 +267,24 @@ public class UserService {
 	}
 
 	/**
+	 * Checks requestor has sent requestee a friend request
+	 * 
+	 * @param           requestor: user sending the request
+	 * @param requestee user receiving the request
+	 * @return true if a friend request is pending, else returns false
+	 */
+	@Transactional(readOnly = false)
+	public Boolean friendRequestSent(User requestor, User requestee) {
+		List<User> requestorRequestees = requestor.getFriendRequestees();
+		List<User> requesteeRequestors = requestee.getFriendRequestors();
+
+		// data invariability: if the former condition is true, then the latter should
+		// also be,
+		// if the former is false, then the latter should also be
+		return requestorRequestees.contains(requestee) && requesteeRequestors.contains(requestor);
+	}
+
+	/**
 	 * Send a friend request
 	 * 
 	 * @param           requestor: user sending the request
@@ -290,24 +308,6 @@ public class UserService {
 		// save the relation in database
 		userRepository.save(requestee);
 		userRepository.save(requestor);
-	}
-
-	/**
-	 * Checks requestor has sent requestee a friend request
-	 * 
-	 * @param           requestor: user sending the request
-	 * @param requestee user receiving the request
-	 * @return true if a friend request is pending, else returns false
-	 */
-	@Transactional(readOnly = false)
-	public Boolean friendRequestSent(User requestor, User requestee) {
-		List<User> requestorRequestees = requestor.getFriendRequestees();
-		List<User> requesteeRequestors = requestee.getFriendRequestors();
-
-		// data invariability: if the former condition is true, then the latter should
-		// also be,
-		// if the former is false, then the latter should also be
-		return requestorRequestees.contains(requestee) && requesteeRequestors.contains(requestor);
 	}
 
 	/**

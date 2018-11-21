@@ -14,7 +14,7 @@ import project.persistance.entities.Chatroom;
 import project.persistance.entities.Membership;
 import project.persistance.entities.User;
 import project.persistance.repositories.ChatroomRepository;
-import project.persistance.repositories.TagRepository;
+// import project.persistance.repositories.TagRepository;
 import project.persistance.repositories.UserRepository;
 
 @Service
@@ -23,16 +23,16 @@ public class ChatroomService {
 	// protected final static Logger LOG = LoggerFactory.getLogger(UserService.class);
 
 	@Autowired
-	protected ChatroomRepository chatroomRepository;
+	private ChatroomRepository chatroomRepository;
 	
 	@Autowired
-	protected UserRepository userRepository;
+	private UserRepository userRepository;
+	
+//	@Autowired
+//	private TagRepository tagRepository;
 	
 	@Autowired
-	protected TagRepository tagRepository;
-	
-	@Autowired
-	protected MessageService messageService;
+	private MessageService messageService;
 	
 	public void updateLastMessageReceived(String chatroomName) {
 		try {

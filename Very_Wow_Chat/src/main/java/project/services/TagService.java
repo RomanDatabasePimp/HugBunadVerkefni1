@@ -18,14 +18,16 @@ import project.persistance.repositories.TagRepository;
 
 @Service
 public class TagService {
+
+	// TODO: is this used?
 	// logs all neo4j calls
-	protected final static Logger LOG = LoggerFactory.getLogger(UserService.class);
+	// private final static Logger LOG = LoggerFactory.getLogger(UserService.class);
 
 	@Autowired
-	protected ChatroomRepository chatroomRepository;
+	private ChatroomRepository chatroomRepository;
 
 	@Autowired
-	protected TagRepository tagRepository;
+	private TagRepository tagRepository;
 
 	/**
 	 * remove the old tags and add new ones
