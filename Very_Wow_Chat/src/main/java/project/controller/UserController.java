@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 
 import project.services.ChatroomService;
+import project.services.CryptographyService;
 import project.services.UserService;
 import project.persistance.entities.User;
 import project.errors.HttpException;
@@ -54,7 +55,8 @@ public class UserController {
 			User user = userService.findByUsername(token.getName());
 			// if an attribute is not given, the old one is used
 			String newDisplayName = newUser.getDisplayName() != null ? newUser.getDisplayName() : user.getDisplayName();
-			String newEmail = newUser.getEmail() != null ? newUser.getEmail() : user.getEmail();
+			// TODO: encrypt email
+			String newEmail = newUser.getEmail() != null ? CryptographyService.getCiphertext(newUser.getEmail()) : user.getEmail();
 			String newPassword = newUser.getPassword() != null ? newUser.getPassword() : user.getPassword();
 			// apply the new attributes
 			user.setDisplayName(newDisplayName);

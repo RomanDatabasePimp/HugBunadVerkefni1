@@ -413,6 +413,7 @@ public class ChatroomService {
 	 */
 	@Transactional(readOnly = false)
 	public void deleteChatroom(Chatroom chatroom) {
+		messageService.deleteAllChatMessagesOfChatroom(chatroom);
 		chatroomRepository.delete(chatroom);
 	}
 
@@ -426,7 +427,7 @@ public class ChatroomService {
 			}
 		}
 		
-		messageService.deleteAllChatMessagesOfChatroom(chatroom);
+		
 		// if not found, throw an exception
 		throw new NotFoundException("User is not a member of the chatroom " + chatroom.getChatroomName());
 	}
