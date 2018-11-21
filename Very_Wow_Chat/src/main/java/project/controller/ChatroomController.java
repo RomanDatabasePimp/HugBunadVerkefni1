@@ -114,7 +114,6 @@ public class ChatroomController {
 	 * @param username: chatroomName of the chatroom to be returned
 	 * @return: if chatroom not found: return 404 not found if user is not the
 	 *          owner: return 401 unauthorized if successful: return 204 no content
-	 *          TODO: delete messages
 	 */
 	@RequestMapping(path = "/{chatroomName}", method = RequestMethod.DELETE, headers = "Accept=application/json")
     public ResponseEntity<Object> deleteChatroom(@PathVariable String chatroomName, UsernamePasswordAuthenticationToken token){
@@ -300,7 +299,6 @@ public class ChatroomController {
 		}
 	}
 
-	// accept admin invite
 	/**
 	 * Join an open chatrom or accept n invite
 	 * 
@@ -309,7 +307,7 @@ public class ChatroomController {
 	 *          status code of 404 for not found, or 401 for unauthorized
 	 */
 	@RequestMapping(path = "/{chatroomName}/acceptadmininvite", method = RequestMethod.POST, headers = "Accept=application/json")
-	public ResponseEntity<Object> acceptAdminInvite(@PathVariable String chatroomName,
+	public ResponseEntity<Object> rejectAdminInvite(@PathVariable String chatroomName,
 			UsernamePasswordAuthenticationToken token) {
 		try {
 			// fetch user from authentication token
@@ -318,6 +316,54 @@ public class ChatroomController {
 			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
 			// accept the invite
 			chatroomService.acceptAdminInvite(user, chatroom);
+			// return successful, no content
+			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+		} catch (HttpException e) {
+			return e.getErrorResponseEntity();
+		}
+	}
+	
+	/**
+	 * Join an open chatrom or accept n invite
+	 * 
+	 * @param chatroomName: name of the chatroom to be joined
+	 * @return: if successful return a status code of 204, else error message with
+	 *          status code of 404 for not found, or 401 for unauthorized
+	 */
+	@RequestMapping(path = "/{chatroomName}/rejectchatroominvite", method = RequestMethod.DELETE, headers = "Accept=application/json")
+	public ResponseEntity<Object> acceptMemberInvite(@PathVariable String chatroomName,
+			UsernamePasswordAuthenticationToken token) {
+		try {
+			// fetch user from authentication token
+			User user = userService.findByUsername(token.getName());
+			// the chatroom that the user wants to join
+			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
+			// accept the invite
+			chatroomService.rejectChatroomInvitation(user, chatroom);
+			// return successful, no content
+			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+		} catch (HttpException e) {
+			return e.getErrorResponseEntity();
+		}
+	}
+	
+	/**
+	 * Join an open chatrom or accept n invite
+	 * 
+	 * @param chatroomName: name of the chatroom to be joined
+	 * @return: if successful return a status code of 204, else error message with
+	 *          status code of 404 for not found, or 401 for unauthorized
+	 */
+	@RequestMapping(path = "/{chatroomName}/rejectadmininvite", method = RequestMethod.DELETE, headers = "Accept=application/json")
+	public ResponseEntity<Object> acceptAdminInvite(@PathVariable String chatroomName,
+			UsernamePasswordAuthenticationToken token) {
+		try {
+			// fetch user from authentication token
+			User user = userService.findByUsername(token.getName());
+			// the chatroom that the user wants to join
+			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
+			// accept the invite
+			chatroomService.rejectAdminInvitation(user, chatroom);
 			// return successful, no content
 			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
 		} catch (HttpException e) {

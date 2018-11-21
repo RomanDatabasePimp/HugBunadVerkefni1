@@ -8,19 +8,35 @@ import project.persistance.entities.User;
 
 /**
  * Repository interface for neo4j and users
+ * 
  * @author Vilhelml
- *
  */
-public interface UserRepository extends Neo4jRepository<User, Long>{
-	// Return a User NodeEntity if userName exists
+public interface UserRepository extends Neo4jRepository<User, Long> {
+
+	/**
+	 * Returns a <code>User</code> <code>NodeEntity</code> if user with
+	 * user name <code>userName</code> exists.
+	 * 
+	 * @param username Name of user.
+	 * @return Returns a User NodeEntity if user with user name userName exists.
+	 */
 	User findByUsername(@Param("username") String username);
-	
-	// save a user in databse, for creates and updates
+
+	/**
+	 * Save a user in database, for creates and updates.
+	 */
 	User save(User user);
 
-	// delete a user
+	/**
+	 * Delete a user.
+	 */
 	void delete(User user);
-	// delete user relations
+
+	/**
+	 * Delete user relations.
+	 * 
+	 * @param username
+	 */
 	@Query("MATCH (a:User)-[r]-(b) WHERE a.username = \"vilhelml\" DELETE r;")
 	void deleteUserRelations(@Param("username") String username);
 }

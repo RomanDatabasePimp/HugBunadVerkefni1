@@ -21,8 +21,6 @@ public class MessageService {
 	private ChatMessageRepository chatMessageRepository;
 
 	/**
-	 * TODO finish implementing
-	 * 
 	 * Returns `limit` messages from chat room `chatroom` starting from `offset`.
 	 * 
 	 * @param chatroom
@@ -37,8 +35,6 @@ public class MessageService {
 	}
 	
 	/**
-	 * TODO finish implementing
-	 * 
 	 * Returns `limit` messages from chat room `chatroom` starting from `offset`.
 	 * 
 	 * @param chatroom

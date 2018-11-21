@@ -45,6 +45,9 @@ public class UserController {
 
 	/**
 	 * Update a user's displayName, password, and email
+	 * 
+	 * NOTE: email in <code>newUser</code> is assumed to be unencrypted.
+	 * 
 	 * @param newUser: container for the properties to update
 	 * @return
 	 */
@@ -55,7 +58,7 @@ public class UserController {
 			User user = userService.findByUsername(token.getName());
 			// if an attribute is not given, the old one is used
 			String newDisplayName = newUser.getDisplayName() != null ? newUser.getDisplayName() : user.getDisplayName();
-			// TODO: encrypt email
+			// NOTE: encrypt email here.
 			String newEmail = newUser.getEmail() != null ? CryptographyService.getCiphertext(newUser.getEmail()) : user.getEmail();
 			String newPassword = newUser.getPassword() != null ? newUser.getPassword() : user.getPassword();
 			// apply the new attributes

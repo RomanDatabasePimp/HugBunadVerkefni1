@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ReponseReturner {
+	
 	protected Map<String, Object> results;
 	protected Map<String, List<Map<String, Object>>> errors;
 	

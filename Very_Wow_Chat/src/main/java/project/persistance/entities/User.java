@@ -17,6 +17,8 @@ public class User {
 	protected String username;
 	protected String password;
 	protected String displayName;
+	
+	// NOTE: at the moment the email is assumed to be encrypted.
 	protected String email;
 	protected Long created;
 	protected Boolean isActive;
@@ -69,9 +71,13 @@ public class User {
 
 	/**
 	 * Create a new user
+	 * 
+	 * NOTE: email is assumed to be encrypted here.
+	 * 
 	 * @param userName		a unique user name used to authenticate user
 	 * @param password		user's password, used to authenticate user
 	 * @param displayName	user's display name, seen by other users
+	 * @param email	User's email.
 	 */
 	public User(String username, String password, String displayName, String email) {
 		this.username = username;
@@ -115,10 +121,16 @@ public class User {
 		this.displayName = displayName;
 	}
 
+	/**
+	 * NOTE: email is assumed to be encrypted here.
+	 */
 	public String getEmail() {
 		return email;
 	}
 
+	/**
+	 * NOTE: email is assumed to be encrypted here.
+	 */
 	public void setEmail(String email) {
 		this.email = email;
 	}

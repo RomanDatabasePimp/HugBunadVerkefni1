@@ -19,8 +19,6 @@ import project.persistance.repositories.UserRepository;
 
 @Service
 public class ChatroomService {
-	// logs all neo4j calls
-	// protected final static Logger LOG = LoggerFactory.getLogger(UserService.class);
 
 	@Autowired
 	private ChatroomRepository chatroomRepository;
@@ -40,7 +38,6 @@ public class ChatroomService {
 			chatroom.setLastMessageReceived((new Date()).getTime());
 			saveChatroom(chatroom);
 		} catch (NotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -195,6 +192,36 @@ public class ChatroomService {
 		deleteMembership(user, chatroom);
 		// delete admin relation
 		deleteAdminship(user, chatroom);
+	}
+	
+	/**
+	 * delete the 
+	 * @param user the invitee
+	 * @param chatroom the chatroom
+	 * @throws BadRequestException
+	 */
+	public void rejectChatroomInvitation(User user, Chatroom chatroom) throws BadRequestException{
+		// if there is no invite
+		if(!this.memberInvitationSent(user, chatroom)) {
+			throw new BadRequestException("There is no invite to decline");
+		}
+		// delete the relation
+		this.deleteMemberInvitation(user, chatroom);
+	}
+	
+	/**
+	 * delete the 
+	 * @param user the invitee
+	 * @param chatroom the chatroom
+	 * @throws BadRequestException
+	 */
+	public void rejectAdminInvitation(User user, Chatroom chatroom) throws BadRequestException{
+		// if there is no invite
+		if(!this.adminInvitationSent(user, chatroom)) {
+			throw new BadRequestException("There is no invite to decline");
+		}
+		// delete the relation
+		this.deleteAdminInvitation(user, chatroom);
 	}
 
 	/**
@@ -407,9 +434,10 @@ public class ChatroomService {
 	}
 
 	/**
-	 * delete a chatroom (and all its relations)
+	 * Delete chatroom <code>chatroom</code> and all its relations, also
+	 * all associated chat messages.
 	 * 
-	 * @param chatroom
+	 * @param chatroom The chat room to delete.
 	 */
 	@Transactional(readOnly = false)
 	public void deleteChatroom(Chatroom chatroom) {

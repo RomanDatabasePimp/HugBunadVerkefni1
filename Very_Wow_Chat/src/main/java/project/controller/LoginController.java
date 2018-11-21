@@ -28,18 +28,15 @@ public class LoginController {
 
 	/*------------------------------------CONTROLLERS START -----------------------------------------------*/
 
-	/* Usage : url/login 
-	 *   For : METHOD TYPE POST Should contain a json obj of a form 
-	 *         {"userName":"shitufkc","password":"123123"} 
-	 * After : Validates the Client POST request and responds with an appropriate 
-	 *         status code along with user data and  a JTW token */
-	
 	
 	/**
+	 * Usage : url/login 
+	 *   For : METHOD TYPE POST Should contain a json obj of a form 
+	 *         {"userName":"name","password":"123123"} 
+	 * After : Validates the Client POST request and responds with an appropriate 
+	 *         status code along with user data and  a JTW token
 	 * 
-	 * 
-	 * 
-	 * <pre class="code">
+	 * <pre>
 	 * { "userName": "yourNameHere", "password": "yourPasswordHere" }
 	 * </pre>
 	 * 

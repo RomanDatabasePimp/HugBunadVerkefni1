@@ -20,7 +20,8 @@ public class JwtValidator {
 		String base64EncodedSecretKey = TextCodec.BASE64.encode(secretKey);
 
 		JwtUser jwtUser = null;
-		try { // get the tokens information
+		try {
+			// get the tokens information
 			Claims body = Jwts.parser().setSigningKey(base64EncodedSecretKey).parseClaimsJws(token).getBody();
 			// create a token user for further validation
 			jwtUser = new JwtUser();

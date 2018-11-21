@@ -3,8 +3,6 @@ package project.services;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,10 +16,6 @@ import project.persistance.repositories.TagRepository;
 
 @Service
 public class TagService {
-
-	// TODO: is this used?
-	// logs all neo4j calls
-	// private final static Logger LOG = LoggerFactory.getLogger(UserService.class);
 
 	@Autowired
 	private ChatroomRepository chatroomRepository;

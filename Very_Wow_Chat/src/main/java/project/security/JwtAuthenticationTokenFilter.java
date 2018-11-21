@@ -18,7 +18,9 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
 		super("/auth/**");
 	}
 
-	/* THis is where the jtw tokens will be decoded and authenticated */
+	/** 
+	 * THis is where the jtw tokens will be decoded and authenticated
+	 */
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) throws AuthenticationException, IOException, ServletException {
