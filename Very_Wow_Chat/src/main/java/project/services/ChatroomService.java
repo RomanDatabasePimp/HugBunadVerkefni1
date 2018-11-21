@@ -430,7 +430,6 @@ public class ChatroomService {
 				return m;
 			}
 		}
-		
 		// if not found, throw an exception
 		throw new NotFoundException("User is not a member of the chatroom " + chatroom.getChatroomName());
 	}

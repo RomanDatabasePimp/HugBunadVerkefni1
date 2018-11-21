@@ -30,7 +30,6 @@ import java.util.Collections;
 @Configuration                         
 public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
 
-
     @Autowired
     private JwtAuthenticationProvider authenticationProvider; // our authenticator
     
@@ -68,7 +67,6 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
         http.headers().cacheControl();
     }
     
-    /* I swear if this dosent work i will buy razor blades to cut my wrists */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         final CorsConfiguration configuration = new CorsConfiguration();

@@ -19,6 +19,10 @@ import project.services.CryptographyService;
 import project.services.RedisService;
 import project.services.UserService;
 
+/**
+ * Controller that is responsible for resetting user's password and then 
+ * completing the password reset. 
+ */
 @RestController
 public class PasswordResetController {
 	
@@ -37,39 +41,35 @@ public class PasswordResetController {
 	@Value("${email.server.secretkey}")
 	private String emailServerSecretKey;
 	
-	// password_reset
+	/**
+	 * Resets password.  Sends email to the username.
+	 * 
+	 * JSON body:
+	 * {
+	 * 	"username": "harold"
+	 * }
+	 * 
+	 * @param prr JSON mapped to PasswordResetRequest.
+	 * 
+	 * @return NO CONTENT HTTP response
+	 */
 	@RequestMapping(value = "/password_reset", method = RequestMethod.POST, headers = "Accept=application/json")
 	public ResponseEntity<String> passwordReset(@RequestBody PasswordResetRequest prr) {
-		
-		
-		// Check a user exists with this email.
 		
 		try {
 			
 			String username = prr.getUsername();
-			
-			if (DEBUG) {
-				System.out.println("USERNAME:[" + username + "]");
-			}
-			
-			
 			User user = userService.findByUsername(username);
-			
-			// FIXME: maybe in the future this email might be encrypted so
-			// it needs to be decrypted via CryptographyService.
-			String recipientEmail = user.getEmail();
-			
+			String recipientEmail = CryptographyService.getPlaintext(user.getEmail());
 			String randomKey = CryptographyService.getRandomHexString(64);
 			
 			redisService.insertString(randomKey, username);
 			
 			String resetUrl = emailServerUrl + "password_reset/" + randomKey;
 			
-			
 			if (DEBUG) {
 				System.out.println("http://localhost" + ":9090" + "/"+ "password_reset/" + randomKey);
 			}
-			
 			
 			String emailContent = "Reset URL: " + resetUrl;
 			
@@ -79,7 +79,6 @@ public class PasswordResetController {
 			if (DEBUG) {
 				System.out.println(emailContent);
 			}
-			
 
 			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
 		} catch (NotFoundException e) {
@@ -88,8 +87,12 @@ public class PasswordResetController {
 		}
 	}
 	
-	
-	// password_reset
+	/**
+	 * Complete password reset. 
+	 * 
+	 * @param key
+	 * @return 
+	 */
 	@RequestMapping(value = "/password_reset/{key}", method = RequestMethod.POST, headers = "Accept=application/json")
 	public ResponseEntity<String> passwordResetComplete(@PathVariable String key) {
 		try {

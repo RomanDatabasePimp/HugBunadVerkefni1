@@ -99,7 +99,8 @@ public class MessageResponse {
 		this.senderUsernameId = senderUsernameId;
 		this.senderUsername = senderUsername;
 		this.senderDisplayName = senderDisplayName;
-		this.message = CryptographyService.getPlaintext(message);
+		// TODO: decrypt message
+		this.message = message;
 		this.timestamp = timestamp;
 	}
 	
