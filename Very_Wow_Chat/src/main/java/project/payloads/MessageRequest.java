@@ -19,12 +19,14 @@ public class MessageRequest {
 	}
 
 	public void setMessage(String message) {
-		this.message = CryptographyService.getCiphertext(message);
+		// TODO: encrypt message
+		this.message = message;
 	}
 	
 	public MessageRequest() {}
 
 	public MessageRequest(String message) {
-		this.message = CryptographyService.getCiphertext(message);
+		// TODO: encrypt message
+		this.message = message;
 	}
 }

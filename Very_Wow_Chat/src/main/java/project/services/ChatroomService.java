@@ -1,16 +1,5 @@
 package project.services;
 
-import project.persistance.entities.Chatroom;
-import project.persistance.entities.Membership;
-import project.persistance.entities.User;
-import project.persistance.entities.Tag;
-import project.persistance.repositories.ChatroomRepository;
-import project.persistance.repositories.TagRepository;
-import project.persistance.repositories.UserRepository;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.Date;
 import java.util.List;
 
@@ -18,24 +7,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import project.Errors.UnauthorizedException;
-import project.Errors.BadRequestException;
-import project.Errors.NotFoundException;
+import project.errors.BadRequestException;
+import project.errors.NotFoundException;
+import project.errors.UnauthorizedException;
+import project.persistance.entities.Chatroom;
+import project.persistance.entities.Membership;
+import project.persistance.entities.User;
+import project.persistance.repositories.ChatroomRepository;
+// import project.persistance.repositories.TagRepository;
+import project.persistance.repositories.UserRepository;
 
 @Service
 public class ChatroomService {
 	// logs all neo4j calls
 	// protected final static Logger LOG = LoggerFactory.getLogger(UserService.class);
 
-
 	@Autowired
-	protected ChatroomRepository chatroomRepository;
+	private ChatroomRepository chatroomRepository;
+	
 	@Autowired
-	protected UserRepository userRepository;
+	private UserRepository userRepository;
+	
 	@Autowired
-	protected TagRepository tagRepository;
+	private TagService tagService;
+	
 	@Autowired
-	protected MessageService messageService;
+	private MessageService messageService;
 	
 	public void updateLastMessageReceived(String chatroomName) {
 		try {
@@ -416,6 +413,11 @@ public class ChatroomService {
 	 */
 	@Transactional(readOnly = false)
 	public void deleteChatroom(Chatroom chatroom) {
+		// delete the chat logs
+		messageService.deleteAllChatMessagesOfChatroom(chatroom);
+		// remove the tags
+		tagService.removeAllTagsFromChatroom(chatroom);
+		// delete the chatroom
 		chatroomRepository.delete(chatroom);
 	}
 
@@ -428,8 +430,6 @@ public class ChatroomService {
 				return m;
 			}
 		}
-		
-		messageService.deleteAllChatMessagesOfChatroom(chatroom);
 		// if not found, throw an exception
 		throw new NotFoundException("User is not a member of the chatroom " + chatroom.getChatroomName());
 	}
@@ -554,11 +554,20 @@ public class ChatroomService {
 	protected void deleteMembership(User user, Chatroom chatroom) {
 		List<Chatroom> chatrooms = user.getMemberOfChatrooms();
 		List<User> users = chatroom.getMembers();
+		List<Membership> memberships = user.getMemberships();
 		// if the user has received invite
 		if (isMember(user, chatroom)) {
 			// delete the relation
 			chatrooms.remove(chatroom);
 			users.remove(user);
+			// delete the membership
+			// delete the membership
+			for(Membership m : memberships) {
+				if(m.getChatroom() == chatroom) {
+					memberships.remove(m);
+					break;
+				}
+			}
 			// save the chatroom, and update its relations
 			chatroomRepository.save(chatroom);
 		}

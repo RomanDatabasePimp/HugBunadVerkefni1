@@ -1,6 +1,7 @@
 package project.controller;
 
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -19,13 +20,11 @@ import project.services.UserService;
 @RestController
 public class LoginController {
 
-	private final UserService userService; // we need neo4j to auth users
-	private final JwtGenerator jwtGenerator; // create the JWT token
-
-	public LoginController(UserService userService, JwtGenerator jwtGenerator) {
-		this.userService = userService;
-		this.jwtGenerator = jwtGenerator;
-	}
+	@Autowired
+	private UserService userService; // we need neo4j to auth users
+	
+	@Autowired
+	private JwtGenerator jwtGenerator; // create the JWT token
 
 	/*------------------------------------CONTROLLERS START -----------------------------------------------*/
 

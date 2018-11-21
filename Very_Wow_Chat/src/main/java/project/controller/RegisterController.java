@@ -1,6 +1,7 @@
 package project.controller;
 
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -10,11 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import project.Errors.HttpException;
+import project.errors.HttpException;
 import project.payloads.HttpResponseBody;
 import project.payloads.UserRegistrationFormReceiver;
 import project.persistance.entities.User;
 import project.services.AuthenticationService;
+import project.services.CryptographyService;
 import project.services.RedisService;
 import project.services.UserService;
 
@@ -23,14 +25,16 @@ import project.services.UserService;
 public class RegisterController {
 
 
-	private final RedisService redisService; // redis services to insert the user into temp storage
-	private final UserService userService; // connect to neo4j db
+	@Autowired
+	private RedisService redisService; // redis services to insert the user into temp storage
+	
+	@Autowired
+	private UserService userService; // connect to neo4j db
+	
+	@Autowired
+	private AuthenticationService authenticator;
 	
 
-	public RegisterController(UserService userService) {
-		this.redisService = new RedisService();
-		this.userService = userService;
-	}
 
 	/*--------------------------------------------CONTROLLERS START---------------------------------------------------------*/
 
@@ -62,7 +66,7 @@ public class RegisterController {
 		
 		
 		HttpResponseBody clientResponse = new HttpResponseBody(); // create a instance of the response body
-		AuthenticationService authenticator = new AuthenticationService(this.userService);// authenticator
+		// AuthenticationService authenticator = new AuthenticationService(this.userService);// authenticator
 																						
 		// this is not for the api more of for debuggin.
 		if (!payload.allInfoExists()) {
@@ -120,7 +124,9 @@ public class RegisterController {
 		newUser.put("password", privateInfoEncoder.encode(payload.getPassword()));
 		// reason why we encode email is cuz of the new privacy policies any data that
 		// can lead to the user(as a person) has to be secured
-		newUser.put("email", privateInfoEncoder.encode(payload.getEmail()));
+		
+		
+		newUser.put("email", CryptographyService.getCiphertext(payload.getEmail()));
 
 		// insert the data into Redis for 30 min
 		this.redisService.insertUser(payload.getUserName(), newUser);

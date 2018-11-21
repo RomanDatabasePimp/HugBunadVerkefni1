@@ -13,9 +13,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 
 import project.services.ChatroomService;
+import project.services.CryptographyService;
 import project.services.UserService;
 import project.persistance.entities.User;
-import project.Errors.HttpException;
+import project.errors.HttpException;
 import project.payloads.ChatroomResponder;
 import project.payloads.MembershipResponder;
 import project.payloads.RelationsResponder;
@@ -38,6 +39,7 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
+	
 	@Autowired
 	private ChatroomService chatroomService;
 
@@ -53,7 +55,8 @@ public class UserController {
 			User user = userService.findByUsername(token.getName());
 			// if an attribute is not given, the old one is used
 			String newDisplayName = newUser.getDisplayName() != null ? newUser.getDisplayName() : user.getDisplayName();
-			String newEmail = newUser.getEmail() != null ? newUser.getEmail() : user.getEmail();
+			// TODO: encrypt email
+			String newEmail = newUser.getEmail() != null ? CryptographyService.getCiphertext(newUser.getEmail()) : user.getEmail();
 			String newPassword = newUser.getPassword() != null ? newUser.getPassword() : user.getPassword();
 			// apply the new attributes
 			user.setDisplayName(newDisplayName);
@@ -97,16 +100,15 @@ public class UserController {
 	 * @param friendName
 	 * @return no content or error
 	 * 
-	 * Pæling: hafa þessa virkni í delete friend? þannig að delete friend eyði vini eða request eftir aðstæðum
 	 */
-	@RequestMapping(path = "/friendRequest/{requesteeName}", method = RequestMethod.DELETE, headers = "Accept=application/json")
-	public ResponseEntity<Object> deleteFriendRequest( @PathVariable String requesteeName, UsernamePasswordAuthenticationToken token){
+	@RequestMapping(path = "/friendRequest/{requestorName}", method = RequestMethod.DELETE, headers = "Accept=application/json")
+	public ResponseEntity<Object> deleteFriendRequest( @PathVariable String requestorName, UsernamePasswordAuthenticationToken token){
 		try {
 			// fetch user from authentication token
 			User user = userService.findByUsername(token.getName());
-			User requestee = userService.findByUsername(requesteeName);
+			User requestor = userService.findByUsername(requestorName);
 
-			userService.deleteFriendRequest(user, requestee);
+			userService.deleteFriendRequest(requestor, user);
 			
 			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
 		}catch(HttpException e) {

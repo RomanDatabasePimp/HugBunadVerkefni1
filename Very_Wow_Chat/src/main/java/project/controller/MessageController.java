@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import project.Errors.NotFoundException;
+import project.errors.NotFoundException;
 import project.payloads.MessageRequest;
 import project.payloads.MessageResponse;
 import project.payloads.ResponseWrapper;
@@ -37,13 +37,13 @@ import project.services.UserService;
 public class MessageController {
 
 	@Autowired
-	private MessageService messageService;
+	protected MessageService messageService;
 
 	@Autowired
-	private ChatroomService chatroomService;
+	protected ChatroomService chatroomService;
 
 	@Autowired
-	private UserService userService;
+	protected UserService userService;
 
 	/**
 	 * Returns all messages of chat room `chatroomName`.

@@ -1,21 +1,20 @@
 package project.services;
 
-import java.util.ArrayList;
-
-import org.apache.commons.validator.ValidatorResources;
 import org.apache.commons.validator.routines.EmailValidator;
-
-import project.persistance.repositories.RedisRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /* class that handles Authentication and encryption of different types of data */
+@Service
 public class AuthenticationService {
-	private final RedisService redisService; // our redis service
+	
+	@Autowired
+	private RedisService redisService; // our redis service
+	
+	@Autowired
 	private UserService userService;// our neo4j service
 
-	public AuthenticationService(UserService userService) {
-		this.redisService = new RedisService();
-		this.userService = userService;
-	}
+	
 
 	/*
 	 * Usage : auth.userNameExists(userName) 

@@ -67,24 +67,16 @@ public class ChatMessageRepositoryImpl implements ChatMessageRepositoryCustom {
 
 	@Override
 	public void deleteAllChatMessagesOfChatroom(String chatroomName) {
-		// TODO: test
-		//  db.chatMessage.find({chatroomName: "c6", timestamp: { $gte: 1542462067973, $lte: 1542462082416 }}) 
-		
-		Criteria criteria = Criteria.where("chatroomName").is("c2");
-		
+		Criteria criteria = Criteria.where("chatroomName").is(chatroomName);
 		Query query = new Query(criteria);
-		
-		mongoTemplate.remove(query);
+		mongoTemplate.findAllAndRemove(query, ChatMessage.class);
 	}
 
 	@Override
 	public List<ChatMessage> getChatroomMessagesBetweenTime(String chatroomName, long startTime, long endTime) {
-		// db.chatMessage.find({timestamp: { $gte: 1542458691498, $lt: 1542458702913 }})
-		
 		Query query = new Query();
 		query.addCriteria(Criteria.where("chatroomName").is(chatroomName));
 		query.addCriteria(Criteria.where("timestamp").gte(startTime).lte(endTime));
-		
 		List<ChatMessage> results = mongoTemplate.find(query, ChatMessage.class);
 		return results;
 	}

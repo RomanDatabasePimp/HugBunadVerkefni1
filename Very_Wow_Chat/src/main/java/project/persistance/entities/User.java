@@ -1,15 +1,13 @@
 package project.persistance.entities;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import org.neo4j.ogm.annotation.GeneratedValue;
 import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 @NodeEntity
 public class User {
@@ -179,7 +177,6 @@ public class User {
 	
 	public List<Chatroom> getOwnedChatrooms() {
 		if(ownedChatrooms == null) {
-			System.out.println("owned chatrooms is null");
 			ownedChatrooms = new ArrayList<>();
 		}
 		return ownedChatrooms;
