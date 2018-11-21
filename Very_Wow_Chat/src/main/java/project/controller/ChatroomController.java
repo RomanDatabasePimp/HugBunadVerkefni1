@@ -42,11 +42,11 @@ public class ChatroomController {
 	
 
 	@Autowired
-	protected ChatroomService chatroomService;
+	private ChatroomService chatroomService;
 	@Autowired
-	protected UserService userService;
+	private UserService userService;
 	@Autowired
-	protected TagService tagService;
+	private TagService tagService;
 	
 
 	/**
@@ -118,12 +118,12 @@ public class ChatroomController {
 	 * TODO: delete messages
 	 */
 	@RequestMapping(path = "/{chatroomName}", method = RequestMethod.DELETE, headers = "Accept=application/json")
-    public ResponseEntity<Object> deleteChatroom(@PathVariable String chatroomName/*, UsernamePasswordAuthenticationToken token*/){
+    public ResponseEntity<Object> deleteChatroom(@PathVariable String chatroomName, UsernamePasswordAuthenticationToken token){
 		try {
 			// fetch user from authentication token
-			User user = userService.findByUsername(/*token.getName()*/"ror9");
+			User user = userService.findByUsername(token.getName());
 			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
-			if(chatroomService.isOwner(user, chatroom)) {
+			if(!chatroomService.isOwner(user, chatroom)) {
 				ErrorResponder body = new ErrorResponder();
 				body.setError("User is not the chatroom's owner");
 				return new ResponseEntity<>(body.getWrappedError(), HttpStatus.UNAUTHORIZED);
