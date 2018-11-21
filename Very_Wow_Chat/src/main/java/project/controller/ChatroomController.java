@@ -307,7 +307,7 @@ public class ChatroomController {
 	 *          status code of 404 for not found, or 401 for unauthorized
 	 */
 	@RequestMapping(path = "/{chatroomName}/acceptadmininvite", method = RequestMethod.POST, headers = "Accept=application/json")
-	public ResponseEntity<Object> rejectAdminInvite(@PathVariable String chatroomName,
+	public ResponseEntity<Object> acceptAdminInvite(@PathVariable String chatroomName,
 			UsernamePasswordAuthenticationToken token) {
 		try {
 			// fetch user from authentication token
@@ -355,7 +355,7 @@ public class ChatroomController {
 	 *          status code of 404 for not found, or 401 for unauthorized
 	 */
 	@RequestMapping(path = "/{chatroomName}/rejectadmininvite", method = RequestMethod.DELETE, headers = "Accept=application/json")
-	public ResponseEntity<Object> acceptAdminInvite(@PathVariable String chatroomName,
+	public ResponseEntity<Object> rejectAdminInvite(@PathVariable String chatroomName,
 			UsernamePasswordAuthenticationToken token) {
 		try {
 			// fetch user from authentication token

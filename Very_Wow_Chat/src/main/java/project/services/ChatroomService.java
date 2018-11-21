@@ -127,11 +127,11 @@ public class ChatroomService {
 	public void joinChatroom(User user, Chatroom chatroom) throws BadRequestException, UnauthorizedException {
 		// already member
 		if (isMember(user, chatroom)) {
-			throw new BadRequestException("You are already a member of this chatroom.");
+			throw new BadRequestException("You are already a member of " + chatroom.getChatroomName());
 		}
 		// can't join
 		if (!canJoin(user, chatroom)) {
-			throw new UnauthorizedException("You need an invite to join this chatroom.");
+			throw new UnauthorizedException("You need an invite to join " + chatroom.getChatroomName());
 		}
 		
 		// delete the member invite, if there is one
@@ -304,6 +304,9 @@ public class ChatroomService {
 		if(isAdmin(user, chatroom)) {
 			throw new BadRequestException("The user is already an admin of the chatroom");
 		}
+		if(!this.isMember(user, chatroom)) {
+			this.createMemberInvitation(user, chatroom);
+		}
 		createAdminInvitation(user, chatroom);
 	}
 
@@ -468,7 +471,7 @@ public class ChatroomService {
 	 * @param user
 	 * @param chatroom
 	 */
-	protected void createMemberRelation(User user, Chatroom chatroom) {
+	private void createMemberRelation(User user, Chatroom chatroom) {
 		List<Chatroom> chatrooms = user.getMemberOfChatrooms();
 		List<User> users = chatroom.getMembers();
 		List<Membership> memberships = user.getMemberships();
@@ -493,7 +496,7 @@ public class ChatroomService {
 	 * @param user
 	 * @param chatroom
 	 */
-	protected void createAdminRelation(User user, Chatroom chatroom) {
+	private void createAdminRelation(User user, Chatroom chatroom) {
 		List<Chatroom> chatrooms = user.getAdminOfChatrooms();
 		List<User> users = chatroom.getAdministrators();
 
@@ -509,7 +512,7 @@ public class ChatroomService {
 	 * @param user
 	 * @param chatroom
 	 */
-	protected void createMemberInvitation(User user, Chatroom chatroom) {
+	private void createMemberInvitation(User user, Chatroom chatroom) {
 		List<Chatroom> chatrooms = user.getChatroomInvites();
 		List<User> users = chatroom.getMemberInvitees();
 		// create the relation
@@ -525,7 +528,7 @@ public class ChatroomService {
 	 * @param user
 	 * @param chatroom
 	 */
-	protected void createAdminInvitation(User user, Chatroom chatroom) {
+	private void createAdminInvitation(User user, Chatroom chatroom) {
 		List<Chatroom> chatrooms = user.getChatroomAdminInvites();
 		List<User> users = chatroom.getAdminInvitees();
 		// create the relation
@@ -541,7 +544,7 @@ public class ChatroomService {
 	 * @param user
 	 * @param chatroom
 	 */
-	protected void deleteMemberInvitation(User user, Chatroom chatroom) {
+	private void deleteMemberInvitation(User user, Chatroom chatroom) {
 		List<Chatroom> chatrooms = user.getChatroomInvites();
 		List<User> users = chatroom.getMemberInvitees();
 		// if the user has received invite
@@ -560,7 +563,7 @@ public class ChatroomService {
 	 * @param user
 	 * @param chatroom
 	 */
-	protected void deleteAdminInvitation(User user, Chatroom chatroom) {
+	private void deleteAdminInvitation(User user, Chatroom chatroom) {
 		List<Chatroom> chatrooms = user.getChatroomAdminInvites();
 		List<User> users = chatroom.getAdminInvitees();
 		// if the user has received invite
@@ -579,7 +582,7 @@ public class ChatroomService {
 	 * @param user
 	 * @param chatroom
 	 */
-	protected void deleteMembership(User user, Chatroom chatroom) {
+	private void deleteMembership(User user, Chatroom chatroom) {
 		List<Chatroom> chatrooms = user.getMemberOfChatrooms();
 		List<User> users = chatroom.getMembers();
 		List<Membership> memberships = user.getMemberships();
@@ -607,7 +610,7 @@ public class ChatroomService {
 	 * @param user
 	 * @param chatroom
 	 */
-	protected void deleteAdminship(User user, Chatroom chatroom) {
+	private void deleteAdminship(User user, Chatroom chatroom) {
 		List<Chatroom> chatrooms = user.getAdminOfChatrooms();
 		List<User> users = chatroom.getAdministrators();
 		// if the user has received invite
