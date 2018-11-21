@@ -15,6 +15,7 @@ import java.io.IOException;
  * controller is not called */
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
+	
 	@Override
 	public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
 			AuthenticationException e) throws IOException, ServletException {

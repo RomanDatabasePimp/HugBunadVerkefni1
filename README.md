@@ -19,6 +19,12 @@ db.dropDatabase()
 ```
 
 NEO4j
+```
+match (n)-[r]-(m) delete n,r,m;
+match (n) delete n;
+```
+
+
 
 
 ## Git

@@ -1,65 +1,65 @@
 package project.services;
 
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import project.persistance.repositories.RedisRepository;
 
-/* This class uses the redisrepository to fufill all redis based requests by our app */
+/**
+ * This class uses the Redis repository to fulfill all Redis based requests by
+ * our application
+ */
 @Service
 public class RedisService {
-	private final RedisRepository RedisRepository; // get our Repo
 
-	public RedisService() {
-		this.RedisRepository = new RedisRepository();
-	}
+	@Autowired
+	private RedisRepository redisRepository;
 
-	/*
-	 * Usage : Redser.userNameExists(username) 
-	 *   For : Redser is RedisService class
-	 *         username is a string 
-	 *  After: return true if the usernamename Exists in the redis database
+	/**
+	 * Checks if user name <code>username</code> exists in Redis database.
+	 * 
+	 * @param username
+	 * @return <code>True</code> if user name exists in Redis database, otherwise
+	 *         <code>False</code>
 	 */
 	public boolean userNameExists(String username) {
-		return this.RedisRepository.checkIfKeyExists(username);
+		return this.redisRepository.checkIfKeyExists(username);
 	}
 
 	/*
-	 * Usage : Redser.insertUser(key, data) 
-	 *   For : Redser is RedisService class 
-	 *         key is the pointer to where the data is stored 
-	 *         data is the userdata in NOTE THIS HAS TO BE IN JSON FORM 
-	 *  After: inserts the user into the redis repo and  returns the key
+	 * Usage : Redser.insertUser(key, data) For : Redser is RedisService class key
+	 * is the pointer to where the data is stored data is the userdata in NOTE THIS
+	 * HAS TO BE IN JSON FORM After: inserts the user into the redis repo and
+	 * returns the key
 	 */
 	public String insertUser(String key, JSONObject data) {
-		this.RedisRepository.insertData(key, data.toString());
+		this.redisRepository.insertData(key, data.toString());
 		return key;
 	}
-	
+
 	public void insertString(String key, String string) {
-		RedisRepository.insertString(key, string);
+		redisRepository.insertString(key, string);
 	}
-	
+
 	public String getString(String key) {
-		return RedisRepository.getString(key);
+		return redisRepository.getString(key);
 	}
-	
-	
+
 	public String getAndDestroyString(String key) {
-		String string = RedisRepository.getString(key);
-		RedisRepository.destroyData(key);
+		String string = redisRepository.getString(key);
+		redisRepository.destroyData(key);
 		return string;
 	}
-	
+
 	/*
-	 * Usage : Redser.getAndDestroyData(key) 
-	 *   For : Redser is RedisService class 
-	 *         key String is the pointer to where the data is stored 
-	 *  After: fetches the data where the key is pointing to and then removes it from redis
+	 * Usage : Redser.getAndDestroyData(key) For : Redser is RedisService class key
+	 * String is the pointer to where the data is stored After: fetches the data
+	 * where the key is pointing to and then removes it from redis
 	 */
 	public JSONObject getAndDestroyData(String key) {
-		JSONObject data = this.RedisRepository.getData(key);
-		this.RedisRepository.destroyData(key);
+		JSONObject data = this.redisRepository.getData(key);
+		this.redisRepository.destroyData(key);
 		return data;
 	}
 

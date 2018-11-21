@@ -21,12 +21,12 @@ public class CryptographyService {
 	private static String spw;
 	private static String ss;
 	
-	private static final String PASSWORD_ALPHABET_1 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~`!@#$%^&*()-_=+[{]}\\|;:\'\",<.>/?";
+	// private static final String PASSWORD_ALPHABET_1 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~`!@#$%^&*()-_=+[{]}\\|;:\'\",<.>/?";
 	
 	// "comfortable" alphabet to type in.
 	private static final String PASSWORD_ALPHABET_2 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&*()-_=+[{]}|;:,<.>?";
 	
-	private static final char[] PASSWORD_ALPHABET_1_CHARS = (new String(PASSWORD_ALPHABET_1)).toCharArray();
+	// private static final char[] PASSWORD_ALPHABET_1_CHARS = (new String(PASSWORD_ALPHABET_1)).toCharArray();
 	private static final char[] PASSWORD_ALPHABET_2_CHARS = (new String(PASSWORD_ALPHABET_2)).toCharArray();
 
 	@PostConstruct

@@ -3,9 +3,12 @@ package project.persistance.repositories;
 import org.json.JSONObject;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
+import org.springframework.stereotype.Repository;
 
 /* Class creates a connection to the redis server and oversees all the 
  * of the sending and reciving of data between the Spring Server and Redis server */
+
+@Repository
 public class RedisRepository {
 	private final JedisConnectionFactory redisConn; // define our connection
 

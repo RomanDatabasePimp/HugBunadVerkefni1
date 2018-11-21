@@ -1,25 +1,20 @@
 package project.controller;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import project.Errors.NotFoundException;
-import project.payloads.HttpResponseBody;
+import project.errors.NotFoundException;
 import project.payloads.PasswordResetRequest;
-import project.payloads.UserRegistrationFormReceiver;
 import project.persistance.entities.User;
 import project.pojo.Mailer;
-import project.services.AuthenticationService;
 import project.services.CryptographyService;
 import project.services.RedisService;
 import project.services.UserService;

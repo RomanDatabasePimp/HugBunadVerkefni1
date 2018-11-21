@@ -1,16 +1,5 @@
 package project.services;
 
-import project.persistance.entities.Chatroom;
-import project.persistance.entities.Membership;
-import project.persistance.entities.User;
-import project.persistance.entities.Tag;
-import project.persistance.repositories.ChatroomRepository;
-import project.persistance.repositories.TagRepository;
-import project.persistance.repositories.UserRepository;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.Date;
 import java.util.List;
 
@@ -18,22 +7,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import project.Errors.UnauthorizedException;
-import project.Errors.BadRequestException;
-import project.Errors.NotFoundException;
+import project.errors.BadRequestException;
+import project.errors.NotFoundException;
+import project.errors.UnauthorizedException;
+import project.persistance.entities.Chatroom;
+import project.persistance.entities.Membership;
+import project.persistance.entities.User;
+import project.persistance.repositories.ChatroomRepository;
+import project.persistance.repositories.TagRepository;
+import project.persistance.repositories.UserRepository;
 
 @Service
 public class ChatroomService {
 	// logs all neo4j calls
 	// protected final static Logger LOG = LoggerFactory.getLogger(UserService.class);
 
-
 	@Autowired
 	protected ChatroomRepository chatroomRepository;
+	
 	@Autowired
 	protected UserRepository userRepository;
+	
 	@Autowired
 	protected TagRepository tagRepository;
+	
 	@Autowired
 	protected MessageService messageService;
 	

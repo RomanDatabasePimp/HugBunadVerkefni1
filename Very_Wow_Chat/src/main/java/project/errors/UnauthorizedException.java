@@ -1,9 +1,6 @@
-package project.Errors;
+package project.errors;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
-import project.payloads.ErrorResponder;
 
 /**
  * A custom exception class for throwing and catching errors
@@ -12,6 +9,11 @@ import project.payloads.ErrorResponder;
  */
 public class UnauthorizedException extends HttpException{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3792131199243047779L;
+
 	public UnauthorizedException (String msg) {
 		super(msg);
 		super.setStatus(HttpStatus.UNAUTHORIZED);
