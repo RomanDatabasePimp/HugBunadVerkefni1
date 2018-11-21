@@ -187,8 +187,8 @@ public class UserService {
 			throw new BadRequestException("A friend request is already pending.");
 		}
 		// check if they are already friends
-		if (areFriends(requestor, requestee)) {
-			throw new BadRequestException("おまえ は もう 友達。(You are already friends)");
+		if(areFriends(requestor, requestee)) {
+			throw new BadRequestException("You are already friends");
 		}
 		// check if a friend requet has been sent in the other direction already
 		if (friendRequestSent(requestee, requestor)) {
