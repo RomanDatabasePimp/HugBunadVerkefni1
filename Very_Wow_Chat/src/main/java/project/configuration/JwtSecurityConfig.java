@@ -33,12 +33,12 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private JwtAuthenticationProvider authenticationProvider; // our authenticator
+    
     @Autowired
     private JwtAuthenticationEntryPoint entryPoint; // what happens if the authentication fails
     
     @Bean
     public AuthenticationManager authenticationManager() {
-    	// how we authenticate the user
         return new ProviderManager(Collections.singletonList(authenticationProvider));
     }
 

@@ -5,6 +5,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 /* this is where we store our jwt token */
 public class JwtAuthenticationToken extends UsernamePasswordAuthenticationToken {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1826501946064090116L;
 	private String token;
 
 	public JwtAuthenticationToken(String token) {

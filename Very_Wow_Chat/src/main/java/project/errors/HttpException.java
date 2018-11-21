@@ -1,4 +1,4 @@
-package project.Errors;
+package project.errors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +11,13 @@ import project.payloads.ErrorResponder;
  * @author Vilhelml
  *
  */
-public abstract class HttpException extends Exception{
+public abstract class HttpException extends Exception {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6607734661793333734L;
+	
 	private HttpStatus status;
 	
 	public HttpException(String msg) {
@@ -23,8 +29,6 @@ public abstract class HttpException extends Exception{
 		body.setError(this.getMessage());
 		return  new ResponseEntity<>(body.getWrappedError(), this.status);
 	}
-	
-	//public abstract ResponseEntity<Object> getErrorResponseEntity();
 
 	public void setStatus(HttpStatus status) {
 		this.status = status;

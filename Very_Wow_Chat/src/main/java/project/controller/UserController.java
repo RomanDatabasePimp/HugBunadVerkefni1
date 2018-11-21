@@ -15,7 +15,7 @@ import java.util.List;
 import project.services.ChatroomService;
 import project.services.UserService;
 import project.persistance.entities.User;
-import project.Errors.HttpException;
+import project.errors.HttpException;
 import project.payloads.ChatroomResponder;
 import project.payloads.MembershipResponder;
 import project.payloads.RelationsResponder;
@@ -38,6 +38,7 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
+	
 	@Autowired
 	private ChatroomService chatroomService;
 

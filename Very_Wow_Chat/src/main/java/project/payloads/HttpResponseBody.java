@@ -16,7 +16,6 @@ public class HttpResponseBody {
 	 * codes gives us a very good way of handling responses late down the line
 	 */
 	private JSONObject errors_response;
-	private JSONObject successful_response;
 
 	/*
 	 * A response can consist of many thing this Array can store many individual
@@ -34,7 +33,6 @@ public class HttpResponseBody {
 
 	public HttpResponseBody() {
 		this.errors_response = new JSONObject();
-		this.successful_response = new JSONObject();
 		this.error = new ArrayList<JSONObject>();
 		this.response = new ArrayList<JSONObject>();
 		this.many_in_one_erros = new JSONObject();

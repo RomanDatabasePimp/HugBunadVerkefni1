@@ -8,7 +8,11 @@ import java.util.List;
 
 public class JwtUserDetails implements UserDetails {
 
-    private String userName;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -1523995785727657098L;
+	private String userName;
     private String token;
     private Collection<? extends GrantedAuthority> authorities;
 

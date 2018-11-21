@@ -1,4 +1,4 @@
-package project.controller;
+package project.pojo;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -10,29 +10,20 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/* This calss is responsible for sending POST request to the Email server thats hosted 
- * on our Heroku https://hugbomailserver.herokuapp.com/  it will send the email to the user
- * with the specified content.
- * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!NOTE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- * heroku webapps i.e our webserver go to sleep in 30 min after no use (Since its free version)
- * so you might want to just open the link above in ur borwser just to tell heroku to wake up this app
- * or else you might get sometimes wierd cases where the reuqest was sent but nothing happen thats cuz
- * the server was still sleeping and i dont know how high heroku was not waking it up */
-public class MailController {
+public class Mailer {
+	
+	private final String recipientEmail;
+	private final String emailContent;
+	private final String serverUrl;
+	private final String secretKey;	
 
-	private final String email; // Recipients email
-	private final String content;
-
-	public MailController(String email, String key) {
-		this.email = email;
-		this.content = "Welcome to VeryWowChat!!! \nbefore you can login please validate your account here : "
-				+ "https://verywowchat.herokuapp.com/validation/" + key;
+	public Mailer(String recipientEmail, String emailContent, String serverUrl, String secretKey) {
+		this.recipientEmail = recipientEmail;
+		this.emailContent = emailContent;
+		this.serverUrl = serverUrl;
+		this.secretKey = secretKey;
 	}
 
-	/*
-	 * Usage : send() For : ekkert After : tries to call the tryToSend method to
-	 * send the email
-	 */
 	public void send() {
 		try {
 			this.tryToSend();
@@ -46,12 +37,14 @@ public class MailController {
 	 * toMail,content,seckey that will be sent to the webserver
 	 */
 	public void tryToSend() throws Exception {
-		URL url = new URL("https://hugbomailserver.herokuapp.com/"); // url to preform the http request on
+		URL url = new URL(serverUrl); // url to preform the http request on
+		
+		
 		// data that will be sent to the email
-		Map<String, String> params = new LinkedHashMap<>();
-		params.put("toMail", this.email);
-		params.put("content", this.content);
-		params.put("seckey", "VeryStrongPassword");
+		LinkedHashMap<String, String> params = new LinkedHashMap<>();
+		params.put("toMail", this.recipientEmail);
+		params.put("content", this.emailContent);
+		params.put("seckey", secretKey);
 		/*
 		 * I wrote this last semester for hugbunadar verkefni 1 i am abit fuzzy on the
 		 * details on how it worked a 100% :(
