@@ -1,17 +1,19 @@
-package project.Errors;
+package project.errors;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
-import project.payloads.ErrorResponder;
 
 /**
  * A custom exception class for throwing and catching errors
  * @author Vilhelml
  *
  */
-public class BadRequestException extends HttpException{
+public class BadRequestException extends HttpException {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7351780997818125521L;
+
 	public BadRequestException (String msg) {
 		super(msg);
 		super.setStatus(HttpStatus.BAD_REQUEST);

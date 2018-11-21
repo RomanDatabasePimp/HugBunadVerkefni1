@@ -1,7 +1,5 @@
 package project.persistance.repositories.mongo;
 
-import java.util.List;
-
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import project.persistance.entities.ChatMessage;

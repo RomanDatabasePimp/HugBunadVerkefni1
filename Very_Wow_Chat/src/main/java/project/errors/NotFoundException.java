@@ -1,9 +1,6 @@
-package project.Errors;
+package project.errors;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
-import project.payloads.ErrorResponder;
 
 /**
  * A custom exception class for throwing and catching errors
@@ -12,6 +9,11 @@ import project.payloads.ErrorResponder;
  */
 public class NotFoundException extends HttpException{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 9091563554072961356L;
+
 	public NotFoundException (String msg) {
 		super(msg);
 		super.setStatus(HttpStatus.NOT_FOUND);

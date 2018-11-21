@@ -3,10 +3,14 @@ package project.persistance.repositories;
 import org.json.JSONObject;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
+import org.springframework.stereotype.Repository;
 
 /* Class creates a connection to the redis server and oversees all the 
  * of the sending and reciving of data between the Spring Server and Redis server */
+
+@Repository
 public class RedisRepository {
+	
 	private final JedisConnectionFactory redisConn; // define our connection
 
 	public RedisRepository() {
@@ -18,6 +22,25 @@ public class RedisRepository {
 		this.redisConn = new JedisConnectionFactory();
 		this.redisConn.setHostName("localhost");
 		this.redisConn.setPort(6379);
+	}
+	
+	/**
+	 * Insert string
+	 * 
+	 * @param key
+	 * @param string
+	 */
+	public void insertString(String key, String string) {
+		RedisConnection con = this.redisConn.getConnection();
+		con.setEx(key.getBytes(), 1800, string.getBytes());
+		con.close();
+	}
+	
+	public String getString(String key) {
+		RedisConnection con = this.redisConn.getConnection();
+		String string = new String(con.get(key.getBytes()));
+		con.close();
+		return string;
 	}
 
 	/*

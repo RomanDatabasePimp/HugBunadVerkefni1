@@ -1,5 +1,6 @@
 package project.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import project.persistance.entities.Chatroom;
 import project.persistance.entities.User;
 import project.services.ChatroomService;
+import project.services.CryptographyService;
 import project.services.TagService;
 import project.services.UserService;
 
@@ -19,15 +21,15 @@ import project.services.UserService;
 @RestController
 public class TestController {
 
-	protected final ChatroomService chatroomService;
-	protected final UserService userService;
-	protected final TagService tagservice;
+	@Autowired
+	protected ChatroomService chatroomService;
 	
-	public TestController(ChatroomService chatroomService, UserService userService, TagService tagservice) {
-		this.chatroomService = chatroomService;
-		this.userService = userService;
-		this.tagservice = tagservice;
-	}
+	@Autowired
+	protected UserService userService;
+	
+	@Autowired
+	protected TagService tagservice;
+	
 	
 	/**
 	 * Temporary test method to fill the database with test data
@@ -36,26 +38,29 @@ public class TestController {
 	@RequestMapping(value = "/createdata", method = RequestMethod.GET, headers = "Accept=application/json")
 	public void createMockUserRelations() {
 		BCryptPasswordEncoder privateInfoEncoder = new BCryptPasswordEncoder();
+		
+		
+		
 		try {
 			User vilhelm = new User(
 				"vilhelml",
 				privateInfoEncoder.encode("Test$1234"),
 				"Vilhelm",
-				privateInfoEncoder.encode("fskdnfsf@fdsfds.com")
+				CryptographyService.getCiphertext("fskdnfsf@fdsfds.com")
 			);
 			this.userService.createUser(vilhelm);
 			User roman = new User(
 				"ror9",
 				privateInfoEncoder.encode("Test$1234"),
 				"Roman",
-				privateInfoEncoder.encode("fskdnfsf@fdsfds.com")
+				CryptographyService.getCiphertext("fskdnfsf@fdsfds.com")
 			);
 			this.userService.createUser(roman);
 			User david = new User(
 				"dah38",
 				privateInfoEncoder.encode("Test$1234"),
 				"Davíð",
-				privateInfoEncoder.encode("fskdnfsf@fdsfds.com")
+				CryptographyService.getCiphertext("fskdnfsf@fdsfds.com")
 			);
 			this.userService.createUser(david);
 			

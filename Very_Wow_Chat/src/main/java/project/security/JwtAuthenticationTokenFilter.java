@@ -23,14 +23,16 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
 	public Authentication attemptAuthentication(HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) throws AuthenticationException, IOException, ServletException {
 		String header = httpServletRequest.getHeader("Authorization");// in the header we get Authorisation
-		
+
 		// if Authorisation was not found or if the value of it starts with Token we
-		// pass an error  the startsWith stuff is just something that i append to the start of the token
+		// pass an error the startsWith stuff is just something that i append to the
+		// start of the token
 		if (header == null || !header.startsWith("Token ")) {
 			throw new RuntimeException("JWT Token is missing");
 		}
-		
-		// reason we start from 6 its cuz the we need to remember i appended Token in the start
+
+		// reason we start from 6 its cuz the we need to remember i appended Token in
+		// the start
 		String authenticationToken = header.substring(6);
 
 		JwtAuthenticationToken token = new JwtAuthenticationToken(authenticationToken);

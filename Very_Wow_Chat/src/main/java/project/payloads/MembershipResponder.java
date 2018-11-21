@@ -1,7 +1,6 @@
 package project.payloads;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import project.persistance.entities.Chatroom;
 import project.persistance.entities.Membership;
