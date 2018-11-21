@@ -173,7 +173,7 @@ public class TagService {
 	 * @param chatroom
 	 */
 	@Transactional(readOnly = false)
-	protected void removeAllTagsFromChatroom(Chatroom chatroom) {
+	public void removeAllTagsFromChatroom(Chatroom chatroom) {
 		List<Tag> tags = chatroom.getTags();
 		// remove the chatroom from the tag's list of chatroom using it
 		for (Tag tag : tags) {

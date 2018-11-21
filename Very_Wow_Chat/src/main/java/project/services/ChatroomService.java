@@ -28,8 +28,8 @@ public class ChatroomService {
 	@Autowired
 	private UserRepository userRepository;
 	
-//	@Autowired
-//	private TagRepository tagRepository;
+	@Autowired
+	private TagService tagService;
 	
 	@Autowired
 	private MessageService messageService;
@@ -413,7 +413,11 @@ public class ChatroomService {
 	 */
 	@Transactional(readOnly = false)
 	public void deleteChatroom(Chatroom chatroom) {
+		// delete the chat logs
 		messageService.deleteAllChatMessagesOfChatroom(chatroom);
+		// remove the tags
+		tagService.removeAllTagsFromChatroom(chatroom);
+		// delete the chatroom
 		chatroomRepository.delete(chatroom);
 	}
 
@@ -426,8 +430,6 @@ public class ChatroomService {
 				return m;
 			}
 		}
-		
-		
 		// if not found, throw an exception
 		throw new NotFoundException("User is not a member of the chatroom " + chatroom.getChatroomName());
 	}
@@ -552,11 +554,20 @@ public class ChatroomService {
 	protected void deleteMembership(User user, Chatroom chatroom) {
 		List<Chatroom> chatrooms = user.getMemberOfChatrooms();
 		List<User> users = chatroom.getMembers();
+		List<Membership> memberships = user.getMemberships();
 		// if the user has received invite
 		if (isMember(user, chatroom)) {
 			// delete the relation
 			chatrooms.remove(chatroom);
 			users.remove(user);
+			// delete the membership
+			// delete the membership
+			for(Membership m : memberships) {
+				if(m.getChatroom() == chatroom) {
+					memberships.remove(m);
+					break;
+				}
+			}
 			// save the chatroom, and update its relations
 			chatroomRepository.save(chatroom);
 		}
