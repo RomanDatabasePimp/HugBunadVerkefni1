@@ -305,7 +305,7 @@ public class ChatroomService {
 			throw new BadRequestException("The user is already an admin of the chatroom");
 		}
 		if(!this.isMember(user, chatroom)) {
-			this.createMemberRelation(user, chatroom);
+			this.createMemberInvitation(user, chatroom);
 		}
 		createAdminInvitation(user, chatroom);
 	}
