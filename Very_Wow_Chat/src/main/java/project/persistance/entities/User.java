@@ -179,7 +179,6 @@ public class User {
 	
 	public List<Chatroom> getOwnedChatrooms() {
 		if(ownedChatrooms == null) {
-			System.out.println("owned chatrooms is null");
 			ownedChatrooms = new ArrayList<>();
 		}
 		return ownedChatrooms;
