@@ -1,8 +1,10 @@
 package project.persistance.entities;
 
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+
 
 /**
  * TODO: finish implementing...
@@ -11,7 +13,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
  */
 @Document(collection = "chatMessage")
 public class ChatMessage {
-	
 
 	// MongoDB ID
 	@Id
@@ -25,6 +26,7 @@ public class ChatMessage {
 	protected String senderUsername;
 	protected String senderDisplayName;
 	
+	// @Convert(converter = MessageConverter.class)
 	private String message;
 	
 	@Indexed

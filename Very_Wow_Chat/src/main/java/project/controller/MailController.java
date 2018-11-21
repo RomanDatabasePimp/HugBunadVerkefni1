@@ -10,14 +10,18 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/* This calss is responsible for sending POST request to the Email server thats hosted 
- * on our Heroku https://hugbomailserver.herokuapp.com/  it will send the email to the user
- * with the specified content.
- * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!NOTE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- * heroku webapps i.e our webserver go to sleep in 30 min after no use (Since its free version)
- * so you might want to just open the link above in ur borwser just to tell heroku to wake up this app
- * or else you might get sometimes wierd cases where the reuqest was sent but nothing happen thats cuz
- * the server was still sleeping and i dont know how high heroku was not waking it up */
+
+/**
+ * This class is responsible for sending POST request to the email server that's
+ * hosted on our Heroku server, https://hugbomailserver.herokuapp.com/.
+ * It will send the email to the user with the specified content.
+ * 
+ * NOTE: Heroku web apps, i.e our webserver, go to sleep in 30 min. after no use 
+ * (since its free version) so you might want to just open the link above in 
+ * your browser just to tell Heroku to wake up this app or else you might get 
+ * sometimes weird cases where the request was sent but nothing happen thats 
+ * because the server was still sleeping.
+ */
 public class MailController {
 
 	private final String email; // Recipients email

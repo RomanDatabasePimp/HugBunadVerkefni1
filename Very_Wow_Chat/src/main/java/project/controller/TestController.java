@@ -14,21 +14,21 @@ import project.services.TagService;
 import project.services.UserService;
 
 /**
+ * Controller for test purposes.
  * 
  * @author Vilhelml
- *
  */
 @RestController
 public class TestController {
 
 	@Autowired
-	protected ChatroomService chatroomService;
+	private ChatroomService chatroomService;
 	
 	@Autowired
-	protected UserService userService;
+	private UserService userService;
 	
 	@Autowired
-	protected TagService tagservice;
+	private TagService tagservice;
 	
 	
 	/**
