@@ -1,5 +1,7 @@
 # Hugbúnaðarverkefni 1
 
+# Fyrir Skilaverkefni 4
+
 Application: Very Wow Chat
 
 ## Setup
@@ -90,6 +92,7 @@ Hello world!
   - viola :)
   
  ## Hlekkir
+
 
 Google Drive mappa: <https://drive.google.com/drive/folders/1LK9SQP_2fKv09Pbfxk-JckEw37gyObZT>
 

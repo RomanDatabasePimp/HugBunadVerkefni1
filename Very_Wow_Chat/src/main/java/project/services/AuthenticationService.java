@@ -10,11 +10,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthenticationService {
 	
+	// Our short term storage
 	@Autowired
-	private RedisService redisService; // our redis service
+	private RedisService redisService;
 	
+	// Our long term storage 
 	@Autowired
-	private UserService userService;// our neo4j service
+	private UserService userService;
 
 	
 	/**

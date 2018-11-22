@@ -18,27 +18,28 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
 		super("/auth/**");
 	}
 
-	/** 
-	 * THis is where the jtw tokens will be decoded and authenticated
-	 */
+	/** This is where the JWT tokens will be decoded and authenticated */
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) throws AuthenticationException, IOException, ServletException {
-		String header = httpServletRequest.getHeader("Authorization");// in the header we get Authorisation
+		// The token should be stored in the header under " Authorization "
+		String header = httpServletRequest.getHeader("Authorization");
 
-		// if Authorisation was not found or if the value of it starts with Token we
-		// pass an error the startsWith stuff is just something that i append to the
-		// start of the token
+		/* if Authorization was not found or if the token dosent start with "Token"
+		   we pass an error.
+		   
+		   Its a good practice just to add something to the token just to see at least if
+		   it is our token to avoid unnecessary computation  */
 		if (header == null || !header.startsWith("Token ")) {
 			throw new RuntimeException("JWT Token is missing");
 		}
 
-		// reason we start from 6 its cuz the we need to remember i appended Token in
-		// the start
+		/* We need to remember that the token starts with "Token xxxxxxx" 
+		 * so we grab the token part for validation */
 		String authenticationToken = header.substring(6);
 
 		JwtAuthenticationToken token = new JwtAuthenticationToken(authenticationToken);
-		// let our authentication manager handle all the token shit
+		// let our authentication manager handle all the token next
 		return getAuthenticationManager().authenticate(token);
 	}
 
