@@ -84,12 +84,25 @@ public class RegisterController {
 			clientResponse.addSingleError("error", "All information must be filled");
 			return new ResponseEntity<>(clientResponse.getErrorResponse(), HttpStatus.BAD_REQUEST);
 		}
+		
+		/* After debuggin the project we found out u can have spaces and other things in your name 
+		 * we dont want that so we prevent spaces in username and Displayname and special characters */
+		if(!authenticator.checkUserNameOrDisplayValidForm(payload.getUserName())) {
+			clientResponse.addErrorForForm("Username", "Cannot contain spaces or special characters");
+			return new ResponseEntity<>(clientResponse.getErrorResponse(), HttpStatus.BAD_REQUEST);
+		}
 
 		/*  before starting authenticating we check if the client can have this username
 		 *  i decided if the username is taken there is no reason to validate rest of the  data  */
 		if (authenticator.userNameExists(payload.getUserName())) {
 			clientResponse.addErrorForForm("Username", "Username already exists");
 			return new ResponseEntity<>(clientResponse.getErrorResponse(), HttpStatus.BAD_REQUEST);
+		}
+		
+		/* After debuggin the project we found out u can have spaces and other things in your name 
+		 * we dont want that so we prevent spaces in username and Displayname and special characters */
+		if(!authenticator.checkUserNameOrDisplayValidForm(payload.getDisplayName())) {
+			clientResponse.addErrorForForm("DisplayName", "Cannot contain spaces or special characters");
 		}
 
 		/* now that we know we have all the data we need and we know the username is
