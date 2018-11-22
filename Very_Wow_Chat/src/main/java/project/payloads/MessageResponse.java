@@ -3,6 +3,14 @@ package project.payloads;
 import project.persistance.entities.ChatMessage;
 import project.services.CryptographyService;
 
+/**
+ * Messages that are sent from the server to the client are encapsulated by
+ * this class.
+ * 
+ * NOTE: messages that are inserted into this container are assumed to be
+ * encrypted, and when they are retrieved from this container they are
+ * assumed to be unencrypted.
+ */
 public class MessageResponse {
 
 	// MongoDB ID

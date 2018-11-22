@@ -12,6 +12,8 @@ public interface TagRepository extends Neo4jRepository<Tag, Long> {
 
 	/**
 	 * Return a Tag NodeEntity if tagName exists.
+	 * 
+	 * @param tagName
 	 */
 	Tag findByName(@Param("tagName") String tagName);
 
@@ -22,11 +24,15 @@ public interface TagRepository extends Neo4jRepository<Tag, Long> {
 
 	/**
 	 * Create a new Tag in database.
+	 * 
+	 * @param tag
 	 */
 	Tag save(Tag tag);
 
 	/**
 	 * Delete a Tag.
+	 * 
+	 * @param tag
 	 */
 	void delete(Tag tag);
 

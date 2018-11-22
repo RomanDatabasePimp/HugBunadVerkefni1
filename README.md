@@ -88,8 +88,22 @@ Hello world!
   - clonið branchið
   - git clone -b skilaverk4 https://github.com/RomanDatabasePimp/HugBunadVerkefni1.git
   - viola :)
-  
- ## Hlekkir
+
+## 
+
+```
+# Delete nodes
+match (n)-[r]-(m) delete n,r,m;
+match (n) delete n;
+
+# Show nodes
+match (n) return n;
+
+use very_wow_chat
+db.chatMessage.drop()
+```
+
+## Hlekkir
 
 Google Drive mappa: <https://drive.google.com/drive/folders/1LK9SQP_2fKv09Pbfxk-JckEw37gyObZT>
 

@@ -30,9 +30,9 @@ import project.services.TagService;
 import project.services.UserService;
 
 /**
+ * REST controller responsible for chat room management.
  * 
  * @author Vilhelml
- *
  */
 @RestController
 @RequestMapping("/auth/chatroom")
@@ -47,9 +47,11 @@ public class ChatroomController {
 
 	/**
 	 * 
-	 * @param timestampResponder
+	 * 
 	 * @param chatroomName
+	 * 
 	 * @return
+	 * 
 	 * @deprecated temporary method for testing purposes
 	 */
 	@RequestMapping(path = "/{chatroomName}/updatechatroomlastmessage", method = RequestMethod.POST, headers = "Accept=application/json")

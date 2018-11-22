@@ -11,8 +11,8 @@ import org.neo4j.ogm.annotation.EndNode;
 
 /**
  * Relationship entity for the last time a user read a message in a chatroom
+ * 
  * @author Vilhelml
- *
  */
 @RelationshipEntity(type = "MEMBER_OF")
 public class Membership {

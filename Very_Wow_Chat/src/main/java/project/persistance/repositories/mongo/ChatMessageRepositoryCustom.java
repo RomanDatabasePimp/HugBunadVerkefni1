@@ -4,66 +4,94 @@ import java.util.List;
 
 import project.persistance.entities.ChatMessage;
 
+/**
+ * Custom chat message methods that are implemented in 
+ * <code>ChatMessageRepositoryCustom.java</code>.
+ */
 public interface ChatMessageRepositoryCustom {
 	
 	/**
-	 * Returns a paged list of chat messages.
-	 *
-	 * If M[1..n] was a list of all messages for a chat room C, then this method
-	 * would return M[n - offset - limit, n - offset].
+	 * Returns up to <code>limit</code> chat messages from chat room with name 
+	 * <code>chatroomName</code> starting from <code>offset</code>.
 	 * 
-	 * @param id     CHATROOM ID
-	 * @param limit
-	 * @param offset
-	 * @return
+	 * If M[1..n] was the list of all messages for chat room C, then this method
+	 * would return M[offset, offset + limit], or M[offset, n] if 
+	 * offset + limit > n.
+	 * 
+	 * @param chatroomName Name of chat room.
+	 * @param offset 
+	 * @param limit How many messages at most to fetch (if they exist).
+	 * 
+	 * @return List of chat messages.
 	 */
 	List<ChatMessage> findPagedResultByChatroomName(String chatroomName, int offset, int limit);
 
 	/**
+	 * Returns all chat messages from chat room with name 
+	 * <code>chatroomName</code> starting from <code>offset</code> to the end.
 	 * 
-	 * @param chatroomName
-	 * @param offset
-	 * @return
+	 * If M[1..n] was the list of all messages for chat room C, then this method
+	 * would return M[offset, n].
+	 * 
+	 * @param chatroomName Name of chat room.
+	 * @param offset 
+	 * @param limit How many messages at most to fetch (if they exist).
+	 * 
+	 * @return List of chat messages.
 	 */
 	List<ChatMessage> findPagedResultByChatroomName(String chatroomName, int offset);
 
 	/**
+	 * Returns all message of chat room <code>chatroomName</code>.
 	 * 
-	 * @param chatroomName
-	 * @return
+	 * @param chatroomName Name of chat room.
+	 * 
+	 * @return List of chat messages.
 	 */
 	List<ChatMessage> getAllMessages(String chatroomName);
 
 	/**
+	 * Posts chat message <code>message</code>.
 	 * 
-	 * @param message
+	 * TODO: this is a repository so the input should be Java primitives.
+	 * 
+	 * @param message Chat message to post.
 	 */
 	void postMessage(ChatMessage message);
 
 	/**
+	 * Deletes all chat messages of chat room <code>chatroomName</code>.
 	 * 
-	 * @param chatroomName
+	 * @param chatroomName Name of chat room.
 	 */
 	void deleteAllChatMessagesOfChatroom(String chatroomName);
 
 	/**
+	 * Returns all chat message for chat room <code>chatroomName</code> that
+	 * were posted between <code>startTime</code> and <code>endTime</code>.
 	 * 
-	 * @param chatroomName
-	 * @param startTime
-	 * @param endTime
-	 * @return
+	 * @param chatroomName Name of chat room.
+	 * @param startTime Start Unix time in milliseconds.
+	 * @param endTime End Unix time in milliseconds.
+	 * 
+	 * @return List of messages.
 	 */
 	List<ChatMessage> getChatroomMessagesBetweenTime(String chatroomName, long startTime, long endTime);
 
 	/**
+	 * Posts chat message <code>message</code>.
 	 * 
-	 * @param message
+	 * TODO: this is a repository so the input should be Java primitives.
+	 * 
+	 * @param message Chat message to post.
 	 */
 	void addChatMessage(ChatMessage message);
 
 	/**
+	 * Returns the number of messages that exist for chat room 
+	 * <code>chatroomName</code>.
 	 * 
-	 * @return
+	 * @return List of chat messages.
 	 */
 	long getNrOfMessage(String chatroomName);
 

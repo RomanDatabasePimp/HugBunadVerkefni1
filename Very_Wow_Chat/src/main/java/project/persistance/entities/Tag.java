@@ -8,6 +8,13 @@ import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
+
+/**
+ * Tag for chat rooms.
+ * 
+ * Chat rooms can be tagged, and users can search for public chat rooms with
+ * these chats.
+ */
 @NodeEntity
 public class Tag {
 
