@@ -28,16 +28,30 @@ public class RedisService {
 	}
 
 	/**
-	 * Usage : Redser.insertUser(key, data) For : Redser is RedisService class key
-	 * is the pointer to where the data is stored data is the userdata in NOTE THIS
-	 * HAS TO BE IN JSON FORM After: inserts the user into the redis repo and
-	 * returns the key
+	 * Usage : Redser.insertUser(key, data) 
+	 *   For : Redser is RedisService class
+	 *         key is the pointer to where the data is stored 
+	 *         data is the userdata in NOTE THIS HAS TO BE IN JSON FORM 
+	 *  After: inserts the user into the redis repo and returns the key
 	 */
 	public String insertUser(String key, JSONObject data) {
 		this.redisRepository.insertData(key, data.toString());
 		return key;
 	}
-
+	
+	/**
+	 * Usage : Redser.getAndDestroyData(key) 
+	 *   For : Redser is RedisService class 
+	 *         key String is the pointer to where the data is stored 
+	 *  After: fetches the data where the key is pointing to and then removes it from redis
+	 */
+	public JSONObject getAndDestroyData(String key) {
+		JSONObject data = this.redisRepository.getData(key);
+		this.redisRepository.destroyData(key);
+		return data;
+	}
+	
+	/** pretty simple getters and setters here i dont think these need explaining */
 	public void insertString(String key, String string) {
 		redisRepository.insertString(key, string);
 	}
@@ -52,15 +66,5 @@ public class RedisService {
 		return string;
 	}
 
-	/**
-	 * Usage : Redser.getAndDestroyData(key) For : Redser is RedisService class key
-	 * String is the pointer to where the data is stored After: fetches the data
-	 * where the key is pointing to and then removes it from redis
-	 */
-	public JSONObject getAndDestroyData(String key) {
-		JSONObject data = this.redisRepository.getData(key);
-		this.redisRepository.destroyData(key);
-		return data;
-	}
 
 }

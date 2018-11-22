@@ -20,11 +20,13 @@ import project.services.UserService;
 @RestController
 public class LoginController {
 
+	// need to have a connection to the database to fetch user that is requested
 	@Autowired
-	private UserService userService; // we need neo4j to auth users
+	private UserService userService;
 	
+	// used for creating jwt tokens if the authentication is successful
 	@Autowired
-	private JwtGenerator jwtGenerator; // create the JWT token
+	private JwtGenerator jwtGenerator;
 
 	/*------------------------------------CONTROLLERS START -----------------------------------------------*/
 
@@ -46,26 +48,34 @@ public class LoginController {
 	 */
 	@RequestMapping(value = "/login", method = RequestMethod.POST, headers = "Accept=application/json")
 	public ResponseEntity<String> login(@RequestBody JwtUser payload) throws Exception {
-		HttpResponseBody clientResponse = new HttpResponseBody(); // create a instance of the response body
-
+		/* Since this is a restfull controller, we have our own custom way to respond to the user
+		 *  so our responses would be uniformed, this will make it easier to work with in the client side */
+		HttpResponseBody clientResponse = new HttpResponseBody();
 		
-		// check if the user exists in the neo4j database if dosent exists then we
-		// respond with error and 404 not found
+		/* The initial idea was, when the controllers are called, they call different services to 
+		 *  Fulfill the request that was asked of them, the services return either errors or data that was requested
+		 *  the controller collects these errors from all the services and makes a response out of them 
+		 *  or sends the data if the request was successful */
+	
+		/* check if the user exists in the database if dosen't exists then we
+		    respond with error along with 404(not found) HTTP response */
 		if (!this.userService.userExistsAndActive(payload.getUserName())) {
+			// create a error
 			clientResponse.addErrorForForm("Username", "Username not found");
+			// return the error
 			return new ResponseEntity<>(clientResponse.getErrorResponse(), HttpStatus.NOT_FOUND);
 		}
 
-		// now we know the user exists we fetch him and need to validate the password
+		// at this point we know the user exists we fetch him and then we need to validate the password
 		User fetchedUsr = this.userService.findByUsername(payload.getUserName());
-		// the password is encrypted in the db so we need to decode it
+		/* the password is hashed in the database so we need a way to authenticate
+		 * and confirmed that the given password from the client is correct. */
 		BCryptPasswordEncoder privateInfoEncoder = new BCryptPasswordEncoder();
-		
+		// fetch the raw password from the client input
 		CharSequence raw_password = payload.getPassword();
-		
 
-		// check if password matches the requested login
-		// if (!privateInfoEncoder.matches(encodedPassword, fetchedUsr.getPassword())) {
+		/* check if password matches the requested login,
+		 * if the password dosent match we create an error and responde with it */
 		if (!privateInfoEncoder.matches(raw_password, fetchedUsr.getPassword())) {
 			clientResponse.addErrorForForm("Password", "Password does not match the username");
 			return new ResponseEntity<>(clientResponse.getErrorResponse(), HttpStatus.UNAUTHORIZED);

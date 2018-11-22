@@ -187,8 +187,6 @@ public class UserService {
 	 */
 	@Transactional(readOnly = false)
 	public void addFriend(User requestor, User requestee) throws BadRequestException {
-		System.out.println("send request");
-		System.out.println(requestor.getUsername() + " -[request]-> " + requestee.getUsername());
 		// check if user is sending himself a friend request
 		if (requestor == requestee) {
 			throw new BadRequestException("Cannot add self as friend.");
@@ -203,7 +201,6 @@ public class UserService {
 		}
 		// check if a friend requet has been sent in the other direction already
 		if (friendRequestSent(requestee, requestor)) {
-			System.out.println("friend request from other direction has been sent");
 			// both users have sent each other a friend request, they are now friends
 			// delete the old friend request
 			deleteFriendRequest(requestee, requestor);
