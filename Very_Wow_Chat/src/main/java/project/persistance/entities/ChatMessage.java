@@ -12,19 +12,19 @@ public class ChatMessage {
 
 	// MongoDB ID
 	@Id
-	protected String id;
-	
+	private String id;
+
 	// Rel. to neo4j
-	protected String chatroomName;
-	
+	private String chatroomName;
+
 	// Rel. to neo4j
-	protected long senderUsernameId;
-	protected String senderUsername;
-	protected String senderDisplayName;
-	
+	private long senderUsernameId;
+	private String senderUsername;
+	private String senderDisplayName;
+
 	// @Convert(converter = MessageConverter.class)
 	private String message;
-	
+
 	@Indexed
 	private Long timestamp;
 

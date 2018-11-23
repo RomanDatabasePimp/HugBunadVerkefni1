@@ -15,21 +15,21 @@ import project.persistance.entities.ChatMessage;
  */
 @Repository
 public class ChatMessageRepositoryImpl implements ChatMessageRepositoryCustom {
-	
+
 	@Autowired
-	private MongoTemplate mongoTemplate;	
+	private MongoTemplate mongoTemplate;
 
 	/**
-	 * Returns up to <code>limit</code> chat messages from chat room with name 
+	 * Returns up to <code>limit</code> chat messages from chat room with name
 	 * <code>chatroomName</code> starting from <code>offset</code>.
 	 * 
 	 * If M[1..n] was the list of all messages for chat room C, then this method
-	 * would return M[offset, offset + limit], or M[offset, n] if 
-	 * offset + limit > n.
+	 * would return M[offset, offset + limit], or M[offset, n] if offset + limit &gt;
+	 * n.
 	 * 
 	 * @param chatroomName Name of chat room.
-	 * @param offset 
-	 * @param limit How many messages at most to fetch (if they exist).
+	 * @param offset
+	 * @param limit        How many messages at most to fetch (if they exist).
 	 * 
 	 * @return List of chat messages.
 	 */
@@ -42,17 +42,16 @@ public class ChatMessageRepositoryImpl implements ChatMessageRepositoryCustom {
 		List<ChatMessage> results = mongoTemplate.find(query, ChatMessage.class);
 		return results;
 	}
-	
+
 	/**
-	 * Returns all chat messages from chat room with name 
-	 * <code>chatroomName</code> starting from <code>offset</code> to the end.
+	 * Returns all chat messages from chat room with name <code>chatroomName</code>
+	 * starting from <code>offset</code> to the end.
 	 * 
 	 * If M[1..n] was the list of all messages for chat room C, then this method
 	 * would return M[offset, n].
 	 * 
 	 * @param chatroomName Name of chat room.
-	 * @param offset 
-	 * @param limit How many messages at most to fetch (if they exist).
+	 * @param offset
 	 * 
 	 * @return List of chat messages.
 	 */
@@ -74,7 +73,7 @@ public class ChatMessageRepositoryImpl implements ChatMessageRepositoryCustom {
 	 */
 	@Override
 	public void postMessage(ChatMessage message) {
-		mongoTemplate.insert(message);	
+		mongoTemplate.insert(message);
 	}
 
 	/**
@@ -85,7 +84,7 @@ public class ChatMessageRepositoryImpl implements ChatMessageRepositoryCustom {
 	 * @return List of chat messages.
 	 */
 	@Override
-	public List<ChatMessage> getAllMessages(String chatroomName) { 
+	public List<ChatMessage> getAllMessages(String chatroomName) {
 		Criteria criteria = Criteria.where("chatroomName").is(chatroomName);
 		Query query = new Query(criteria);
 		List<ChatMessage> results = mongoTemplate.find(query, ChatMessage.class);
@@ -105,12 +104,12 @@ public class ChatMessageRepositoryImpl implements ChatMessageRepositoryCustom {
 	}
 
 	/**
-	 * Returns all chat message for chat room <code>chatroomName</code> that
-	 * were posted between <code>startTime</code> and <code>endTime</code>.
+	 * Returns all chat message for chat room <code>chatroomName</code> that were
+	 * posted between <code>startTime</code> and <code>endTime</code>.
 	 * 
 	 * @param chatroomName Name of chat room.
-	 * @param startTime Start Unix time in milliseconds.
-	 * @param endTime End Unix time in milliseconds.
+	 * @param startTime    Start Unix time in milliseconds.
+	 * @param endTime      End Unix time in milliseconds.
 	 * 
 	 * @return List of messages.
 	 */
@@ -136,7 +135,7 @@ public class ChatMessageRepositoryImpl implements ChatMessageRepositoryCustom {
 	}
 
 	/**
-	 * Returns the number of messages that exist for chat room 
+	 * Returns the number of messages that exist for chat room
 	 * <code>chatroomName</code>.
 	 * 
 	 * @return List of chat messages.

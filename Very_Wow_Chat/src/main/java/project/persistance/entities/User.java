@@ -11,84 +11,87 @@ import org.neo4j.ogm.annotation.Relationship;
 
 /**
  * Class which maps the user to a database entity.
->>>>>>> 354dd39d95455007748d68612d0897968f255913
  */
 @NodeEntity
 public class User {
 
-	@Id @GeneratedValue protected Long id;
+	@Id
+	@GeneratedValue
+	private Long id;
 
-	protected String username;
-	protected String password;
-	protected String displayName;
-	
+	private String username;
+	private String password;
+	private String displayName;
+
 	// NOTE: at the moment the email is assumed to be encrypted.
-	protected String email;
-	protected Long created;
-	protected Boolean isActive;
+	private String email;
+	private Long created;
+	private Boolean isActive;
 
 	// The User's friends
-	@Relationship(type="FRIENDS", direction=Relationship.UNDIRECTED)
-	protected List<User> friends;
+	@Relationship(type = "FRIENDS", direction = Relationship.UNDIRECTED)
+	private List<User> friends;
 
 	// Users who have received a friend request from the User
-	@Relationship(type="FRIEND_REQUEST", direction=Relationship.OUTGOING)
-	protected List<User> friendRequestees;
-	
+	@Relationship(type = "FRIEND_REQUEST", direction = Relationship.OUTGOING)
+	private List<User> friendRequestees;
+
 	// Users who have sent a friend request to the User
-	@Relationship(type="FRIEND_REQUEST", direction=Relationship.INCOMING)
-	protected List<User> friendRequestors;
-	
+	@Relationship(type = "FRIEND_REQUEST", direction = Relationship.INCOMING)
+	private List<User> friendRequestors;
+
 	// chatrooms the user is a member of
-	@Relationship(type="OWNS", direction=Relationship.OUTGOING)
-	protected List<Chatroom> ownedChatrooms;
-	
+	@Relationship(type = "OWNS", direction = Relationship.OUTGOING)
+	private List<Chatroom> ownedChatrooms;
+
 	// chatrooms the user is a member of
-	@Relationship(type="ADMIN_OF", direction=Relationship.OUTGOING)
-	protected List<Chatroom> adminOfChatrooms;
-	
+	@Relationship(type = "ADMIN_OF", direction = Relationship.OUTGOING)
+	private List<Chatroom> adminOfChatrooms;
+
 	// chatooms the user has requested to join
-	@Relationship(type="REQUESTS_TO_JOIN", direction=Relationship.OUTGOING)
-	protected List<Chatroom> chatroomRequests;
+	@Relationship(type = "REQUESTS_TO_JOIN", direction = Relationship.OUTGOING)
+	private List<Chatroom> chatroomRequests;
 
 	// chatooms the user has received an invite to join from
-	@Relationship(type="INVITES", direction=Relationship.INCOMING)
-	protected List<Chatroom> chatroomInvites;
+	@Relationship(type = "INVITES", direction = Relationship.INCOMING)
+	private List<Chatroom> chatroomInvites;
 
 	// chatooms the user has received an invite to become an administrator
-	@Relationship(type="ADMIN_INVITES", direction=Relationship.INCOMING)
-	protected List<Chatroom> chatroomAdminInvites;
+	@Relationship(type = "ADMIN_INVITES", direction = Relationship.INCOMING)
+	private List<Chatroom> chatroomAdminInvites;
 
 	// chatrooms the user is a member of
-	@Relationship(type="HAS_MEMBER", direction=Relationship.INCOMING)
-	protected List<Chatroom> memberOfChatrooms;
-	
+	@Relationship(type = "HAS_MEMBER", direction = Relationship.INCOMING)
+	private List<Chatroom> memberOfChatrooms;
+
 	// list of all the relations to chatrooms that the user is a member of
-	//@JsonIgnoreProperties("user")
-	@Relationship(type="MEMBER_OF", direction=Relationship.OUTGOING)
-	protected List<Membership> memberships;
-	
-	// ATH when getting the chatrooms, their tag arrays will be empty, to get the tags, use findChatroomBychatroomName!!!
-	
+	// @JsonIgnoreProperties("user")
+	@Relationship(type = "MEMBER_OF", direction = Relationship.OUTGOING)
+	private List<Membership> memberships;
+
+	// ATH when getting the chatrooms, their tag arrays will be empty, to get the
+	// tags, use findChatroomBychatroomName!!!
+
 	// Empty constructor required as of Neo4j API 2.0.5
-	protected User() {};
+	public User() {
+	};
 
 	/**
 	 * Create a new user
 	 * 
 	 * NOTE: email is assumed to be encrypted here.
 	 * 
-	 * @param userName		a unique user name used to authenticate user
-	 * @param password		user's password, used to authenticate user
-	 * @param displayName	user's display name, seen by other users
-	 * @param email	User's email.
+	 * @param username    a unique user name used to authenticate user
+	 * @param password    user's password, used to authenticate user
+	 * @param displayName user's display name, seen by other users
+	 * @param email       User's email.
 	 */
 	public User(String username, String password, String displayName, String email) {
 		this.username = username;
 		this.password = password;
 		this.displayName = displayName;
 		this.email = email;
-		
+
 		this.created = (new Date()).getTime(); // current time
 		this.isActive = true;
 	}
@@ -148,7 +151,7 @@ public class User {
 	}
 
 	public List<User> getFriends() {
-		if(friends == null) {
+		if (friends == null) {
 			friends = new ArrayList<>();
 		}
 		return friends;
@@ -159,7 +162,7 @@ public class User {
 	}
 
 	public List<User> getFriendRequestees() {
-		if(friendRequestees == null) {
+		if (friendRequestees == null) {
 			friendRequestees = new ArrayList<>();
 		}
 		return friendRequestees;
@@ -170,7 +173,7 @@ public class User {
 	}
 
 	public List<User> getFriendRequestors() {
-		if(friendRequestors == null) {
+		if (friendRequestors == null) {
 			friendRequestors = new ArrayList<>();
 		}
 		return friendRequestors;
@@ -181,7 +184,7 @@ public class User {
 	}
 
 	public List<Chatroom> getMemberOfChatrooms() {
-		if(memberOfChatrooms == null) {
+		if (memberOfChatrooms == null) {
 			memberOfChatrooms = new ArrayList<>();
 		}
 		return memberOfChatrooms;
@@ -190,9 +193,9 @@ public class User {
 	public void setMemberOfChatrooms(List<Chatroom> memberOfChatrooms) {
 		this.memberOfChatrooms = memberOfChatrooms;
 	}
-	
+
 	public List<Chatroom> getOwnedChatrooms() {
-		if(ownedChatrooms == null) {
+		if (ownedChatrooms == null) {
 			ownedChatrooms = new ArrayList<>();
 		}
 		return ownedChatrooms;
@@ -203,7 +206,7 @@ public class User {
 	}
 
 	public List<Chatroom> getAdminOfChatrooms() {
-		if(adminOfChatrooms == null) {
+		if (adminOfChatrooms == null) {
 			adminOfChatrooms = new ArrayList<>();
 		}
 		return adminOfChatrooms;
@@ -214,7 +217,7 @@ public class User {
 	}
 
 	public List<Chatroom> getChatroomRequests() {
-		if(chatroomRequests == null) {
+		if (chatroomRequests == null) {
 			chatroomRequests = new ArrayList<>();
 		}
 		return chatroomRequests;
@@ -225,7 +228,7 @@ public class User {
 	}
 
 	public List<Chatroom> getChatroomInvites() {
-		if(chatroomInvites == null) {
+		if (chatroomInvites == null) {
 			chatroomInvites = new ArrayList<>();
 		}
 		return chatroomInvites;
@@ -236,7 +239,7 @@ public class User {
 	}
 
 	public List<Chatroom> getChatroomAdminInvites() {
-		if(chatroomAdminInvites == null) {
+		if (chatroomAdminInvites == null) {
 			chatroomAdminInvites = new ArrayList<>();
 		}
 		return chatroomAdminInvites;
@@ -247,7 +250,7 @@ public class User {
 	}
 
 	public List<Membership> getMemberships() {
-		if(memberships == null) {
+		if (memberships == null) {
 			memberships = new ArrayList<>();
 		}
 		return memberships;

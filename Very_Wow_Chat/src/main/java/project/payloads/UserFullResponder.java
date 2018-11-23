@@ -6,7 +6,7 @@ import java.util.Map;
 import project.persistance.entities.User;
 
 /**
- * This class is for wrapping data in json objects
+ * This class is for wrapping data in JSON objects
  * 
  * @author Vilhelml
  * @since 20.10.18
@@ -28,7 +28,6 @@ public class UserFullResponder {
 	 * constructor notað af spring controller til að vinna með json objects
 	 * 
 	 * @param username
-	 * @param password
 	 * @param displayName
 	 * @param email
 	 */
@@ -48,8 +47,6 @@ public class UserFullResponder {
 		wrapper.put("GoodResp", this);
 		return wrapper;
 	}
-
-	// getters
 
 	public String getUsername() {
 		return username;

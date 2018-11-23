@@ -6,28 +6,25 @@ import java.util.Map;
 import project.persistance.entities.User;
 
 /**
- * This class is for wrapping data in json objects
+ * This class is for wrapping data in JSON objects
  * 
  * @author Vilhelml
  * @since 20.10.18
- *
  */
 public class UserResponder {
-	protected String username;
-	protected String displayName;
+	private String username;
+	private String displayName;
 
 	public UserResponder(User user) {
 		this.username = user.getUsername();
 		this.displayName = user.getDisplayName();
 	}
-
+	
 	/**
 	 * constructor notað af spring controller til að vinna með json objects
 	 * 
 	 * @param username
-	 * @param password
 	 * @param displayName
-	 * @param email
 	 */
 	public UserResponder(String username, String displayName) {
 		this.username = username;

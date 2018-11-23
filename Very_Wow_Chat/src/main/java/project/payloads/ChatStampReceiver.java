@@ -1,17 +1,17 @@
 package project.payloads;
 
 /**
- * contains a chatroom name and a timestamp, used for updating when a user last
- * visited the chatroom
+ * Contains a chatroom name and a timestamp, used for updating when a user last
+ * visited the chatroom.
  * 
  * @author Vilhelml
- *
  */
 public class ChatStampReceiver {
+
 	// name of the chatroom
-	protected String chatroomName;
+	private String chatroomName;
 	// timestamp
-	protected Long timestamp;
+	private Long timestamp;
 
 	public ChatStampReceiver(String chatroomName, Long timestamp) {
 		this.chatroomName = chatroomName;

@@ -19,18 +19,18 @@ public class Membership {
 
 	@Id
 	@GeneratedValue
-	protected Long id;
+	private Long id;
 
 	@StartNode
-	protected User user;
+	private User user;
 
 	@EndNode
-	protected Chatroom chatroom;
+	private Chatroom chatroom;
 
 	// timestamp for the last time the user read a message in the chatroom
-	protected Long lastRead;
+	private Long lastRead;
 	// timestamp for when the user joined the chatroom as a member
-	protected Long whenJoined;
+	private Long whenJoined;
 
 	// empty constructor for neo4j
 	public Membership() {

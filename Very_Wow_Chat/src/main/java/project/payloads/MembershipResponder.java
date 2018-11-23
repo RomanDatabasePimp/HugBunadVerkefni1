@@ -8,9 +8,9 @@ import project.persistance.entities.User;
 
 public class MembershipResponder extends ChatroomResponder {
 
-	protected Long lastRead;
-	protected ChatroomUserRelation userRelation;
-
+	private Long lastRead;
+	private ChatroomUserRelation userRelation;
+	
 	/**
 	 * initalize a responder though manual input
 	 * 
@@ -21,6 +21,8 @@ public class MembershipResponder extends ChatroomResponder {
 	 * @param invited_only
 	 * @param lastRead
 	 * @param userRelation
+	 * @param lastMessageReceived
+	 * @param tags
 	 */
 	public MembershipResponder(String chatroomName, String displayName, String description, Boolean listed,
 			Boolean invited_only, Long lastRead, ChatroomUserRelation userRelation, Long lastMessageReceived,
@@ -53,8 +55,6 @@ public class MembershipResponder extends ChatroomResponder {
 			this.userRelation = ChatroomUserRelation.MEMBER;
 		}
 	}
-
-	// getters
 
 	public Long getLastRead() {
 		return lastRead;

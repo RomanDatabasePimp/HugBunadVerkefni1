@@ -111,7 +111,6 @@ public class MessageResponse {
 	}
 
 	/**
-	 * 
 	 * Decrypts the encrypted message.
 	 * 
 	 * @param id

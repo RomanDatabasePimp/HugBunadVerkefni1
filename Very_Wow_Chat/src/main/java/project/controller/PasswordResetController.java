@@ -26,9 +26,6 @@ import project.services.UserService;
 @RestController
 public class PasswordResetController {
 
-	// TODO: remove later
-	private static boolean DEBUG = true;
-
 	@Autowired
 	private RedisService redisService;
 
@@ -60,15 +57,9 @@ public class PasswordResetController {
 			String randomKey = CryptographyService.getRandomHexString(64);
 			redisService.insertString(randomKey, username);
 			String resetUrl = emailServerUrl + "password_reset/" + randomKey;
-			if (DEBUG) {
-				System.out.println("http://localhost" + ":9090" + "/" + "password_reset/" + randomKey);
-			}
 			String emailContent = "Reset URL: " + resetUrl;
 			Mailer mailer = new Mailer(recipientEmail, emailContent, emailServerUrl, emailServerSecretKey);
 			mailer.send();
-			if (DEBUG) {
-				System.out.println(emailContent);
-			}
 			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
 		} catch (NotFoundException e) {
 			e.printStackTrace();
@@ -92,9 +83,6 @@ public class PasswordResetController {
 			String username = redisService.getAndDestroyString(key);
 			User user = userService.findByUsername(username);
 			String password = CryptographyService.getStrongRandomPassword(20);
-			if (DEBUG) {
-				System.out.println("Password: " + password);
-			}
 			// Update existing user.
 			userService.updateUser(user, null, null, password);
 			// Create response.

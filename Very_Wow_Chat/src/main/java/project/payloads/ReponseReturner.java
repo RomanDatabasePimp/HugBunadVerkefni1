@@ -7,8 +7,8 @@ import java.util.HashMap;
 
 public class ReponseReturner {
 
-	protected Map<String, Object> results;
-	protected Map<String, List<Map<String, Object>>> errors;
+	private Map<String, Object> results;
+	private Map<String, List<Map<String, Object>>> errors;
 
 	public ReponseReturner() {
 		results = new HashMap<String, Object>();

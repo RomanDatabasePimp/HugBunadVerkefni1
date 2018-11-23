@@ -26,7 +26,7 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
 		String header = httpServletRequest.getHeader("Authorization");
 
 		/*
-		 * if Authorization was not found or if the token dosent start with "Token" we
+		 * if Authorization was not found or if the token dosen't start with "Token" we
 		 * pass an error.
 		 * 
 		 * Its a good practice just to add something to the token just to see at least

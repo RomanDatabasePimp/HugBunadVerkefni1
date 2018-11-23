@@ -69,7 +69,7 @@ public class ChatroomService {
 	 * 
 	 * @param chatroomName
 	 * @return the chatroom
-	 * @throws exception if chatroomName doesn't belong to any chatroom
+	 * @throws NotFoundException if chatroomName doesn't belong to any chatroom
 	 */
 	public Chatroom findByChatname(String chatroomName) throws NotFoundException {
 		// throw error if user doesn't exist
@@ -168,7 +168,7 @@ public class ChatroomService {
 			throw new BadRequestException("Chatoom name is already in use.");
 		}
 		// check if chatroomName is valid
-		if (!authenticationService.NoSymbolsCheck(newChatroom.getChatroomName())) {
+		if (!authenticationService.noSymbolsCheck(newChatroom.getChatroomName())) {
 			throw new BadRequestException("Chatoom name contains invalid characters.");
 		}
 		// create a owner relation

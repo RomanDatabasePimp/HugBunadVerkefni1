@@ -83,11 +83,15 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 
 	/**
-	 * This is a custom cors filter that allowed all of the requests we use from the
-	 * localhost client running on port 3000 BE WARNED IF YOU WANT TO USE THIS
-	 * FILTER YOU HAVE TO ADD .cors() IN configure AND THIS FUNCTION HAS TO HAVE
-	 * "Bean" ANNOTATION AND MUST RETURN "CorsConfigurationSource" AND MUST BE NAMED
-	 * "corsConfigurationSource" OR ELSE .cors() WONT USE IT !!!!!
+	 * This is a custom CORS filter that allowed all of the requests we use from the
+	 * localhost client running on port 3000
+	 * 
+	 * BE WARNED IF YOU WANT TO USE THIS FILTER YOU HAVE TO ADD .cors() IN configure
+	 * AND THIS FUNCTION HAS TO HAVE "Bean" ANNOTATION AND MUST RETURN
+	 * "CorsConfigurationSource" AND MUST BE NAMED "corsConfigurationSource" OR ELSE
+	 * .cors() WONT USE IT !!!!!
+	 * 
+	 * @return new source
 	 */
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {

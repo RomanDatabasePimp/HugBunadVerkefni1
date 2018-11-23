@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class ErrorResponder {
+
 	private List<Map<String, Object>> errors;
 	private Map<String, Object> error;
 

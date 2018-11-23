@@ -11,13 +11,9 @@ import project.payloads.ErrorResponder;
  * status
  * 
  * @author Vilhelml
- *
  */
 public abstract class HttpException extends Exception {
-
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = -6607734661793333734L;
 
 	private HttpStatus status;

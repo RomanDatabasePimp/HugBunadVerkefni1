@@ -1,16 +1,18 @@
 package project.payloads;
 
-/* This class has several to purposes
- * 1- this act as a payload (BOTH FROM POST REQUESTS AND AS MIDDLEWARES)
- * 2- later we will use this to create a JWT 
- * The reason i am not using Users.js is because we only need 2 variables and User.js has so much
- * that we would have to implement ALLOT OF LAZY loading and i think its just to much so we have this class
- * to make it more simple */
+/**
+ * This class has several to purposes 1- this act as a payload (BOTH FROM POST
+ * REQUESTS AND AS MIDDLEWARES) 2- later we will use this to create a JWT The
+ * reason i am not using Users.js is because we only need 2 variables and
+ * User.js has so much that we would have to implement ALLOT OF LAZY loading and
+ * i think its just to much so we have this class to make it more simple
+ */
 public class JwtUser {
 
 	private String userName;
 	private String password;
-	/*
+
+	/**
 	 * this is for authentication, we can have role based authentication later if we
 	 * want to add more restrictions to what people can and cant do like user roles
 	 * and admin roles but for now we just have one role
@@ -18,8 +20,7 @@ public class JwtUser {
 	private String role;
 
 	public JwtUser() {
-	} // used for authentication in middlewares
-		// used when we receive a payload
+	}
 
 	public JwtUser(String userName, String password) {
 		this.userName = userName;

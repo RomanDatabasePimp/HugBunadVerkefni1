@@ -20,13 +20,16 @@ import project.services.CryptographyService;
 import project.services.RedisService;
 import project.services.UserService;
 
-/* This class handles http POST, PUT for registration and validation of a new user  */
+/**
+ * This class handles HTTP POST, PUT for registration and validation of a new
+ * user.
+ */
 @RestController
 public class RegisterController {
 
 	/**
 	 * Temporary storage database, holds the users that still have to be validated,
-	 * before beeing added into the long term storage
+	 * before being added into the long term storage
 	 */
 	@Autowired
 	private RedisService redisService;
@@ -40,13 +43,13 @@ public class RegisterController {
 
 	/**
 	 * This class holds over all the basic functions needed to authenticate or
-	 * validate data recived from user
+	 * validate data received from user
 	 */
 	@Autowired
 	private AuthenticationService authenticator;
 
 	/**
-	 * Usage: url/regiseter
+	 * Usage: url/register
 	 * 
 	 * NOTE: POST request should contain a JSON object of the form
 	 * 
@@ -64,8 +67,10 @@ public class RegisterController {
 	 * code along with the data.
 	 * 
 	 * 
-	 * @param payload
-	 * @return
+	 * @param payload User registration form.
+	 * 
+	 * @return Empty response.
+	 * 
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/register", method = RequestMethod.POST, headers = "Accept=application/json")
@@ -98,7 +103,7 @@ public class RegisterController {
 		 * your name we dont want that so we prevent spaces in username and Displayname
 		 * and special characters
 		 */
-		if (!authenticator.NoSymbolsCheck(payload.getUserName())) {
+		if (!authenticator.noSymbolsCheck(payload.getUserName())) {
 			clientResponse.addErrorForForm("Username", "Cannot contain spaces or special characters");
 			return new ResponseEntity<>(clientResponse.getErrorResponse(), HttpStatus.BAD_REQUEST);
 		}
@@ -118,7 +123,7 @@ public class RegisterController {
 		 * your name we dont want that so we prevent spaces in username and Displayname
 		 * and special characters
 		 */
-		if (!authenticator.NoSymbolsCheck(payload.getDisplayName())) {
+		if (!authenticator.noSymbolsCheck(payload.getDisplayName())) {
 			clientResponse.addErrorForForm("DisplayName", "Cannot contain spaces or special characters");
 		}
 
@@ -206,9 +211,9 @@ public class RegisterController {
 	 *   After: checks if the key is points to a unvalidated user, if so it stores the user in neo4j and sets its status as validated
 	 * </pre>
 	 * 
-	 * @param payload
-	 * @return
-	 * @throws Exception
+	 * @param key URL path fragment
+	 * 
+	 * @return No response.
 	 */
 	@RequestMapping(path = "/validation/{key}", method = RequestMethod.PUT, headers = "Accept=application/json")
 	public ResponseEntity<String> validateUser(@PathVariable String key) {

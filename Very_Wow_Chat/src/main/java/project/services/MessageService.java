@@ -39,7 +39,6 @@ public class MessageService {
 	 * Returns `limit` messages from chat room `chatroom` starting from `offset`.
 	 * 
 	 * @param chatroom
-	 * @param limit
 	 * @param offset
 	 * @return
 	 */
@@ -84,19 +83,20 @@ public class MessageService {
 	}
 
 	/**
-	 * Adds chat message to a chat room it points to.
+	 * Adds chat message to a chat room which is stored in <code>chatMessage</code>.
 	 * 
-	 * @param chatMessage
+	 * @param chatMessage The chat message (container).
 	 */
 	public void addChatMessage(ChatMessage chatMessage) {
 		chatMessageRepository.addChatMessage(chatMessage);
 	}
 
 	/**
-	 * Returns the nr. of messages in chat room `chatroom`
+	 * Returns the number of messages in chat room <code>chatroom</code>.
 	 * 
-	 * @param chatroom
-	 * @return
+	 * @param chatroom The chat room.
+	 * 
+	 * @return Number of messages for chat room <code>chatroom</code>.
 	 */
 	public long getNrOfMessage(Chatroom chatroom) {
 		return chatMessageRepository.getNrOfMessage(chatroom.getChatroomName());

@@ -52,7 +52,7 @@ public class TagService {
 	 * add a single tag to a chatroom
 	 * 
 	 * @param chatroom
-	 * @param tag
+	 * @param tagName
 	 */
 	@Transactional(readOnly = false)
 	public void addTagtoChatroom(Chatroom chatroom, String tagName) throws BadRequestException {
@@ -164,7 +164,7 @@ public class TagService {
 	/**
 	 * remove all the tags a chatroom has
 	 * 
-	 * @param readOnly
+	 * @param chatroom
 	 */
 	@Transactional(readOnly = false)
 	public void removeAllTagsFromChatroom(Chatroom chatroom) {
