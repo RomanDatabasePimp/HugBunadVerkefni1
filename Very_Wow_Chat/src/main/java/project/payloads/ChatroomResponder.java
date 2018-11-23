@@ -6,9 +6,11 @@ import java.util.stream.Collectors;
 import project.persistance.entities.Chatroom;
 
 /**
- * This class is for wrapping chatrooms in a way that can be replicated in a json object.
- * This is used by controllers to receive json objects to convert to jva class
- * and to convert java classes to json objects when returning resources.
+ * This class is for wrapping chatrooms in a way that can be replicated in a
+ * json object. This is used by controllers to receive json objects to convert
+ * to jva class and to convert java classes to json objects when returning
+ * resources.
+ * 
  * @author Vilhelml
  *
  */
@@ -19,9 +21,11 @@ public class ChatroomResponder {
 	protected String displayName;
 	// description of the chatroom
 	protected String description;
-	// denotes the visibility of the chatroom: true means listed, false means unlisted
+	// denotes the visibility of the chatroom: true means listed, false means
+	// unlisted
 	protected Boolean listed;
-	// denots the accessability of the chatroom: true means users can only join with an invite, false means anyone can join
+	// denots the accessability of the chatroom: true means users can only join with
+	// an invite, false means anyone can join
 	protected Boolean invited_only;
 	// the username of the owner of the chatroom
 	protected String ownerUsername;
@@ -31,9 +35,10 @@ public class ChatroomResponder {
 	protected Long lastMessageReceived;
 	// the chatroom's tags
 	protected List<String> tags;
-	
+
 	/**
 	 * Create a responder from a chatroom
+	 * 
 	 * @param chatroom chatroom to be transformed
 	 */
 	public ChatroomResponder(Chatroom chatroom) {
@@ -47,16 +52,18 @@ public class ChatroomResponder {
 		this.lastMessageReceived = chatroom.getLastMessageReceived();
 		this.tags = chatroom.getTags().stream().map(x -> x.getName()).collect(Collectors.toList());
 	}
-	
+
 	/**
 	 * constructor notað af spring controller til að vinna með json objects
+	 * 
 	 * @param chatroomName
 	 * @param displayName
 	 * @param description
 	 * @param listed
 	 * @param invited_only
 	 */
-	public ChatroomResponder(String chatroomName, String displayName, String description, Boolean listed, Boolean invited_only, Long lastMessageReceived, List<String> tags) {
+	public ChatroomResponder(String chatroomName, String displayName, String description, Boolean listed,
+			Boolean invited_only, Long lastMessageReceived, List<String> tags) {
 		this.chatroomName = chatroomName;
 		this.displayName = displayName;
 		this.description = description;
@@ -106,6 +113,5 @@ public class ChatroomResponder {
 	public List<String> getTags() {
 		return tags;
 	}
-	
-	
+
 }

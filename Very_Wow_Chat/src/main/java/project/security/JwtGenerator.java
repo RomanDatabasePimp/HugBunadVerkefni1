@@ -11,13 +11,14 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class JwtGenerator {
-    // get our secret key from the environmental variables 
+	// get our secret key from the environmental variables
 	@Value("${cryptography.security.password}")
 	private String secretKey;
-    
+
 	/**
-	 * Pretty simple we create a JWT token here to return to the client so he can use it
-	 * to authenticate himself next time.*/
+	 * Pretty simple we create a JWT token here to return to the client so he can
+	 * use it to authenticate himself next time.
+	 */
 	public String generate(JwtUser jwtUser) {
 		Claims claims = Jwts.claims().setSubject(jwtUser.getUserName());
 		claims.put("role", jwtUser.getRole());

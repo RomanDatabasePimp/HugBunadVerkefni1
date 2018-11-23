@@ -13,7 +13,9 @@ import project.persistance.entities.User;
 import project.persistance.repositories.UserRepository;
 
 /**
- * This servies handles functionality relating to users and the users' relations with other users.
+ * This servies handles functionality relating to users and the users' relations
+ * with other users.
+ * 
  * @author Vilhelml
  *
  */
@@ -27,7 +29,7 @@ public class UserService {
 	 * Updates user with user name `username`. Use null for those properties you
 	 * don't want to update.
 	 * 
-	 * @param username    in plaintext
+	 * @param username       in plaintext
 	 * @param newDisplayName in plaintext
 	 * @param newEmail       in plaintext
 	 * @param newPassword    in plaintext
@@ -167,7 +169,7 @@ public class UserService {
 			throw new BadRequestException("A friend request is already pending.");
 		}
 		// check if they are already friends
-		if(areFriends(requestor, requestee)) {
+		if (areFriends(requestor, requestee)) {
 			throw new BadRequestException("You are already friends");
 		}
 		// check if a friend requet has been sent in the other direction already

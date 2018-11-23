@@ -8,12 +8,11 @@ import java.util.List;
 public class ErrorResponder {
 	private List<Map<String, Object>> errors;
 	private Map<String, Object> error;
-	
+
 	public ErrorResponder() {
 		errors = new ArrayList<Map<String, Object>>();
 		error = new HashMap<>();
 	}
-	
 
 	public List<Map<String, Object>> getErrors() {
 		return errors;
@@ -28,7 +27,7 @@ public class ErrorResponder {
 	public Map<String, Object> getError() {
 		return error;
 	}
-	
+
 	public Object getWrappedError() {
 		return ResponseWrapper.badWrap(error);
 	}
@@ -36,6 +35,5 @@ public class ErrorResponder {
 	public void setError(String e) {
 		this.error.put("error", e);
 	}
-	
-	
+
 }

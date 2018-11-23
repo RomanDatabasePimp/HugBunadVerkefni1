@@ -20,14 +20,18 @@ public class ChatMessageRepositoryImpl implements ChatMessageRepositoryCustom {
 	private MongoTemplate mongoTemplate;	
 
 	/**
-	 * Fetches up to <code>limit</code> messages for chat room with chat room 
-	 * name <code>chatroomName</code> starting from position <code>offset</code>.
+	 * Returns up to <code>limit</code> chat messages from chat room with name 
+	 * <code>chatroomName</code> starting from <code>offset</code>.
+	 * 
+	 * If M[1..n] was the list of all messages for chat room C, then this method
+	 * would return M[offset, offset + limit], or M[offset, n] if 
+	 * offset + limit > n.
 	 * 
 	 * @param chatroomName Name of chat room.
-	 * @param offset The position where to fetch messages.
-	 * @param limit Up to how many messages to fetch.
+	 * @param offset 
+	 * @param limit How many messages at most to fetch (if they exist).
 	 * 
-	 * @return A list of chat messages.
+	 * @return List of chat messages.
 	 */
 	@Override
 	public List<ChatMessage> findPagedResultByChatroomName(String chatroomName, int offset, int limit) {
@@ -40,11 +44,15 @@ public class ChatMessageRepositoryImpl implements ChatMessageRepositoryCustom {
 	}
 	
 	/**
-	 * Fetches all messages for chat room with name <code>chatroomName</code>
-	 * starting from position <code>offset</code>.
+	 * Returns all chat messages from chat room with name 
+	 * <code>chatroomName</code> starting from <code>offset</code> to the end.
+	 * 
+	 * If M[1..n] was the list of all messages for chat room C, then this method
+	 * would return M[offset, n].
 	 * 
 	 * @param chatroomName Name of chat room.
-	 * @param offset Position of where to fetch messages.
+	 * @param offset 
+	 * @param limit How many messages at most to fetch (if they exist).
 	 * 
 	 * @return List of chat messages.
 	 */
@@ -58,8 +66,11 @@ public class ChatMessageRepositoryImpl implements ChatMessageRepositoryCustom {
 	}
 
 	/**
+	 * Posts chat message <code>message</code>.
 	 * 
-	 * @param chatroomName Name of chat room.
+	 * TODO: this is a repository so the input should be Java primitives.
+	 * 
+	 * @param message Chat message to post.
 	 */
 	@Override
 	public void postMessage(ChatMessage message) {
@@ -67,8 +78,11 @@ public class ChatMessageRepositoryImpl implements ChatMessageRepositoryCustom {
 	}
 
 	/**
+	 * Returns all message of chat room <code>chatroomName</code>.
 	 * 
-	 * @param chatroomName Name of chat room. 
+	 * @param chatroomName Name of chat room.
+	 * 
+	 * @return List of chat messages.
 	 */
 	@Override
 	public List<ChatMessage> getAllMessages(String chatroomName) { 
@@ -79,8 +93,7 @@ public class ChatMessageRepositoryImpl implements ChatMessageRepositoryCustom {
 	}
 
 	/**
-	 * Deletes all messages that belong to chat room with name 
-	 * <code>chatroomName</code>.
+	 * Deletes all chat messages of chat room <code>chatroomName</code>.
 	 * 
 	 * @param chatroomName Name of chat room.
 	 */
@@ -92,13 +105,14 @@ public class ChatMessageRepositoryImpl implements ChatMessageRepositoryCustom {
 	}
 
 	/**
-	 * 
+	 * Returns all chat message for chat room <code>chatroomName</code> that
+	 * were posted between <code>startTime</code> and <code>endTime</code>.
 	 * 
 	 * @param chatroomName Name of chat room.
-	 * @param startTime Unix time in milliseconds.  When to pick messages from.
-	 * @param endTime Unix time in milliseconds.  When to pick messages to.
+	 * @param startTime Start Unix time in milliseconds.
+	 * @param endTime End Unix time in milliseconds.
 	 * 
-	 * @return List of chat messages.
+	 * @return List of messages.
 	 */
 	@Override
 	public List<ChatMessage> getChatroomMessagesBetweenTime(String chatroomName, long startTime, long endTime) {
@@ -110,10 +124,11 @@ public class ChatMessageRepositoryImpl implements ChatMessageRepositoryCustom {
 	}
 
 	/**
-	 * Adds chat messages to database.  <code>message</code> contains which
-	 * chat room it belongs to.
+	 * Posts chat message <code>message</code>.
 	 * 
-	 * @param messages chat message container
+	 * TODO: this is a repository so the input should be Java primitives.
+	 * 
+	 * @param message Chat message to post.
 	 */
 	@Override
 	public void addChatMessage(ChatMessage message) {
@@ -121,11 +136,10 @@ public class ChatMessageRepositoryImpl implements ChatMessageRepositoryCustom {
 	}
 
 	/**
-	 * Returns the number of messages in chat room with name <code>chatroomName</code>.
+	 * Returns the number of messages that exist for chat room 
+	 * <code>chatroomName</code>.
 	 * 
-	 * @param chatroomName Name of chat room.
-	 * 
-	 * @return How many messages are in chat room with name <code>chatroomName</code>.
+	 * @return List of chat messages.
 	 */
 	@Override
 	public long getNrOfMessage(String chatroomName) {

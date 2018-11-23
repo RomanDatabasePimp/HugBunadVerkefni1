@@ -24,20 +24,21 @@ public class JwtAuthenticationProvider extends AbstractUserDetailsAuthentication
 
 	@Override
 	protected void additionalAuthenticationChecks(UserDetails userDetails,
-		UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken) throws AuthenticationException {
+			UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken) throws AuthenticationException {
 	}
 
 	/* method that we call when a jwt token arrives */
 	@Override
 	protected UserDetails retrieveUser(String username,
 			UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken) throws AuthenticationException {
-		// convert it into our implementation of the token 
+		// convert it into our implementation of the token
 		JwtAuthenticationToken jwtAuthenticationToken = (JwtAuthenticationToken) usernamePasswordAuthenticationToken;
 		String token = jwtAuthenticationToken.getToken(); // get the token in string form
 
 		JwtUser jwtUser = validator.validate(token);// use the validator to confirm the token authenticity
-		
-		// if no token was recived then the token was not sent or its not define correcly in the header
+
+		// if no token was recived then the token was not sent or its not define
+		// correcly in the header
 		if (jwtUser == null) {
 			throw new RuntimeException("JWT Token is incorrect");
 		}

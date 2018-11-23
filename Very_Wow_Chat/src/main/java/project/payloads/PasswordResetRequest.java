@@ -11,8 +11,9 @@ public class PasswordResetRequest {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	
-	public PasswordResetRequest() {}
+
+	public PasswordResetRequest() {
+	}
 
 	public PasswordResetRequest(String username) {
 		super();

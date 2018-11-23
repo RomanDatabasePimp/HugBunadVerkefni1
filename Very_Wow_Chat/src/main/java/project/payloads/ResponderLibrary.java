@@ -11,15 +11,17 @@ public class ResponderLibrary {
 
 	/**
 	 * converts a list of Users to a list of UserResponders
+	 * 
 	 * @param list
 	 * @return
 	 */
 	public static List<UserResponder> toUserResponderList(List<User> list) {
 		return list.stream().map(x -> new UserResponder(x)).collect(Collectors.toList());
 	}
-	
+
 	/**
 	 * converts a list of Chatrooms to a list of ChatroomResponders
+	 * 
 	 * @param list
 	 * @return
 	 */
@@ -29,6 +31,7 @@ public class ResponderLibrary {
 
 	/**
 	 * converts a list of Memberships to a list of MembershipResponders
+	 * 
 	 * @param list
 	 * @return
 	 */

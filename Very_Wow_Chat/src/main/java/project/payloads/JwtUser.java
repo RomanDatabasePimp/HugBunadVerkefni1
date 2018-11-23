@@ -19,7 +19,7 @@ public class JwtUser {
 
 	public JwtUser() {
 	} // used for authentication in middlewares
-	// used when we receive a payload
+		// used when we receive a payload
 
 	public JwtUser(String userName, String password) {
 		this.userName = userName;

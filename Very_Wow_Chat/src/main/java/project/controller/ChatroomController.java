@@ -30,8 +30,8 @@ import project.services.TagService;
 import project.services.UserService;
 
 /**
- * This controller is responsible for receiving requests related to the user 
- * and the user's relations with other users and handling them.
+ * REST controller responsible for chat room management.
+ * 
  * @author Vilhelml
  */
 @RestController
@@ -47,9 +47,11 @@ public class ChatroomController {
 
 	/**
 	 * 
-	 * @param timestampResponder
+	 * 
 	 * @param chatroomName
+	 * 
 	 * @return
+	 * 
 	 * @deprecated temporary method for testing purposes
 	 */
 	@RequestMapping(path = "/{chatroomName}/updatechatroomlastmessage", method = RequestMethod.POST, headers = "Accept=application/json")
@@ -116,12 +118,13 @@ public class ChatroomController {
 	 *          owner: return 401 unauthorized if successful: return 204 no content
 	 */
 	@RequestMapping(path = "/{chatroomName}", method = RequestMethod.DELETE, headers = "Accept=application/json")
-    public ResponseEntity<Object> deleteChatroom(@PathVariable String chatroomName, UsernamePasswordAuthenticationToken token){
+	public ResponseEntity<Object> deleteChatroom(@PathVariable String chatroomName,
+			UsernamePasswordAuthenticationToken token) {
 		try {
 			// fetch user from authentication token
 			User user = userService.findByUsername(token.getName());
 			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
-			if(!chatroomService.isOwner(user, chatroom)) {
+			if (!chatroomService.isOwner(user, chatroom)) {
 				ErrorResponder body = new ErrorResponder();
 				body.setError("User is not the chatroom's owner");
 				return new ResponseEntity<>(body.getWrappedError(), HttpStatus.UNAUTHORIZED);
@@ -322,7 +325,7 @@ public class ChatroomController {
 			return e.getErrorResponseEntity();
 		}
 	}
-	
+
 	/**
 	 * Join an open chatrom or accept n invite
 	 * 
@@ -346,7 +349,7 @@ public class ChatroomController {
 			return e.getErrorResponseEntity();
 		}
 	}
-	
+
 	/**
 	 * Join an open chatrom or accept n invite
 	 * 
