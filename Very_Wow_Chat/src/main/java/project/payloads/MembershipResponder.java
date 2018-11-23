@@ -8,8 +8,8 @@ import project.persistance.entities.User;
 
 public class MembershipResponder extends ChatroomResponder{
 
-	protected Long lastRead;
-	protected ChatroomUserRelation userRelation;
+	private Long lastRead;
+	private ChatroomUserRelation userRelation;
 	
 	/**
 	 * initalize a responder though manual input

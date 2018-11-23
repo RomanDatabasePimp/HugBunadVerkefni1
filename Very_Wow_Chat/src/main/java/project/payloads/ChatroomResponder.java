@@ -12,23 +12,23 @@ import project.persistance.entities.Chatroom;
  */
 public class ChatroomResponder {
 	// unique name serving as an identifier
-	protected String chatroomName;
+	private String chatroomName;
 	// non-unique name to be displayed
-	protected String displayName;
+	private String displayName;
 	// description of the chatroom
-	protected String description;
+	private String description;
 	// denotes the visibility of the chatroom: true means listed, false means unlisted
-	protected Boolean listed;
+	private Boolean listed;
 	// denots the accessability of the chatroom: true means users can only join with an invite, false means anyone can join
-	protected Boolean invited_only;
+	private Boolean invited_only;
 	// the username of the owner of the chatroom
-	protected String ownerUsername;
+	private String ownerUsername;
 	// when the chatroom was created
-	protected Long created;
+	private Long created;
 	// timestamp of when the latest message was received
-	protected Long lastMessageReceived;
+	private Long lastMessageReceived;
 	// the chatroom's tags
-	protected List<String> tags;
+	private List<String> tags;
 	
 	/**
 	 * Create a responder from a chatroom

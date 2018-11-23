@@ -7,9 +7,9 @@ package project.payloads;
  */
 public class ChatStampReceiver {
 	// name of the chatroom
-	protected String chatroomName;
+	private String chatroomName;
 	// timestamp
-	protected Long timestamp;
+	private Long timestamp;
 
 	public ChatStampReceiver(String chatroomName, Long timestamp) {
 		this.chatroomName = chatroomName;

@@ -26,6 +26,11 @@ public class CryptographyService {
 	
 	private static final char[] PASSWORD_ALPHABET_CHARS = (new String(PASSWORD_ALPHABET)).toCharArray();
 
+	/*
+	 * After Spring has populated `password` and `salt` (and constructed this
+	 * object), `init` is invoked and `spw` and `ss` are populated so this
+	 * service can be access by regular Java classes (not Spring).
+	 */
 	@PostConstruct
 	public void init() {
 		spw = password;

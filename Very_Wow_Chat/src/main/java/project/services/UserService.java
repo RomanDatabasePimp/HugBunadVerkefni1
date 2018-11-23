@@ -15,10 +15,6 @@ import project.persistance.repositories.UserRepository;
 @Service
 public class UserService {
 
-	// logs all neo4j calls
-	// protected final static Logger LOG =
-	// LoggerFactory.getLogger(UserService.class);
-
 	@Autowired
 	private UserRepository userRepository;
 

@@ -27,7 +27,8 @@ import java.util.Collections;
 
 /**
  * This is our authentication flow, i.e how the server should react
- * to a request from client. */
+ * to a request from client. 
+ */
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableWebSecurity
 @Configuration                         

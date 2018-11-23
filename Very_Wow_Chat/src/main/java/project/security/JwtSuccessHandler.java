@@ -9,8 +9,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class JwtSuccessHandler implements AuthenticationSuccessHandler {
+	
     /**
-     * We can implement somekind of success addition if needed here but for now 
+     * We can implement some kind of success addition if needed here but for now 
      * it will stay empty */
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,

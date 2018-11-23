@@ -20,11 +20,11 @@ public class Tag {
 
 	@Id @GeneratedValue protected Long id;
 	// unique name of the tag
-	protected String name;
+	private String name;
 
 	// list of chatrooms that have a outgoing relation to the tag
 	@Relationship(type="HAS_TAG", direction=Relationship.INCOMING)
-	protected List<Chatroom> chatroomsWithTag;
+	private List<Chatroom> chatroomsWithTag;
 
 	// Empty constructor required as of Neo4j API 2.0.5
 	public Tag() {}
