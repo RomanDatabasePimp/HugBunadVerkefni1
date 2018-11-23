@@ -9,12 +9,19 @@ import org.springframework.data.repository.query.Param;
 import project.persistance.entities.Chatroom;
 
 /**
- * Repository interface for neo4j and chat rooms.
+ * <<<<<<< HEAD An interface defining methods relating to database functionality
+ * of users, such as fetching, creating, updating and deleting.
+ * 
+ * This interface uses neo4j to store data.
+ * 
+ * This interface will be implemented by spring behind the scenes. =======
+ * Repository interface for neo4j and chat rooms. >>>>>>>
+ * 354dd39d95455007748d68612d0897968f255913
  * 
  * @author Vilhelml
  */
 public interface ChatroomRepository extends Neo4jRepository<Chatroom, Long> {
-	
+
 	/**
 	 * Returns chat room with name <code>chatroomName</code>.
 	 * 
@@ -43,7 +50,6 @@ public interface ChatroomRepository extends Neo4jRepository<Chatroom, Long> {
 	 */
 	Chatroom save(Chatroom chatroom);
 
-	
 	/**
 	 * Deletes chat room <code>chatroom</code>.
 	 * 
@@ -51,7 +57,6 @@ public interface ChatroomRepository extends Neo4jRepository<Chatroom, Long> {
 	 */
 	void delete(Chatroom chatroom);
 
-	
 	/**
 	 * Finds and returns all (public?) chat rooms with tag <code>tagName</code>.
 	 * 

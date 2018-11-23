@@ -12,12 +12,15 @@ import project.errors.NotFoundException;
 import project.persistance.entities.User;
 import project.persistance.repositories.UserRepository;
 
+/**
+ * This servies handles functionality relating to users and the users' relations
+ * with other users.
+ * 
+ * @author Vilhelml
+ *
+ */
 @Service
 public class UserService {
-
-	// logs all neo4j calls
-	// protected final static Logger LOG =
-	// LoggerFactory.getLogger(UserService.class);
 
 	@Autowired
 	private UserRepository userRepository;
@@ -26,63 +29,33 @@ public class UserService {
 	 * Updates user with user name `username`. Use null for those properties you
 	 * don't want to update.
 	 * 
-	 * @param username    in plaintext
-	 * @param displayName in plaintext
-	 * @param email       in plaintext
-	 * @param password    in plaintext
+	 * @param username       in plaintext
+	 * @param newDisplayName in plaintext
+	 * @param newEmail       in plaintext
+	 * @param newPassword    in plaintext
 	 * @throws NotFoundException
 	 */
-	public void updateUser(String username, String displayName, String email, String password)
+	public void updateUser(User user, String newDisplayName, String newEmail, String newPassword)
 			throws NotFoundException {
 
-		User user = findByUsername(username);
 		BCryptPasswordEncoder bcpe = new BCryptPasswordEncoder();
 
-		if (displayName != null) {
-			user.setDisplayName(displayName);
+		if (newDisplayName != null) {
+			user.setDisplayName(newDisplayName);
 		}
 
-		if (email != null) {
+		if (newEmail != null) {
 			// NOTE: encrypt email here.
-			String emailEncrypted = CryptographyService.getCiphertext(email);
+			String emailEncrypted = CryptographyService.getCiphertext(newEmail);
 			user.setEmail(emailEncrypted);
 		}
 
-		if (password != null) {
-			String passwordDigest = bcpe.encode(password);
+		if (newPassword != null) {
+			String passwordDigest = bcpe.encode(newPassword);
 			user.setPassword(passwordDigest);
 		}
 
 		saveUser(user);
-	}
-
-	/**
-	 * Updates user `existingUser` with information/attributes/properties from user
-	 * `newUserInfo`.
-	 * 
-	 * NOTE: email of <code>existingUser</code> is assumed to be encrypted,
-	 * BUT email of <code>newUserInfo</code> is assumed to be unencrypted.
-	 * 
-	 * @param existingUser 
-	 * @param newUserInfo
-	 */
-	public void updateUser(User existingUser, User newUserInfo) {
-
-		String newDisplayName = newUserInfo.getDisplayName() != null ? newUserInfo.getDisplayName()
-				: existingUser.getDisplayName();
-		
-		
-		
-		String newEmail = newUserInfo.getEmail() != null ? CryptographyService.getCiphertext(newUserInfo.getEmail()) : existingUser.getEmail();
-		String newPassword = newUserInfo.getPassword() != null ? newUserInfo.getPassword() : existingUser.getPassword();
-
-		// apply the new attributes
-		existingUser.setDisplayName(newDisplayName);
-		existingUser.setPassword(newPassword);
-		existingUser.setEmail(newEmail);
-
-		// save the changes
-		saveUser(existingUser);
 	}
 
 	/**
@@ -196,7 +169,7 @@ public class UserService {
 			throw new BadRequestException("A friend request is already pending.");
 		}
 		// check if they are already friends
-		if(areFriends(requestor, requestee)) {
+		if (areFriends(requestor, requestee)) {
 			throw new BadRequestException("You are already friends");
 		}
 		// check if a friend requet has been sent in the other direction already

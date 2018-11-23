@@ -44,10 +44,10 @@ public class HttpResponseBody {
 	/*-----------------------------------------------------------------------------*/
 
 	/*
-	 * Usage : addErrorForForm(FieldVal,Message) 
-	 *   For : FieldVal - String input field type (username , password ,email etc..) 
-	 *   	   Message - String error msg for the field 
-	 *  After: creates a errors obj that holds many error msg each beeing {field:Fieldtype, message:message}
+	 * Usage : addErrorForForm(FieldVal,Message) For : FieldVal - String input field
+	 * type (username , password ,email etc..) Message - String error msg for the
+	 * field After: creates a errors obj that holds many error msg each beeing
+	 * {field:Fieldtype, message:message}
 	 */
 	public void addErrorForForm(String fieldVal, String message) {
 		JSONObject newobj = new JSONObject();
@@ -57,11 +57,10 @@ public class HttpResponseBody {
 	}
 
 	/*
-	 * Usage : addToErrorArray(arrayKey,key,value) 
-	 *   For : arrayKey(STRING) - ID of the array you want to add this into 
-	 *         key(STRING) - key of the json obj that will be created 
-	 *         value - value of key 
-	 *  After: adds the a new json obj {key:value} to the arrayKey list
+	 * Usage : addToErrorArray(arrayKey,key,value) For : arrayKey(STRING) - ID of
+	 * the array you want to add this into key(STRING) - key of the json obj that
+	 * will be created value - value of key After: adds the a new json obj
+	 * {key:value} to the arrayKey list
 	 */
 	public void addToErrorArray(String arrayKey, String key, String value) {
 		JSONObject newobj = new JSONObject();
@@ -74,18 +73,17 @@ public class HttpResponseBody {
 	 */
 
 	/*
-	 * Usage : addToErrorArray(arrayKey,newobj) 
-	 *   For : arrayKey(STRING) - ID of the array you want to add this into newobj(JSONObject)- just a jsonobject 
-	 *  After: adds the a new json obj to the arrayKey list
+	 * Usage : addToErrorArray(arrayKey,newobj) For : arrayKey(STRING) - ID of the
+	 * array you want to add this into newobj(JSONObject)- just a jsonobject After:
+	 * adds the a new json obj to the arrayKey list
 	 */
 	public void addToErrorArray(String arrayKey, JSONObject newobj) {
 		this.many_in_one_erros.append(arrayKey, newobj);
 	}
 
 	/*
-	 * Usage : addSingleError(key,value) 
-	 *   For : key,value are strings 
-	 *  After: adds a  single error to the error List
+	 * Usage : addSingleError(key,value) For : key,value are strings After: adds a
+	 * single error to the error List
 	 */
 	public void addSingleError(String key, String value) {
 		JSONObject error = new JSONObject();
@@ -93,9 +91,8 @@ public class HttpResponseBody {
 	}
 
 	/*
-	 * Usage : addSingleError(newobj) 
-	 *   For : newobj is a custom JSONObject 
-	 *  After: adds a single jsonobj to the error List
+	 * Usage : addSingleError(newobj) For : newobj is a custom JSONObject After:
+	 * adds a single jsonobj to the error List
 	 */
 	public void addSingleError(JSONObject newobj) {
 		this.error.add(newobj);
@@ -110,10 +107,10 @@ public class HttpResponseBody {
 	/*-----------------------------------------------------------------------------*/
 
 	/*
-	 * Usage : addToSuccArray(arrayKey,key,value) 
-	 *   For : arrayKey(STRING) - ID of the array you want to add this into 
-	 *         key(STRING) - key of the json obj that will  be created value - value of key 
-	 *  After: adds the a new json obj {key:value} to the arrayKey list
+	 * Usage : addToSuccArray(arrayKey,key,value) For : arrayKey(STRING) - ID of the
+	 * array you want to add this into key(STRING) - key of the json obj that will
+	 * be created value - value of key After: adds the a new json obj {key:value} to
+	 * the arrayKey list
 	 */
 	public void addToSuccArray(String arrayKey, String key, String value) {
 		JSONObject newobj = new JSONObject();
@@ -122,18 +119,17 @@ public class HttpResponseBody {
 	}
 
 	/*
-	 * Usage : addToSuccArray(arrayKey,newobj) 
-	 *   For : arrayKey(STRING) - ID of the array you want to add this into newobj(JSONObject)
-	 *  After: adds the a new json obj to the arrayKey list
+	 * Usage : addToSuccArray(arrayKey,newobj) For : arrayKey(STRING) - ID of the
+	 * array you want to add this into newobj(JSONObject) After: adds the a new json
+	 * obj to the arrayKey list
 	 */
 	public void addToSuccArray(String arrayKey, JSONObject newobj) {
 		this.many_in_one_succ.append(arrayKey, newobj);
 	}
 
 	/*
-	 * Usage : addSingleSucc(key,value) 
-	 *   For : key,value are strings 
-	 * After: adds a single succ to the succ List
+	 * Usage : addSingleSucc(key,value) For : key,value are strings After: adds a
+	 * single succ to the succ List
 	 */
 	public void addSingleSucc(String key, String value) {
 		JSONObject error = new JSONObject();
@@ -141,9 +137,8 @@ public class HttpResponseBody {
 	}
 
 	/*
-	 * Usage : addSingleSucc(newobj) 
-	 *   For : newobj is a custom JSONObject 
-	 *  After: adds a single jsonobj to the succ List
+	 * Usage : addSingleSucc(newobj) For : newobj is a custom JSONObject After: adds
+	 * a single jsonobj to the succ List
 	 */
 	public void addSingleSucc(JSONObject newobj) {
 		this.response.add(newobj);

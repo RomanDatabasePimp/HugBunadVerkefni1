@@ -6,13 +6,14 @@ import project.persistance.entities.Chatroom;
 import project.persistance.entities.Membership;
 import project.persistance.entities.User;
 
-public class MembershipResponder extends ChatroomResponder{
+public class MembershipResponder extends ChatroomResponder {
 
 	protected Long lastRead;
 	protected ChatroomUserRelation userRelation;
-	
+
 	/**
 	 * initalize a responder though manual input
+	 * 
 	 * @param chatroomName
 	 * @param displayName
 	 * @param description
@@ -21,17 +22,9 @@ public class MembershipResponder extends ChatroomResponder{
 	 * @param lastRead
 	 * @param userRelation
 	 */
-	public MembershipResponder(
-			String chatroomName, 
-			String displayName, 
-			String description, 
-			Boolean listed, 
-			Boolean invited_only,
-			Long lastRead,
-			ChatroomUserRelation userRelation,
-			Long lastMessageReceived,
-			List<String> tags
-			) {
+	public MembershipResponder(String chatroomName, String displayName, String description, Boolean listed,
+			Boolean invited_only, Long lastRead, ChatroomUserRelation userRelation, Long lastMessageReceived,
+			List<String> tags) {
 		super(chatroomName, displayName, description, listed, invited_only, lastMessageReceived, tags);
 		this.lastRead = lastRead;
 		this.userRelation = userRelation;
@@ -39,6 +32,7 @@ public class MembershipResponder extends ChatroomResponder{
 
 	/**
 	 * initalize a responder from a membership
+	 * 
 	 * @param membership
 	 */
 	public MembershipResponder(Membership membership) {
@@ -51,18 +45,15 @@ public class MembershipResponder extends ChatroomResponder{
 		List<Chatroom> o = user.getOwnedChatrooms();
 		List<Chatroom> a = user.getAdminOfChatrooms();
 		// set the user relation
-		if(o.contains(chatroom)) {
+		if (o.contains(chatroom)) {
 			this.userRelation = ChatroomUserRelation.OWNER;
-		}
-		else if(a.contains(chatroom)) {
+		} else if (a.contains(chatroom)) {
 			this.userRelation = ChatroomUserRelation.ADMIN;
-		}
-		else {
+		} else {
 			this.userRelation = ChatroomUserRelation.MEMBER;
 		}
 	}
 
-	
 	// getters
 
 	public Long getLastRead() {

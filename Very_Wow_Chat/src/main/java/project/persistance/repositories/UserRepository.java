@@ -7,15 +7,20 @@ import org.springframework.data.repository.query.Param;
 import project.persistance.entities.User;
 
 /**
- * Repository interface for neo4j and users
+ * An interface defining methods relating to database functionality of users,
+ * such as fetching, creating, updating and deleting.
+ * 
+ * This interface uses neo4j to store data.
+ * 
+ * This interface will be implemented by spring behind the scenes.
  * 
  * @author Vilhelml
  */
 public interface UserRepository extends Neo4jRepository<User, Long> {
 
 	/**
-	 * Returns a <code>User</code> <code>NodeEntity</code> if user with
-	 * user name <code>userName</code> exists.
+	 * Returns a <code>User</code> <code>NodeEntity</code> if user with user name
+	 * <code>userName</code> exists.
 	 * 
 	 * @param username Name of user.
 	 * 

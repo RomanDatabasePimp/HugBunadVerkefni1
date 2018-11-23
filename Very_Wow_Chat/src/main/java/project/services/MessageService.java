@@ -30,10 +30,11 @@ public class MessageService {
 	 */
 	public List<ChatMessage> getChatPage(Chatroom chatroom, int offset, int limit) {
 		String chatroomName = chatroom.getChatroomName();
-		List<ChatMessage> chatMessages = chatMessageRepository.findPagedResultByChatroomName(chatroomName, offset, limit);
+		List<ChatMessage> chatMessages = chatMessageRepository.findPagedResultByChatroomName(chatroomName, offset,
+				limit);
 		return chatMessages;
 	}
-	
+
 	/**
 	 * Returns `limit` messages from chat room `chatroom` starting from `offset`.
 	 * 
@@ -90,7 +91,7 @@ public class MessageService {
 	public void addChatMessage(ChatMessage chatMessage) {
 		chatMessageRepository.addChatMessage(chatMessage);
 	}
-	
+
 	/**
 	 * Returns the nr. of messages in chat room `chatroom`
 	 * 

@@ -8,6 +8,16 @@ import org.springframework.data.repository.query.Param;
 
 import project.persistance.entities.Tag;
 
+/**
+ * An interface defining methods relating to database functionality of tags,
+ * such as fetching, creating, updating and deleting.
+ * 
+ * This interface uses neo4j to store data.
+ * 
+ * This interface will be implemented by spring behind the scenes.
+ * 
+ * @author Vilhelml
+ */
 public interface TagRepository extends Neo4jRepository<Tag, Long> {
 
 	/**

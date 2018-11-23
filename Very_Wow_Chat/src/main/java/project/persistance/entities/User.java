@@ -10,7 +10,8 @@ import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
 /**
- * Class which maps the user to a node in a neo4j database.
+ * Class which maps the user to a database entity.
+>>>>>>> 354dd39d95455007748d68612d0897968f255913
  */
 @NodeEntity
 public class User {
@@ -263,7 +264,5 @@ public class User {
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
 	}
-	
-	
-	
+
 }

@@ -13,19 +13,19 @@ import java.util.Map;
  * "Generalization" of MessageController.java.
  */
 public class Mailer {
-	
+
 	private final String recipientEmail;
 	private final String emailContent;
 	private final String serverUrl;
-	private final String secretKey;	
+	private final String secretKey;
 
 	/**
 	 * Create a email to send.
 	 * 
 	 * @param recipientEmail who to send email to
-	 * @param emailContent contents of email
-	 * @param serverUrl supplied by Spring
-	 * @param secretKey supplied by Spring
+	 * @param emailContent   contents of email
+	 * @param serverUrl      supplied by Spring
+	 * @param secretKey      supplied by Spring
 	 */
 	public Mailer(String recipientEmail, String emailContent, String serverUrl, String secretKey) {
 		this.recipientEmail = recipientEmail;
@@ -35,8 +35,7 @@ public class Mailer {
 	}
 
 	/**
-	 * Sends a message, and if it fails then it'll only print a stack
-	 * trace.
+	 * Sends a message, and if it fails then it'll only print a stack trace.
 	 */
 	public void send() {
 		try {
@@ -45,22 +44,22 @@ public class Mailer {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
-	 * Try to send message.  If it fails then it raises an exception.
+	 * Try to send message. If it fails then it raises an exception.
 	 * 
 	 * @throws Exception
 	 */
 	public void tryToSend() throws Exception {
 		URL url = new URL(serverUrl);
-		
+
 		LinkedHashMap<String, String> params = new LinkedHashMap<>();
 		params.put("toMail", this.recipientEmail);
 		params.put("content", this.emailContent);
 		params.put("seckey", secretKey);
-		
+
 		StringBuilder postData = new StringBuilder();
-		
+
 		for (Iterator<Map.Entry<String, String>> it = params.entrySet().iterator(); it.hasNext();) {
 			Map.Entry<String, String> param = (Map.Entry<String, String>) it.next();
 			if (postData.length() != 0) {
@@ -70,7 +69,7 @@ public class Mailer {
 			postData.append('=');
 			postData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
 		}
-		
+
 		byte[] postDataBytes = postData.toString().getBytes("UTF-8");
 
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();

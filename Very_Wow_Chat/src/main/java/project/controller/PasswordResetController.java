@@ -20,34 +20,31 @@ import project.services.RedisService;
 import project.services.UserService;
 
 /**
- * Controller that is responsible for resetting user's password and then 
- * completing the password reset. 
+ * Controller that is responsible for resetting user's password and then
+ * completing the password reset.
  */
 @RestController
 public class PasswordResetController {
-	
+
 	// TODO: remove later
 	private static boolean DEBUG = true;
-	
+
 	@Autowired
 	private RedisService redisService;
-	
+
 	@Autowired
 	private UserService userService;
-	
+
 	@Value("${email.server.url}")
 	private String emailServerUrl;
 
 	@Value("${email.server.secretkey}")
 	private String emailServerSecretKey;
-	
+
 	/**
-	 * Resets password.  Sends email to the username.
+	 * Resets password. Sends email to the username.
 	 * 
-	 * JSON body:
-	 * {
-	 * 	"username": "harold"
-	 * }
+	 * JSON body: { "username": "harold" }
 	 * 
 	 * @param prr JSON mapped to PasswordResetRequest.
 	 * 
@@ -64,7 +61,7 @@ public class PasswordResetController {
 			redisService.insertString(randomKey, username);
 			String resetUrl = emailServerUrl + "password_reset/" + randomKey;
 			if (DEBUG) {
-				System.out.println("http://localhost" + ":9090" + "/"+ "password_reset/" + randomKey);
+				System.out.println("http://localhost" + ":9090" + "/" + "password_reset/" + randomKey);
 			}
 			String emailContent = "Reset URL: " + resetUrl;
 			Mailer mailer = new Mailer(recipientEmail, emailContent, emailServerUrl, emailServerSecretKey);
@@ -78,7 +75,7 @@ public class PasswordResetController {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	/**
 	 * Complete password reset, returns a randomly generated password.
 	 * 
@@ -89,16 +86,17 @@ public class PasswordResetController {
 	@RequestMapping(value = "/password_reset/{key}", method = RequestMethod.POST, headers = "Accept=application/json")
 	public ResponseEntity<Object> passwordResetComplete(@PathVariable String key) {
 		try {
-			if (!redisService.userNameExists(key)) {			
+			if (!redisService.userNameExists(key)) {
 				return new ResponseEntity<>("not found", HttpStatus.NOT_FOUND);
 			}
 			String username = redisService.getAndDestroyString(key);
+			User user = userService.findByUsername(username);
 			String password = CryptographyService.getStrongRandomPassword(20);
 			if (DEBUG) {
 				System.out.println("Password: " + password);
 			}
 			// Update existing user.
-			userService.updateUser(username, null, null, password);
+			userService.updateUser(user, null, null, password);
 			// Create response.
 			JSONObject obj = new JSONObject();
 			obj.put("password", password);

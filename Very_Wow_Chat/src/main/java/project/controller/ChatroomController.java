@@ -118,12 +118,13 @@ public class ChatroomController {
 	 *          owner: return 401 unauthorized if successful: return 204 no content
 	 */
 	@RequestMapping(path = "/{chatroomName}", method = RequestMethod.DELETE, headers = "Accept=application/json")
-    public ResponseEntity<Object> deleteChatroom(@PathVariable String chatroomName, UsernamePasswordAuthenticationToken token){
+	public ResponseEntity<Object> deleteChatroom(@PathVariable String chatroomName,
+			UsernamePasswordAuthenticationToken token) {
 		try {
 			// fetch user from authentication token
 			User user = userService.findByUsername(token.getName());
 			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
-			if(!chatroomService.isOwner(user, chatroom)) {
+			if (!chatroomService.isOwner(user, chatroom)) {
 				ErrorResponder body = new ErrorResponder();
 				body.setError("User is not the chatroom's owner");
 				return new ResponseEntity<>(body.getWrappedError(), HttpStatus.UNAUTHORIZED);
@@ -324,7 +325,7 @@ public class ChatroomController {
 			return e.getErrorResponseEntity();
 		}
 	}
-	
+
 	/**
 	 * Join an open chatrom or accept n invite
 	 * 
@@ -348,7 +349,7 @@ public class ChatroomController {
 			return e.getErrorResponseEntity();
 		}
 	}
-	
+
 	/**
 	 * Join an open chatrom or accept n invite
 	 * 
@@ -466,16 +467,6 @@ public class ChatroomController {
 			return e.getErrorResponseEntity();
 		}
 	}
-
-	// add/replace tags (?)
-	// search for chatrroms with a tag
-
-	// ban user, unban user (need to add banned user list)
-	// a used banned from a chatroom cannot request to join it, cannot receive
-	// invites to it
-
-	// ------------------------------------------ tag related requests
-	// ---------------------------------
 
 	@RequestMapping(path = "/{chatroomName}/tags", method = RequestMethod.GET, headers = "Accept=application/json")
 	public ResponseEntity<Object> getChatroomTags(@PathVariable String chatroomName) {

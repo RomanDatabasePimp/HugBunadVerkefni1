@@ -4,12 +4,12 @@ import project.persistance.entities.ChatMessage;
 import project.services.CryptographyService;
 
 /**
- * Messages that are sent from the server to the client are encapsulated by
- * this class.
+ * Messages that are sent from the server to the client are encapsulated by this
+ * class.
  * 
  * NOTE: messages that are inserted into this container are assumed to be
- * encrypted, and when they are retrieved from this container they are
- * assumed to be unencrypted.
+ * encrypted, and when they are retrieved from this container they are assumed
+ * to be unencrypted.
  */
 public class MessageResponse {
 
@@ -84,14 +84,14 @@ public class MessageResponse {
 	public String getMessage() {
 		return message;
 	}
-	
+
 	/**
 	 * Decrypts the encrypted message and stores it.
 	 * 
 	 * @param message Encrypted message.
 	 */
 	public void setMessage(String message) {
-		// NOTE: Decrypt message 
+		// NOTE: Decrypt message
 		this.message = CryptographyService.getPlaintext(message);
 	}
 
@@ -119,7 +119,7 @@ public class MessageResponse {
 	 * @param senderUsernameId
 	 * @param senderUsername
 	 * @param senderDisplayName
-	 * @param message Encrypted message.
+	 * @param message           Encrypted message.
 	 * @param timestamp
 	 */
 	public MessageResponse(String id, String chatroomName, long senderUsernameId, String senderUsername,

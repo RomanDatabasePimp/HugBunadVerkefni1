@@ -17,46 +17,28 @@ import org.neo4j.ogm.annotation.EndNode;
 @RelationshipEntity(type = "MEMBER_OF")
 public class Membership {
 
-    @Id
-    @GeneratedValue
+	@Id
+	@GeneratedValue
 	protected Long id;
 
 	@StartNode
 	protected User user;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	public void setChatroom(Chatroom chatroom) {
-		this.chatroom = chatroom;
-	}
-
-	public void setLastRead(long lastRead) {
-		this.lastRead = lastRead;
-	}
-
-	public void setWhenJoined(long whenJoined) {
-		this.whenJoined = whenJoined;
-	}
-
 	@EndNode
 	protected Chatroom chatroom;
-	
+
 	// timestamp for the last time the user read a message in the chatroom
 	protected Long lastRead;
 	// timestamp for when the user joined the chatroom as a member
 	protected Long whenJoined;
 
 	// empty constructor for neo4j
-	public Membership() {}
-	
+	public Membership() {
+	}
+
 	/**
 	 * a relation which denotes the last time the user viewed the chatroom
+	 * 
 	 * @param user
 	 * @param chatroom
 	 */
@@ -65,11 +47,11 @@ public class Membership {
 		this.chatroom = chatroom;
 
 		Long now = (new Date()).getTime(); // current time
-		
+
 		this.lastRead = now;
 		this.whenJoined = now;
 	}
-	
+
 	// getters and setters
 
 	public Long getId() {
@@ -94,5 +76,25 @@ public class Membership {
 
 	public Long getWhenJoined() {
 		return whenJoined;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public void setChatroom(Chatroom chatroom) {
+		this.chatroom = chatroom;
+	}
+
+	public void setLastRead(long lastRead) {
+		this.lastRead = lastRead;
+	}
+
+	public void setWhenJoined(long whenJoined) {
+		this.whenJoined = whenJoined;
 	}
 }
