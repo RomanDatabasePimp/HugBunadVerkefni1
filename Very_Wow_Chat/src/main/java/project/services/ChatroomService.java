@@ -17,6 +17,11 @@ import project.persistance.repositories.ChatroomRepository;
 // import project.persistance.repositories.TagRepository;
 import project.persistance.repositories.UserRepository;
 
+/**
+ * This service handles functionality relating to chatrooms, and the chatrooms' relations with other entities.
+ * @author Vilhelml
+ *
+ */
 @Service
 public class ChatroomService {
 

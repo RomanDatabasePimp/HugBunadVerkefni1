@@ -30,9 +30,9 @@ import project.services.TagService;
 import project.services.UserService;
 
 /**
- * 
+ * This controller is responsible for receiving requests related to the user 
+ * and the user's relations with other users and handling them.
  * @author Vilhelml
- *
  */
 @RestController
 @RequestMapping("/auth/chatroom")

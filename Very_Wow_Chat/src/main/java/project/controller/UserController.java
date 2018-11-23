@@ -30,7 +30,8 @@ import project.persistance.entities.Membership;
 
 
 /**
- * 
+ * This controller is responsible for receiving requests related to chatrooms, and the chatrooms'
+ * relations with other entities.
  * @author Vilhelml
  */
 @RestController

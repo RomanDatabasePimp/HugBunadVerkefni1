@@ -9,7 +9,12 @@ import org.springframework.data.repository.query.Param;
 import project.persistance.entities.Chatroom;
 
 /**
- * Repository interface for neo4j and chatrooms
+ * An interface defining methods relating to database functionality 
+ * of users, such as fetching, creating, updating and deleting.
+ * 
+ * This interface uses neo4j to store data.
+ * 
+ * This interface will be implemented by spring behind the scenes.
  * 
  * @author Vilhelml
  */

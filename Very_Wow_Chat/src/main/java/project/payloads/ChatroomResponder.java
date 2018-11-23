@@ -6,8 +6,10 @@ import java.util.stream.Collectors;
 import project.persistance.entities.Chatroom;
 
 /**
- * This class is for wrapping data in json objects
- * @author Vilhelm
+ * This class is for wrapping chatrooms in a way that can be replicated in a json object.
+ * This is used by controllers to receive json objects to convert to jva class
+ * and to convert java classes to json objects when returning resources.
+ * @author Vilhelml
  *
  */
 public class ChatroomResponder {

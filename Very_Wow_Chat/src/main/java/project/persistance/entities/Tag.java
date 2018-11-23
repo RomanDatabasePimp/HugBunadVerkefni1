@@ -8,6 +8,13 @@ import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
+/**
+ * Tag entity
+ * Chatrooms have a list of tags. 
+ * The tags help describe the theme of the chatroom. 
+ * The chatrooms can be searched for by their tags. 
+ * @author Vilhelml
+ */
 @NodeEntity
 public class Tag {
 

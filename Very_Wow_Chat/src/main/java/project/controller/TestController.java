@@ -14,7 +14,10 @@ import project.services.TagService;
 import project.services.UserService;
 
 /**
- * Controller for test purposes.
+ * Controller for test purposes; creating dummy data. 
+ * This ensures we are always working with the same data
+ * when testing and debugging. Also ensures that all testers
+ *  have as similar environments as possible.
  * 
  * @author Vilhelml
  */

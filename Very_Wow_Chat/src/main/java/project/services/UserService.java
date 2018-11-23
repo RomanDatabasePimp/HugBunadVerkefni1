@@ -12,12 +12,13 @@ import project.errors.NotFoundException;
 import project.persistance.entities.User;
 import project.persistance.repositories.UserRepository;
 
+/**
+ * This servies handles functionality relating to users and the users' relations with other users.
+ * @author Vilhelml
+ *
+ */
 @Service
 public class UserService {
-
-	// logs all neo4j calls
-	// protected final static Logger LOG =
-	// LoggerFactory.getLogger(UserService.class);
 
 	@Autowired
 	private UserRepository userRepository;

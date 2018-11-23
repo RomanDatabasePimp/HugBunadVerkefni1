@@ -9,6 +9,17 @@ import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
+/**
+ * A user entity
+ * People perusing our system do so as users.
+ * Users a user can
+ * 		create a chatroom
+ * 		request to be friends with other users
+ * 		accept of deny friend requests
+ * 		attempt to join a chatroom
+ * @author Vilhelml
+ *
+ */
 @NodeEntity
 public class User {
 

@@ -9,6 +9,24 @@ import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
+/**
+ * A chatroom entity
+ * A chatroom gives a set of users a closed environment to discuss.
+ * A chatroom has
+ * 		members
+ *  	admins
+ *   	tags
+ *   	an owner
+ * A chatroom can
+ * 		be listed or unlisted
+ * 		be limited to users with invites
+ * 		invite users to join
+ * 		invite users to become admins
+ * The messages posted on the chatroom are stored in a different database
+ * 
+ * @author Vilhelml
+ *
+ */
 @NodeEntity
 public class Chatroom {
 

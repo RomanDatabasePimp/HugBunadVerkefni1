@@ -10,7 +10,10 @@ import java.util.Date;
 import org.neo4j.ogm.annotation.EndNode;
 
 /**
- * Relationship entity for the last time a user read a message in a chatroom
+ * A membership entity
+ * a membership contains information on the relation between the user and the chatroom
+ * 		- when the user last read a message from the chatroom
+ *  	- when the user joined the chatroom
  * @author Vilhelml
  *
  */
@@ -23,26 +26,6 @@ public class Membership {
 
 	@StartNode
 	protected User user;
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	public void setChatroom(Chatroom chatroom) {
-		this.chatroom = chatroom;
-	}
-
-	public void setLastRead(long lastRead) {
-		this.lastRead = lastRead;
-	}
-
-	public void setWhenJoined(long whenJoined) {
-		this.whenJoined = whenJoined;
-	}
 
 	@EndNode
 	protected Chatroom chatroom;
@@ -94,5 +77,26 @@ public class Membership {
 
 	public Long getWhenJoined() {
 		return whenJoined;
+	}
+
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public void setChatroom(Chatroom chatroom) {
+		this.chatroom = chatroom;
+	}
+
+	public void setLastRead(long lastRead) {
+		this.lastRead = lastRead;
+	}
+
+	public void setWhenJoined(long whenJoined) {
+		this.whenJoined = whenJoined;
 	}
 }
