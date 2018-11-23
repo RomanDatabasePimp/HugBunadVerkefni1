@@ -168,7 +168,7 @@ public class ChatroomService {
 			throw new BadRequestException("Chatoom name is already in use.");
 		}
 		// check if chatroomName is valid
-		if (!authenticationService.NoSymbolsCheck(newChatroom.getChatroomName())) {
+		if (!authenticationService.noSymbolsCheck(newChatroom.getChatroomName())) {
 			throw new BadRequestException("Chatoom name contains invalid characters.");
 		}
 		// create a owner relation

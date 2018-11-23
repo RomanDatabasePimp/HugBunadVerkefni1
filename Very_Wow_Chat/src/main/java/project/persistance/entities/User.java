@@ -11,7 +11,6 @@ import org.neo4j.ogm.annotation.Relationship;
 
 /**
  * Class which maps the user to a database entity.
->>>>>>> 354dd39d95455007748d68612d0897968f255913
  */
 @NodeEntity
 public class User {

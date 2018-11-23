@@ -29,10 +29,10 @@ public class UserService {
 	 * Updates user with user name <code>username</code>. Use <code>null</code> for
 	 * those properties you don't want to update.
 	 * 
-	 * @param username    The user name.
-	 * @param displayName Display name of user.
-	 * @param email       Email of user (unencrypted).
-	 * @param password    Password (unencrypted/unhashed)
+	 * @param user The user
+	 * @param newDisplayName Display name of user.
+	 * @param newEmail Email of user (unencrypted?)
+	 * @param newPassword Password (unencrypted/unhashed) ?
 	 * 
 	 * @throws NotFoundException
 	 */

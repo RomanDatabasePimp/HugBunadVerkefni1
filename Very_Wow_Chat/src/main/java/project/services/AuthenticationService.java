@@ -78,7 +78,7 @@ public class AuthenticationService {
 	 * 
 	 * @param name
 	 */
-	public boolean NoSymbolsCheck(String name) {
+	public boolean noSymbolsCheck(String name) {
 		/*
 		 * I know there is a package for this but i fck love writing regex its so fun.
 		 * its much harder to define what is not allowed rathen then what is allowed so
