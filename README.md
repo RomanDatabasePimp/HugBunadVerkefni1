@@ -1,32 +1,28 @@
 # Hugbúnaðarverkefni 1: Very Wow Chat
 
 A chat room application.
-
 Members: 
-
 * Róman (ror9@hi.is)
 * Vilhelm (vilhelml@hi.is)
 * Davíð (dah38@hi.is)
 
 ## Introduction
+The project is split into Three parts 
+1. The server part i.e backend (this repository)
+2. The client part i.e frontend (another repository)
+   Can be found at : https://github.com/RomanDatabasePimp/Hugbunadverkefni1-Webapp
+3. The Email Server (another repository)<br>
+   Can be found at : https://github.com/vilhelml/cluster-3f-mail-service <br>
+   NOTE : You do not need to deploy this on your local machine this Server is running on : https://hugbomailserver.herokuapp.com/
 
-The project is split into two parts: the server part (this repository), and client (server) part (another repository).
-
-Dependencies for this repository are,
-
-* [Maven](https://maven.apache.org/)
-
-"External" dependencies for this repository are,
-
-* [git](https://git-scm.com/)
-	* Version 2.17.2 or higher.
-* [Neo4j](https://neo4j.com/)
-	* Desktop version 1.1.10 or higher.
-* [MongoDB](https://www.mongodb.com/)
-	* Version 4.0.3 or higher.
-* [Redis](https://redis.io/)
-	* Version 5.0.0 or higher.
-
+## Dependencies For this project
+This readme will cover all the steps on how to configure all the Dependencies except for Maven.<br>
+These are the following Dependencies that are required to deploy the server.
+1. Maven : https://maven.apache.org/
+2. Neo4j Desktop version 1.1.10 or higher : https://neo4j.com/   
+3. MongoDB Version 4.0.3 or higher : https://www.mongodb.com/
+4. Redis Version 5.0.0 or higher https://redis.io/
+  
 ## Setup of external services
 
 ### Neo4j
