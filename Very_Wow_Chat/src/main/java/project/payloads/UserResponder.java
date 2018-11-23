@@ -10,7 +10,6 @@ import project.persistance.entities.User;
  * 
  * @author Vilhelml
  * @since 20.10.18
- *
  */
 public class UserResponder {
 	private String username;
@@ -20,14 +19,12 @@ public class UserResponder {
 		this.username = user.getUsername();
 		this.displayName = user.getDisplayName();
 	}
-
+	
 	/**
 	 * constructor notað af spring controller til að vinna með json objects
 	 * 
 	 * @param username
-	 * @param password
 	 * @param displayName
-	 * @param email
 	 */
 	public UserResponder(String username, String displayName) {
 		this.username = username;

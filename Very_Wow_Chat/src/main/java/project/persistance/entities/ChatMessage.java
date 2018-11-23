@@ -13,18 +13,18 @@ public class ChatMessage {
 	// MongoDB ID
 	@Id
 	private String id;
-	
+
 	// Rel. to neo4j
 	private String chatroomName;
-	
+
 	// Rel. to neo4j
 	private long senderUsernameId;
 	private String senderUsername;
 	private String senderDisplayName;
-	
+
 	// @Convert(converter = MessageConverter.class)
 	private String message;
-	
+
 	@Indexed
 	private Long timestamp;
 
@@ -102,6 +102,5 @@ public class ChatMessage {
 		this.message = message;
 		this.timestamp = timestamp;
 	}
-
 
 }

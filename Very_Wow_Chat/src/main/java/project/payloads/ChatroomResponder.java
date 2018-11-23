@@ -6,9 +6,9 @@ import java.util.stream.Collectors;
 import project.persistance.entities.Chatroom;
 
 /**
- * This class is for wrapping data in json objects
+ * This class is for wrapping chat room data in JSON objects.
+ * 
  * @author Vilhelm
- *
  */
 public class ChatroomResponder {
 	// unique name serving as an identifier
@@ -17,9 +17,11 @@ public class ChatroomResponder {
 	private String displayName;
 	// description of the chatroom
 	private String description;
-	// denotes the visibility of the chatroom: true means listed, false means unlisted
+	// denotes the visibility of the chatroom: true means listed, false means
+	// unlisted
 	private Boolean listed;
-	// denots the accessability of the chatroom: true means users can only join with an invite, false means anyone can join
+	// denots the accessability of the chatroom: true means users can only join with
+	// an invite, false means anyone can join
 	private Boolean invited_only;
 	// the username of the owner of the chatroom
 	private String ownerUsername;
@@ -29,9 +31,10 @@ public class ChatroomResponder {
 	private Long lastMessageReceived;
 	// the chatroom's tags
 	private List<String> tags;
-	
+
 	/**
 	 * Create a responder from a chatroom
+	 * 
 	 * @param chatroom chatroom to be transformed
 	 */
 	public ChatroomResponder(Chatroom chatroom) {
@@ -47,14 +50,18 @@ public class ChatroomResponder {
 	}
 	
 	/**
-	 * constructor notað af spring controller til að vinna með json objects
+	 * Constructed used by Spring controller to use JSON objects.
+	 * 
 	 * @param chatroomName
 	 * @param displayName
 	 * @param description
 	 * @param listed
 	 * @param invited_only
+	 * @param lastMessageReceived
+	 * @param tags
 	 */
-	public ChatroomResponder(String chatroomName, String displayName, String description, Boolean listed, Boolean invited_only, Long lastMessageReceived, List<String> tags) {
+	public ChatroomResponder(String chatroomName, String displayName, String description, Boolean listed,
+			Boolean invited_only, Long lastMessageReceived, List<String> tags) {
 		this.chatroomName = chatroomName;
 		this.displayName = displayName;
 		this.description = description;
@@ -104,6 +111,5 @@ public class ChatroomResponder {
 	public List<String> getTags() {
 		return tags;
 	}
-	
-	
+
 }

@@ -12,60 +12,65 @@ import org.neo4j.ogm.annotation.Relationship;
 @NodeEntity
 public class Chatroom {
 
-	@Id @GeneratedValue protected Long id;
+	@Id
+	@GeneratedValue
+	protected Long id;
 	// unique name serving as an identifier
 	private String chatroomName;
 	// non-unique name to be displayed
 	private String displayName;
 	// description of the chatroom
 	private String description;
-	// denotes the visibility of the chatroom: true means listed, false means unlisted
+	// denotes the visibility of the chatroom: true means listed, false means
+	// unlisted
 	private Boolean listed;
 	// when the chatroom was created
 	private Long created;
 	// timestamp of when the latest message was received
 	private Long lastMessageReceived;
-	// denots the accessability of the chatroom: true means users can only join with an invite, false means anyone can join
+	// denots the accessability of the chatroom: true means users can only join with
+	// an invite, false means anyone can join
 	private Boolean invited_only;
-	// the owner of the chatroom, has master privileges 
-	@Relationship(type="OWNS", direction=Relationship.INCOMING)
+	// the owner of the chatroom, has master privileges
+	@Relationship(type = "OWNS", direction = Relationship.INCOMING)
 	private User owner;
 
 	// the tags the chatroom is associated with
-	@Relationship(type="HAS_TAG", direction=Relationship.OUTGOING)
+	@Relationship(type = "HAS_TAG", direction = Relationship.OUTGOING)
 	private List<Tag> tags;
-	
+
 	// users who are members of the chatroom
-	@Relationship(type="HAS_MEMBER", direction=Relationship.OUTGOING)
+	@Relationship(type = "HAS_MEMBER", direction = Relationship.OUTGOING)
 	private List<User> members;
-	
+
 	// users who have administrative privileges of the chatroom
-	@Relationship(type="ADMIN_OF", direction=Relationship.INCOMING)
+	@Relationship(type = "ADMIN_OF", direction = Relationship.INCOMING)
 	private List<User> administrators;
 
 	// users who have been invited to join the chatroom
-	@Relationship(type="INVITES", direction=Relationship.OUTGOING)
+	@Relationship(type = "INVITES", direction = Relationship.OUTGOING)
 	private List<User> memberInvitees;
 
 	// users who have benen invited to become administrators of the chatroom
-	@Relationship(type="ADMIN_INVITES", direction=Relationship.OUTGOING)
+	@Relationship(type = "ADMIN_INVITES", direction = Relationship.OUTGOING)
 	private List<User> adminInvitees;
 
 	// users who have requested to become a member of the chatroom
-	@Relationship(type="REQUESTS_TO_JOIN", direction=Relationship.INCOMING)
+	@Relationship(type = "REQUESTS_TO_JOIN", direction = Relationship.INCOMING)
 	private List<User> requestors;
-	
+
 	// Empty constructor required as of Neo4j API 2.0.5
-	public Chatroom () {}
+	public Chatroom() {
+	}
 	
 	/**
 	 * Create a new chatroom
+	 * 
 	 * @param chatroomName
 	 * @param displayName
 	 * @param description
 	 * @param listed
 	 * @param invited_only
-	 * @param owner
 	 */
 	public Chatroom(String chatroomName, String displayName, String description, Boolean listed, Boolean invited_only) {
 		this.chatroomName = chatroomName;
@@ -73,9 +78,9 @@ public class Chatroom {
 		this.description = description;
 		this.listed = listed;
 		this.invited_only = invited_only;
-		
+
 		Long now = (new Date()).getTime();
-		
+
 		this.lastMessageReceived = now;
 		this.created = now;
 	}
@@ -154,9 +159,8 @@ public class Chatroom {
 		this.lastMessageReceived = lastMessageReceived;
 	}
 
-
 	public List<Tag> getTags() {
-		if(tags == null) {
+		if (tags == null) {
 			tags = new ArrayList<>();
 		}
 		return tags;
@@ -167,7 +171,7 @@ public class Chatroom {
 	}
 
 	public List<User> getMembers() {
-		if(members == null) {
+		if (members == null) {
 			members = new ArrayList<>();
 		}
 		return members;
@@ -178,7 +182,7 @@ public class Chatroom {
 	}
 
 	public List<User> getAdministrators() {
-		if(administrators == null) {
+		if (administrators == null) {
 			administrators = new ArrayList<>();
 		}
 		return administrators;
@@ -189,7 +193,7 @@ public class Chatroom {
 	}
 
 	public List<User> getAdminInvitees() {
-		if(adminInvitees == null) {
+		if (adminInvitees == null) {
 			adminInvitees = new ArrayList<>();
 		}
 		return adminInvitees;
@@ -200,7 +204,7 @@ public class Chatroom {
 	}
 
 	public List<User> getRequestors() {
-		if(requestors == null) {
+		if (requestors == null) {
 			requestors = new ArrayList<>();
 		}
 		return requestors;
@@ -211,7 +215,7 @@ public class Chatroom {
 	}
 
 	public List<User> getMemberInvitees() {
-		if(memberInvitees == null) {
+		if (memberInvitees == null) {
 			memberInvitees = new ArrayList<>();
 		}
 		return memberInvitees;
@@ -220,5 +224,5 @@ public class Chatroom {
 	public void setMemberInvitees(List<User> memberInvitees) {
 		this.memberInvitees = memberInvitees;
 	}
-	
+
 }

@@ -9,13 +9,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-/* This class handles all the authentication failure messages, 
- * i think its like a middleware type of thing that it will just squeze itself
- * between if it dosent work then it will stop the chain here and the requested
- * controller is not called */
+/**
+ * This class handles all the authentication failure messages, i think its like
+ * a middleware type of thing that it will just squeze itself between if it
+ * dosent work then it will stop the chain here and the requested controller is
+ * not called
+ */
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
-	
+
 	@Override
 	public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
 			AuthenticationException e) throws IOException, ServletException {

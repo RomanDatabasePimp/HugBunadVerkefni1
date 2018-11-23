@@ -25,17 +25,21 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
 		// The token should be stored in the header under " Authorization "
 		String header = httpServletRequest.getHeader("Authorization");
 
-		/* if Authorization was not found or if the token dosent start with "Token"
-		   we pass an error.
-		   
-		   Its a good practice just to add something to the token just to see at least if
-		   it is our token to avoid unnecessary computation  */
+		/*
+		 * if Authorization was not found or if the token dosen't start with "Token" we
+		 * pass an error.
+		 * 
+		 * Its a good practice just to add something to the token just to see at least
+		 * if it is our token to avoid unnecessary computation
+		 */
 		if (header == null || !header.startsWith("Token ")) {
 			throw new RuntimeException("JWT Token is missing");
 		}
 
-		/* We need to remember that the token starts with "Token xxxxxxx" 
-		 * so we grab the token part for validation */
+		/*
+		 * We need to remember that the token starts with "Token xxxxxxx" so we grab the
+		 * token part for validation
+		 */
 		String authenticationToken = header.substring(6);
 
 		JwtAuthenticationToken token = new JwtAuthenticationToken(authenticationToken);

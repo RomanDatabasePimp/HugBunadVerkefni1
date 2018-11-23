@@ -17,9 +17,9 @@ import org.neo4j.ogm.annotation.EndNode;
 @RelationshipEntity(type = "MEMBER_OF")
 public class Membership {
 
-    @Id
-    @GeneratedValue
-    private Long id;
+	@Id
+	@GeneratedValue
+	private Long id;
 
 	@StartNode
 	private User user;
@@ -46,17 +46,19 @@ public class Membership {
 
 	@EndNode
 	private Chatroom chatroom;
-	
+
 	// timestamp for the last time the user read a message in the chatroom
 	private Long lastRead;
 	// timestamp for when the user joined the chatroom as a member
 	private Long whenJoined;
 
 	// empty constructor for neo4j
-	public Membership() {}
-	
+	public Membership() {
+	}
+
 	/**
 	 * a relation which denotes the last time the user viewed the chatroom
+	 * 
 	 * @param user
 	 * @param chatroom
 	 */
@@ -65,11 +67,11 @@ public class Membership {
 		this.chatroom = chatroom;
 
 		Long now = (new Date()).getTime(); // current time
-		
+
 		this.lastRead = now;
 		this.whenJoined = now;
 	}
-	
+
 	// getters and setters
 
 	public Long getId() {

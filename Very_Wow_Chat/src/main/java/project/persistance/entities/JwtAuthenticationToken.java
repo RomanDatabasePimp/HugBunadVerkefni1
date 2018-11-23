@@ -3,7 +3,7 @@ package project.persistance.entities;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 /**
- * This is a container for our JWT tokens. 
+ * This is a container for our JWT tokens.
  */
 public class JwtAuthenticationToken extends UsernamePasswordAuthenticationToken {
 
@@ -25,7 +25,7 @@ public class JwtAuthenticationToken extends UsernamePasswordAuthenticationToken 
 	}
 
 	// We don't need these two functions but still have to override them.
-	
+
 	@Override
 	public Object getCredentials() {
 		return null;

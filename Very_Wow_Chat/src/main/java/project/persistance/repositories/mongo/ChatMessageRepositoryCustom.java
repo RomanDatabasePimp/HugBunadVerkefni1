@@ -5,37 +5,36 @@ import java.util.List;
 import project.persistance.entities.ChatMessage;
 
 /**
- * Custom chat message methods that are implemented in 
+ * Custom chat message methods that are implemented in
  * <code>ChatMessageRepositoryCustom.java</code>.
  */
 public interface ChatMessageRepositoryCustom {
-	
+
 	/**
-	 * Returns up to <code>limit</code> chat messages from chat room with name 
+	 * Returns up to <code>limit</code> chat messages from chat room with name
 	 * <code>chatroomName</code> starting from <code>offset</code>.
 	 * 
 	 * If M[1..n] was the list of all messages for chat room C, then this method
-	 * would return M[offset, offset + limit], or M[offset, n] if 
-	 * offset + limit > n.
+	 * would return M[offset, offset + limit], or M[offset, n] if offset + limit &gt;
+	 * n.
 	 * 
 	 * @param chatroomName Name of chat room.
-	 * @param offset 
-	 * @param limit How many messages at most to fetch (if they exist).
+	 * @param offset
+	 * @param limit        How many messages at most to fetch (if they exist).
 	 * 
 	 * @return List of chat messages.
 	 */
 	List<ChatMessage> findPagedResultByChatroomName(String chatroomName, int offset, int limit);
 
 	/**
-	 * Returns all chat messages from chat room with name 
-	 * <code>chatroomName</code> starting from <code>offset</code> to the end.
+	 * Returns all chat messages from chat room with name <code>chatroomName</code>
+	 * starting from <code>offset</code> to the end.
 	 * 
 	 * If M[1..n] was the list of all messages for chat room C, then this method
 	 * would return M[offset, n].
 	 * 
 	 * @param chatroomName Name of chat room.
-	 * @param offset 
-	 * @param limit How many messages at most to fetch (if they exist).
+	 * @param offset
 	 * 
 	 * @return List of chat messages.
 	 */
@@ -67,12 +66,12 @@ public interface ChatMessageRepositoryCustom {
 	void deleteAllChatMessagesOfChatroom(String chatroomName);
 
 	/**
-	 * Returns all chat message for chat room <code>chatroomName</code> that
-	 * were posted between <code>startTime</code> and <code>endTime</code>.
+	 * Returns all chat message for chat room <code>chatroomName</code> that were
+	 * posted between <code>startTime</code> and <code>endTime</code>.
 	 * 
 	 * @param chatroomName Name of chat room.
-	 * @param startTime Start Unix time in milliseconds.
-	 * @param endTime End Unix time in milliseconds.
+	 * @param startTime    Start Unix time in milliseconds.
+	 * @param endTime      End Unix time in milliseconds.
 	 * 
 	 * @return List of messages.
 	 */
@@ -88,7 +87,7 @@ public interface ChatMessageRepositoryCustom {
 	void addChatMessage(ChatMessage message);
 
 	/**
-	 * Returns the number of messages that exist for chat room 
+	 * Returns the number of messages that exist for chat room
 	 * <code>chatroomName</code>.
 	 * 
 	 * @return List of chat messages.

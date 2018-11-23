@@ -6,7 +6,7 @@ import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.stereotype.Repository;
 
 /**
- * Class creates a connection to the Redis server and oversees all the of the 
+ * Class creates a connection to the Redis server and oversees all the of the
  * sending and receiving of data between the Spring Server and Redis server.
  * 
  * TODO: rename this repository to something like to something like temporary
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class RedisRepository {
-	
+
 	private final JedisConnectionFactory redisConn; // define our connection
 
 	public RedisRepository() {
@@ -23,19 +23,18 @@ public class RedisRepository {
 		this.redisConn.setHostName("localhost");
 		this.redisConn.setPort(6379);
 	}
-	
+
 	/**
-	 *  Usage : red.insertString(key,string) 
-	 *    For : red is a RedisServices class 
-	 *          key is pointer to the data that will be stored in redis
-	 *          string is the data you want to store
-	 *   After: stores the string for 30 min */
+	 * Usage : red.insertString(key,string) For : red is a RedisServices class key
+	 * is pointer to the data that will be stored in redis string is the data you
+	 * want to store After: stores the string for 30 min
+	 */
 	public void insertString(String key, String string) {
 		RedisConnection con = this.redisConn.getConnection();
 		con.setEx(key.getBytes(), 1800, string.getBytes());
 		con.close();
 	}
-	
+
 	/**
 	 * 
 	 * @param key
@@ -47,12 +46,12 @@ public class RedisRepository {
 		con.close();
 		return string;
 	}
-	
+
 	/**
-	 * Inserts <code>data</code>, which is a stringified JSON object, with
-	 * key <code>key</code>.
+	 * Inserts <code>data</code>, which is a stringified JSON object, with key
+	 * <code>key</code>.
 	 * 
-	 * @param key access key
+	 * @param key  access key
 	 * @param data JSON object stringified.
 	 */
 	public void insertData(String key, String data) {
@@ -72,8 +71,8 @@ public class RedisRepository {
 	 * 
 	 * @param key The key
 	 * 
-	 * @return <code>true</code> if an entry with key <code>key</code> exists
-	 * in the database, otherwise <code>false</code>.
+	 * @return <code>true</code> if an entry with key <code>key</code> exists in the
+	 *         database, otherwise <code>false</code>.
 	 */
 	public boolean checkIfKeyExists(String key) {
 		RedisConnection con = this.redisConn.getConnection();
@@ -81,10 +80,10 @@ public class RedisRepository {
 		con.close();
 		return exists;
 	}
-	
+
 	/**
-	 * Retrieves entry with key <code>key</code>.  The object that is received
-	 * is assumed to be a stringified JSON object.
+	 * Retrieves entry with key <code>key</code>. The object that is received is
+	 * assumed to be a stringified JSON object.
 	 * 
 	 * @param key Access key
 	 * 

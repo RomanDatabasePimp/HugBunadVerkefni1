@@ -22,16 +22,16 @@ public class ChatroomService {
 
 	@Autowired
 	private ChatroomRepository chatroomRepository;
-	
+
 	@Autowired
 	private UserRepository userRepository;
-	
+
 	@Autowired
 	private TagService tagService;
-	
+
 	@Autowired
 	private MessageService messageService;
-	
+
 	public void updateLastMessageReceived(String chatroomName) {
 		try {
 			Chatroom chatroom = findByChatname(chatroomName);
@@ -41,7 +41,7 @@ public class ChatroomService {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Check if a chatroom exists with a given chatroomName
 	 * 
@@ -59,7 +59,7 @@ public class ChatroomService {
 	 * 
 	 * @param chatroomName
 	 * @return the chatroom
-	 * @throws exception if chatroomName doesn't belong to any chatroom
+	 * @throws NotFoundException if chatroomName doesn't belong to any chatroom
 	 */
 	public Chatroom findByChatname(String chatroomName) throws NotFoundException {
 		// throw error if user doesn't exist
@@ -91,11 +91,13 @@ public class ChatroomService {
 	 * @return
 	 */
 	public boolean hasMemberInvitePrivilages(User user, Chatroom chatroom) {
-		return isOwner(user, chatroom) || isAdmin(user, chatroom); // only the owner and admins can send member invitation
+		return isOwner(user, chatroom) || isAdmin(user, chatroom); // only the owner and admins can send member
+																	// invitation
 	}
 
 	/**
 	 * check if the user can change the tags of a chatroom
+	 * 
 	 * @param chatroom
 	 * @param user
 	 * @return
@@ -103,7 +105,7 @@ public class ChatroomService {
 	public Boolean hasChatroomTagPrivilages(Chatroom chatroom, User user) {
 		return isOwner(user, chatroom) || isAdmin(user, chatroom); // only the owner and admins can edit tags
 	}
-	
+
 	/**
 	 * check if user can send admin invites from this chat
 	 * 
@@ -133,12 +135,12 @@ public class ChatroomService {
 		if (!canJoin(user, chatroom)) {
 			throw new UnauthorizedException("You need an invite to join " + chatroom.getChatroomName());
 		}
-		
+
 		// delete the member invite, if there is one
 		deleteMemberInvitation(user, chatroom);
 		// create relation / send the invite
 		createMemberRelation(user, chatroom);
-		
+
 		// save the changes
 		chatroomRepository.save(chatroom);
 	}
@@ -194,17 +196,18 @@ public class ChatroomService {
 		// delete admin relation
 		deleteAdminship(user, chatroom);
 	}
-	
+
 	/**
 	 * delete the member invitation, and the admin invitation if there is one
-	 * @param user the invitee
+	 * 
+	 * @param user     the invitee
 	 * @param chatroom the chatroom
 	 * @throws BadRequestException
 	 */
 	@Transactional(readOnly = false)
-	public void rejectChatroomInvitation(User user, Chatroom chatroom) throws BadRequestException{
+	public void rejectChatroomInvitation(User user, Chatroom chatroom) throws BadRequestException {
 		// if there is no invite
-		if(!this.memberInvitationSent(user, chatroom)) {
+		if (!this.memberInvitationSent(user, chatroom)) {
 			throw new BadRequestException("There is no invite to decline");
 		}
 		// delete the relation
@@ -212,17 +215,18 @@ public class ChatroomService {
 		// delete the admin invite if it is there
 		this.deleteAdminInvitation(user, chatroom);
 	}
-	
+
 	/**
-	 * delete the 
-	 * @param user the invitee
+	 * delete the
+	 * 
+	 * @param user     the invitee
 	 * @param chatroom the chatroom
 	 * @throws BadRequestException
 	 */
 	@Transactional(readOnly = false)
-	public void rejectAdminInvitation(User user, Chatroom chatroom) throws BadRequestException{
+	public void rejectAdminInvitation(User user, Chatroom chatroom) throws BadRequestException {
 		// if there is no invite
-		if(!this.adminInvitationSent(user, chatroom)) {
+		if (!this.adminInvitationSent(user, chatroom)) {
 			throw new BadRequestException("There is no invite to decline");
 		}
 		// delete the relation
@@ -307,10 +311,10 @@ public class ChatroomService {
 		if (adminInvitationSent(user, chatroom)) {
 			throw new BadRequestException("The user already has a pending admin invitation");
 		}
-		if(isAdmin(user, chatroom)) {
+		if (isAdmin(user, chatroom)) {
 			throw new BadRequestException("The user is already an admin of the chatroom");
 		}
-		if(!this.isMember(user, chatroom)) {
+		if (!this.isMember(user, chatroom)) {
 			this.createMemberInvitation(user, chatroom);
 		}
 		createAdminInvitation(user, chatroom);
@@ -443,8 +447,8 @@ public class ChatroomService {
 	}
 
 	/**
-	 * Delete chatroom <code>chatroom</code> and all its relations, also
-	 * all associated chat messages.
+	 * Delete chatroom <code>chatroom</code> and all its relations, also all
+	 * associated chat messages.
 	 * 
 	 * @param chatroom The chat room to delete.
 	 */
@@ -489,7 +493,7 @@ public class ChatroomService {
 		// create a membership relation entity for the user
 		Membership membership = new Membership(user, chatroom);
 		memberships.add(membership);
-		
+
 		// save the chatroom, and its relations
 		chatroomRepository.save(chatroom);
 		// save the user to preserve relations
@@ -599,8 +603,8 @@ public class ChatroomService {
 			users.remove(user);
 			// delete the membership
 			// delete the membership
-			for(Membership m : memberships) {
-				if(m.getChatroom() == chatroom) {
+			for (Membership m : memberships) {
+				if (m.getChatroom() == chatroom) {
 					memberships.remove(m);
 					break;
 				}

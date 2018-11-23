@@ -20,23 +20,22 @@ public class CryptographyService {
 
 	private static String spw;
 	private static String ss;
-	
-	
+
 	private static final String PASSWORD_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&*()-_=+[{]}|;:,<.>?";
-	
+
 	private static final char[] PASSWORD_ALPHABET_CHARS = (new String(PASSWORD_ALPHABET)).toCharArray();
 
 	/*
 	 * After Spring has populated `password` and `salt` (and constructed this
-	 * object), `init` is invoked and `spw` and `ss` are populated so this
-	 * service can be access by regular Java classes (not Spring).
+	 * object), `init` is invoked and `spw` and `ss` are populated so this service
+	 * can be access by regular Java classes (not Spring).
 	 */
 	@PostConstruct
 	public void init() {
 		spw = password;
 		ss = salt;
 	}
-	
+
 	/**
 	 * Returns a random "strong" password of length <code>n</code>
 	 * 
@@ -45,7 +44,7 @@ public class CryptographyService {
 	 */
 	public static String getStrongRandomPassword(int n) {
 		final char[] alphabet = PASSWORD_ALPHABET_CHARS;
-		String s = RandomStringUtils.random( n, 0, alphabet.length-1, false, false, alphabet, new SecureRandom() );
+		String s = RandomStringUtils.random(n, 0, alphabet.length - 1, false, false, alphabet, new SecureRandom());
 		return s;
 	}
 

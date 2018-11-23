@@ -14,7 +14,7 @@ import project.persistance.entities.Chatroom;
  * @author Vilhelml
  */
 public interface ChatroomRepository extends Neo4jRepository<Chatroom, Long> {
-	
+
 	/**
 	 * Returns chat room with name <code>chatroomName</code>.
 	 * 
@@ -43,7 +43,6 @@ public interface ChatroomRepository extends Neo4jRepository<Chatroom, Long> {
 	 */
 	Chatroom save(Chatroom chatroom);
 
-	
 	/**
 	 * Deletes chat room <code>chatroom</code>.
 	 * 
@@ -51,7 +50,6 @@ public interface ChatroomRepository extends Neo4jRepository<Chatroom, Long> {
 	 */
 	void delete(Chatroom chatroom);
 
-	
 	/**
 	 * Finds and returns all (public?) chat rooms with tag <code>tagName</code>.
 	 * 

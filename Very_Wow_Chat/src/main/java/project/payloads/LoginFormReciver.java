@@ -5,7 +5,7 @@ package project.payloads;
  */
 public class LoginFormReciver {
 
-	// The username and password recived
+	// The username and password received
 	private final String username;
 	private final String password;
 

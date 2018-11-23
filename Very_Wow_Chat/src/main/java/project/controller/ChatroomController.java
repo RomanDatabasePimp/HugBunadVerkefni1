@@ -40,15 +40,15 @@ public class ChatroomController {
 
 	@Autowired
 	private ChatroomService chatroomService;
+	
 	@Autowired
 	private UserService userService;
+	
 	@Autowired
 	private TagService tagService;
 
 	/**
-	 * 
-	 * 
-	 * @param chatroomName
+	 * @param chatroomName chat room name
 	 * 
 	 * @return
 	 * 
@@ -73,8 +73,8 @@ public class ChatroomController {
 	}
 
 	/**
-	 * @param chatroomName: chatroomName of the chatroom to be returned
-	 * @return: if found, return the chatroom with a status code of 200, else error
+	 * @param chatroomName chatroomName of the chatroom to be returned
+	 * @return if found, return the chatroom with a status code of 200, else error
 	 *          message with status code of 404
 	 */
 	@RequestMapping(path = "/{chatroomName}", method = RequestMethod.GET, headers = "Accept=application/json")
@@ -90,9 +90,10 @@ public class ChatroomController {
 	}
 
 	/**
-	 * @param chatroomName: chatroomName of the chatroom of the membership to be
+	 * @param chatroomName chatroomName of the chatroom of the membership to be
 	 *        returned
-	 * @return: if found, return the membership with a status code of 200, else
+	 * @param token 
+	 * @return if found, return the membership with a status code of 200, else
 	 *          error message with status code of 404
 	 */
 	@RequestMapping(path = "/{chatroomName}/membership", method = RequestMethod.GET, headers = "Accept=application/json")
@@ -113,17 +114,19 @@ public class ChatroomController {
 	}
 
 	/**
-	 * @param username: chatroomName of the chatroom to be returned
-	 * @return: if chatroom not found: return 404 not found if user is not the
+	 * @param chatroomName chatroomName of the chatroom to be returned
+	 * @param token
+	 * @return if chatroom not found: return 404 not found if user is not the
 	 *          owner: return 401 unauthorized if successful: return 204 no content
 	 */
 	@RequestMapping(path = "/{chatroomName}", method = RequestMethod.DELETE, headers = "Accept=application/json")
-    public ResponseEntity<Object> deleteChatroom(@PathVariable String chatroomName, UsernamePasswordAuthenticationToken token){
+	public ResponseEntity<Object> deleteChatroom(@PathVariable String chatroomName,
+			UsernamePasswordAuthenticationToken token) {
 		try {
 			// fetch user from authentication token
 			User user = userService.findByUsername(token.getName());
 			Chatroom chatroom = chatroomService.findByChatname(chatroomName);
-			if(!chatroomService.isOwner(user, chatroom)) {
+			if (!chatroomService.isOwner(user, chatroom)) {
 				ErrorResponder body = new ErrorResponder();
 				body.setError("User is not the chatroom's owner");
 				return new ResponseEntity<>(body.getWrappedError(), HttpStatus.UNAUTHORIZED);
@@ -139,6 +142,8 @@ public class ChatroomController {
 	/**
 	 * 
 	 * @param newChatroom, a wrapper for the chatroom data
+	 * @param token
+	 * 
 	 * @return the chatroom that was created, or an error message
 	 */
 	@RequestMapping(path = "/", method = RequestMethod.POST, headers = "Accept=application/json")
@@ -165,8 +170,10 @@ public class ChatroomController {
 		}
 	}
 
-	/*
+	/**
 	 * @param newChatroom, a wrapper for the chatroom data
+	 * @param token
+	 * @param chatroomName
 	 * 
 	 * @return the chatroom that was created, or an error message
 	 */
@@ -209,8 +216,11 @@ public class ChatroomController {
 	/**
 	 * Send an invite from chatroom to user
 	 * 
-	 * @param chatroomName: name of the chatroom to send the request
-	 * @return: if found, return the chatroom with a status code of 200, else error
+	 * @param chatroomName name of the chatroom to send the request
+	 * @param username
+	 * @param token
+	 * 
+	 * @return if found, return the chatroom with a status code of 200, else error
 	 *          message with status code of 404
 	 */
 	@RequestMapping(path = "/{chatroomName}/invite/{username}", method = RequestMethod.POST, headers = "Accept=application/json")
@@ -244,7 +254,9 @@ public class ChatroomController {
 	 * Join an open chatrom or accept n invite
 	 * 
 	 * @param chatroomName: name of the chatroom to be joined
-	 * @return: if successful return a status code of 204, else error message with
+	 * @param token
+	 * 
+	 * @return if successful return a status code of 204, else error message with
 	 *          status code of 404 for not found, or 401 for unauthorized
 	 */
 	@RequestMapping(path = "/{chatroomName}/join", method = RequestMethod.POST, headers = "Accept=application/json")
@@ -267,8 +279,11 @@ public class ChatroomController {
 	/**
 	 * Send an iadmin nvite from chatroom to user
 	 * 
-	 * @param chatroomName: name of the chatroom to send the request
-	 * @return: if found, return the chatroom with a status code of 200, else error
+	 * @param chatroomName name of the chatroom to send the request
+	 * @param username
+	 * @param token
+	 * 
+	 * @return if found, return the chatroom with a status code of 200, else error
 	 *          message with status code of 404
 	 */
 	@RequestMapping(path = "/{chatroomName}/admininvite/{username}", method = RequestMethod.POST, headers = "Accept=application/json")
@@ -304,8 +319,10 @@ public class ChatroomController {
 	/**
 	 * Join an open chatrom or accept n invite
 	 * 
-	 * @param chatroomName: name of the chatroom to be joined
-	 * @return: if successful return a status code of 204, else error message with
+	 * @param chatroomName name of the chatroom to be joined
+	 * @param token
+	 * 
+	 * @return if successful return a status code of 204, else error message with
 	 *          status code of 404 for not found, or 401 for unauthorized
 	 */
 	@RequestMapping(path = "/{chatroomName}/acceptadmininvite", method = RequestMethod.POST, headers = "Accept=application/json")
@@ -324,12 +341,14 @@ public class ChatroomController {
 			return e.getErrorResponseEntity();
 		}
 	}
-	
+
 	/**
 	 * Join an open chatrom or accept n invite
 	 * 
-	 * @param chatroomName: name of the chatroom to be joined
-	 * @return: if successful return a status code of 204, else error message with
+	 * @param chatroomName name of the chatroom to be joined
+	 * @param token
+	 * 
+	 * @return if successful return a status code of 204, else error message with
 	 *          status code of 404 for not found, or 401 for unauthorized
 	 */
 	@RequestMapping(path = "/{chatroomName}/rejectchatroominvite", method = RequestMethod.DELETE, headers = "Accept=application/json")
@@ -353,7 +372,8 @@ public class ChatroomController {
 	 * Join an open chatrom or accept n invite
 	 * 
 	 * @param chatroomName: name of the chatroom to be joined
-	 * @return: if successful return a status code of 204, else error message with
+	 * @param token
+	 * @return if successful return a status code of 204, else error message with
 	 *          status code of 404 for not found, or 401 for unauthorized
 	 */
 	@RequestMapping(path = "/{chatroomName}/rejectadmininvite", method = RequestMethod.DELETE, headers = "Accept=application/json")
@@ -372,11 +392,12 @@ public class ChatroomController {
 			return e.getErrorResponseEntity();
 		}
 	}
-
+	
 	/**
-	 * Leave a chatroom, this includes losing membership and adim status
+	 * Leave a chatroom, this includes losing membership and admin status
 	 * 
 	 * @param chatroomName
+	 * @param token
 	 * @return
 	 */
 	@RequestMapping(path = "/{chatroomName}/leave", method = RequestMethod.DELETE, headers = "Accept=application/json")
@@ -395,11 +416,12 @@ public class ChatroomController {
 			return e.getErrorResponseEntity();
 		}
 	}
-
+	
 	/**
-	 * Leave a chatroom, this includes losing membership and adim status
+	 * Leave a chatroom, this includes losing membership and admin status
 	 * 
 	 * @param chatroomName
+	 * @param token
 	 * @return
 	 */
 	@RequestMapping(path = "/{chatroomName}/quitadmin", method = RequestMethod.DELETE, headers = "Accept=application/json")
@@ -419,6 +441,10 @@ public class ChatroomController {
 		}
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	@RequestMapping(path = "/listedchatrooms", method = RequestMethod.GET, headers = "Accept=application/json")
 	public ResponseEntity<Object> getListedChatrooms() {
 
@@ -432,6 +458,10 @@ public class ChatroomController {
 
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	@RequestMapping(path = "/chatrooms", method = RequestMethod.GET, headers = "Accept=application/json")
 	public ResponseEntity<Object> getAllChatrooms() {
 		List<Chatroom> chatrooms = chatroomService.getAllChatrooms();
@@ -443,7 +473,12 @@ public class ChatroomController {
 		return new ResponseEntity<>(body, HttpStatus.OK);
 	}
 
-	// mark a chatroom as read; set when the user last read a message
+	/**
+	 * 
+	 * @param token
+	 * @param chatroomName
+	 * @return
+	 */
 	@RequestMapping(path = "/{chatroomName}/markread", method = RequestMethod.POST, headers = "Accept=application/json")
 	public ResponseEntity<Object> markChatroomRead(UsernamePasswordAuthenticationToken token,
 			@PathVariable String chatroomName) {
@@ -467,16 +502,12 @@ public class ChatroomController {
 		}
 	}
 
-	// add/replace tags (?)
-	// search for chatrroms with a tag
-
-	// ban user, unban user (need to add banned user list)
-	// a used banned from a chatroom cannot request to join it, cannot receive
-	// invites to it
-
-	// ------------------------------------------ tag related requests
-	// ---------------------------------
-
+	/**
+	 * 
+	 * 
+	 * @param chatroomName
+	 * @return
+	 */
 	@RequestMapping(path = "/{chatroomName}/tags", method = RequestMethod.GET, headers = "Accept=application/json")
 	public ResponseEntity<Object> getChatroomTags(@PathVariable String chatroomName) {
 		try {
@@ -493,6 +524,11 @@ public class ChatroomController {
 		}
 	}
 
+	/**
+	 * 
+	 * @param tagName
+	 * @return
+	 */
 	@RequestMapping(path = "/tag/{tagName}", method = RequestMethod.GET, headers = "Accept=application/json")
 	public ResponseEntity<Object> getListedChatroomsWithTag(@PathVariable String tagName) {
 		// fetch the chatroom
@@ -504,7 +540,14 @@ public class ChatroomController {
 		return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
 	}
 
-	// set tags
+	/**
+	 * Set tags.
+	 * 
+	 * @param chatroomName
+	 * @param tagNames
+	 * @param token
+	 * @return
+	 */
 	@RequestMapping(path = "/{chatroomName}/tags", method = RequestMethod.PATCH, headers = "Accept=application/json")
 	public ResponseEntity<Object> setChatroomTags(@PathVariable String chatroomName, @RequestBody List<String> tagNames,
 			UsernamePasswordAuthenticationToken token) {
@@ -531,9 +574,11 @@ public class ChatroomController {
 		}
 	}
 
-	// -------------------------- get requests for the chatroom's various lists
-	// -------------------------
-
+	/**
+	 * 
+	 * @param chatroomName
+	 * @return
+	 */
 	@RequestMapping(path = "/{chatroomName}/members", method = RequestMethod.GET, headers = "Accept=application/json")
 	public ResponseEntity<Object> getMembers(@PathVariable String chatroomName) {
 		try {
@@ -549,6 +594,11 @@ public class ChatroomController {
 		}
 	}
 
+	/**
+	 * 
+	 * @param chatroomName
+	 * @return
+	 */
 	@RequestMapping(path = "/{chatroomName}/memberinvitees", method = RequestMethod.GET, headers = "Accept=application/json")
 	public ResponseEntity<Object> getMemberInvitees(@PathVariable String chatroomName) {
 		try {
@@ -564,6 +614,11 @@ public class ChatroomController {
 		}
 	}
 
+	/**
+	 * 
+	 * @param chatroomName
+	 * @return
+	 */
 	@RequestMapping(path = "/{chatroomName}/administrators", method = RequestMethod.GET, headers = "Accept=application/json")
 	public ResponseEntity<Object> getAdministrators(@PathVariable String chatroomName) {
 		try {
@@ -579,6 +634,11 @@ public class ChatroomController {
 		}
 	}
 
+	/**
+	 * 
+	 * @param chatroomName
+	 * @return
+	 */
 	@RequestMapping(path = "/{chatroomName}/admininvitees", method = RequestMethod.GET, headers = "Accept=application/json")
 	public ResponseEntity<Object> getAdminInvitees(@PathVariable String chatroomName) {
 		try {

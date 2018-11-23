@@ -1,7 +1,7 @@
 package project.payloads;
 
 /**
- * NOTE: field <code>userName<code> is converted to lower case.
+ * NOTE: field <code>userName</code> is converted to lower case.
  * 
  * NOTE: email here is assumed to be unencrypted.
  */

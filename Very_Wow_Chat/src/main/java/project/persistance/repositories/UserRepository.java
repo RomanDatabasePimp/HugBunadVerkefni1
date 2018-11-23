@@ -14,8 +14,8 @@ import project.persistance.entities.User;
 public interface UserRepository extends Neo4jRepository<User, Long> {
 
 	/**
-	 * Returns a <code>User</code> <code>NodeEntity</code> if user with
-	 * user name <code>userName</code> exists.
+	 * Returns a <code>User</code> <code>NodeEntity</code> if user with user name
+	 * <code>userName</code> exists.
 	 * 
 	 * @param username Name of user.
 	 * 

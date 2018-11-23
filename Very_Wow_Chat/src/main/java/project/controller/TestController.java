@@ -23,51 +23,37 @@ public class TestController {
 
 	@Autowired
 	private ChatroomService chatroomService;
-	
+
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private TagService tagservice;
-	
-	
+
 	/**
 	 * Temporary test method to fill the database with test data
+	 * 
 	 * @deprecated
 	 */
 	@RequestMapping(value = "/createdata", method = RequestMethod.GET, headers = "Accept=application/json")
 	public void createMockUserRelations() {
 		BCryptPasswordEncoder privateInfoEncoder = new BCryptPasswordEncoder();
-		
-		
-		
+
 		try {
-			User vilhelm = new User(
-				"vilhelml",
-				privateInfoEncoder.encode("Test$1234"),
-				"Vilhelm",
-				CryptographyService.getCiphertext("fskdnfsf@fdsfds.com")
-			);
+			User vilhelm = new User("vilhelml", privateInfoEncoder.encode("Test$1234"), "Vilhelm",
+					CryptographyService.getCiphertext("fskdnfsf@fdsfds.com"));
 			this.userService.createUser(vilhelm);
-			User roman = new User(
-				"ror9",
-				privateInfoEncoder.encode("Test$1234"),
-				"Roman",
-				CryptographyService.getCiphertext("fskdnfsf@fdsfds.com")
-			);
+			User roman = new User("ror9", privateInfoEncoder.encode("Test$1234"), "Roman",
+					CryptographyService.getCiphertext("fskdnfsf@fdsfds.com"));
 			this.userService.createUser(roman);
-			User david = new User(
-				"dah38",
-				privateInfoEncoder.encode("Test$1234"),
-				"Davíð",
-				CryptographyService.getCiphertext("fskdnfsf@fdsfds.com")
-			);
+			User david = new User("dah38", privateInfoEncoder.encode("Test$1234"), "Davíð",
+					CryptographyService.getCiphertext("fskdnfsf@fdsfds.com"));
 			this.userService.createUser(david);
-			
+
 			vilhelm = this.userService.findByUsername("vilhelml");
 			roman = this.userService.findByUsername("ror9");
 			david = this.userService.findByUsername("dah38");
-			
+
 			this.userService.addFriend(vilhelm, roman);
 			this.userService.addFriend(roman, vilhelm);
 			this.userService.addFriend(vilhelm, david);
@@ -85,13 +71,12 @@ public class TestController {
 			c5 = this.chatroomService.createChatroom(roman, c5);
 			Chatroom c6 = new Chatroom("c6", "disp6", "desc6", true, true);
 			c6 = this.chatroomService.createChatroom(david, c6);
-			
+
 			this.tagservice.addTagtoChatroom(c1, "music");
 			this.tagservice.addTagtoChatroom(c2, "music");
 			this.tagservice.addTagtoChatroom(c1, "jazz");
 			this.tagservice.addTagtoChatroom(c4, "music");
 			this.tagservice.addTagtoChatroom(c5, "rock");
-			
 
 			this.chatroomService.joinChatroom(vilhelm, c4);
 			this.chatroomService.sendMemberInvitation(vilhelm, c3);
@@ -100,9 +85,8 @@ public class TestController {
 
 			this.chatroomService.joinChatroom(vilhelm, c5);
 			this.chatroomService.acceptAdminInvite(vilhelm, c6);
-			
-			
-		}catch(Exception e) {
+
+		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
 	}

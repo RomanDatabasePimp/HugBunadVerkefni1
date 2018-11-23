@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ResponseWrapper {
-	
+
 	public static Object wrap(Object x) {
 		Map<String, Object> wrapper = new HashMap<>();
 		wrapper.put("GoodResp", x);

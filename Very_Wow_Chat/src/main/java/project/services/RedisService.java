@@ -31,40 +31,40 @@ public class RedisService {
 	}
 
 	/**
-	 * Inserts JSON object (which will be stringified) into Redis ad key 
+	 * Inserts JSON object (which will be stringified) into Redis ad key
 	 * <code>key</code>.
 	 * 
-	 * NOTE: Assumes <code>data</code> is user details (but doesn't actually have
-	 * to be).
+	 * NOTE: Assumes <code>data</code> is user details (but doesn't actually have to
+	 * be).
 	 * 
 	 * NOTE: Assumes the entry exists.
 	 * 
-	 * @param key key of entry
+	 * @param key  key of entry
 	 * @param data JSON object to stringify and insert.
 	 */
 	public String insertUser(String key, JSONObject data) {
 		this.redisRepository.insertData(key, data.toString());
 		return key;
 	}
-	
+
 	/**
 	 * Retrieves the stringified JSON entry with key <code>key</code> and deletes
 	 * the entry from the database.
 	 * 
 	 * NOTE: assumes the entry is stringified JSON.
-	 *  
-	 * @param Key of entry.
+	 * 
+	 * @param key of entry.
 	 */
 	public JSONObject getAndDestroyData(String key) {
 		JSONObject data = this.redisRepository.getData(key);
 		this.redisRepository.destroyData(key);
 		return data;
 	}
-	
+
 	/**
 	 * Inserts string entry with key <code>key</code>
 	 * 
-	 * @param key The key of entry.
+	 * @param key    The key of entry.
 	 * @param string The string to insert.
 	 */
 	public void insertString(String key, String string) {
@@ -76,15 +76,16 @@ public class RedisService {
 	 * 
 	 * @param key Key of entry.
 	 * 
-	 * @return The entry itself, which is a string.  (or maybe it crashes or something...)
+	 * @return The entry itself, which is a string. (or maybe it crashes or
+	 *         something...)
 	 */
 	public String getString(String key) {
 		return redisRepository.getString(key);
 	}
 
 	/**
-	 * Retrieves string entry with key <string>key</string> and deletes the
-	 * entry from Redis.
+	 * Retrieves string entry with key <code>key</code> and deletes the entry
+	 * from Redis.
 	 * 
 	 * @param key Key of entry.
 	 * 

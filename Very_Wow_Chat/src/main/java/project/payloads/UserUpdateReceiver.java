@@ -2,19 +2,18 @@ package project.payloads;
 
 import project.persistance.entities.User;
 
-
 /**
- * This class is ised for receiving update user requests
+ * This class is is for receiving update user requests
+ * 
  * @author Vilhelml
  * @since 20.10.18
- *
  */
 public class UserUpdateReceiver {
-	
+
 	private String password;
 	private String displayName;
 	private String email;
-	
+
 	public UserUpdateReceiver(User user) {
 		this.password = user.getPassword();
 		this.displayName = user.getDisplayName();
@@ -23,7 +22,7 @@ public class UserUpdateReceiver {
 	
 	/**
 	 * constructor notað af spring controller til að vinna með json objects
-	 * @param username
+	 * 
 	 * @param password
 	 * @param displayName
 	 * @param email
@@ -33,7 +32,7 @@ public class UserUpdateReceiver {
 		this.displayName = displayName;
 		this.email = email;
 	}
-	
+
 	// getters
 
 	public String getPassword() {
@@ -47,6 +46,5 @@ public class UserUpdateReceiver {
 	public String getEmail() {
 		return email;
 	}
-	
-	
+
 }

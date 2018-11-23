@@ -19,13 +19,14 @@ public class UserService {
 	private UserRepository userRepository;
 
 	/**
-	 * Updates user with user name `username`. Use null for those properties you
-	 * don't want to update.
+	 * Updates user with user name <code>username</code>. Use <code>null</code> for
+	 * those properties you don't want to update.
 	 * 
-	 * @param username    in plaintext
-	 * @param displayName in plaintext
-	 * @param email       in plaintext
-	 * @param password    in plaintext
+	 * @param username    The user name.
+	 * @param displayName Display name of user.
+	 * @param email       Email of user (unencrypted).
+	 * @param password    Password (unencrypted/unhashed)
+	 * 
 	 * @throws NotFoundException
 	 */
 	public void updateUser(String username, String displayName, String email, String password)
@@ -45,6 +46,7 @@ public class UserService {
 		}
 
 		if (password != null) {
+			// NOTE: hash password here.
 			String passwordDigest = bcpe.encode(password);
 			user.setPassword(passwordDigest);
 		}
@@ -56,20 +58,19 @@ public class UserService {
 	 * Updates user `existingUser` with information/attributes/properties from user
 	 * `newUserInfo`.
 	 * 
-	 * NOTE: email of <code>existingUser</code> is assumed to be encrypted,
-	 * BUT email of <code>newUserInfo</code> is assumed to be unencrypted.
+	 * NOTE: email of <code>existingUser</code> is assumed to be encrypted, BUT
+	 * email of <code>newUserInfo</code> is assumed to be unencrypted.
 	 * 
-	 * @param existingUser 
+	 * @param existingUser
 	 * @param newUserInfo
 	 */
 	public void updateUser(User existingUser, User newUserInfo) {
 
 		String newDisplayName = newUserInfo.getDisplayName() != null ? newUserInfo.getDisplayName()
 				: existingUser.getDisplayName();
-		
-		
-		
-		String newEmail = newUserInfo.getEmail() != null ? CryptographyService.getCiphertext(newUserInfo.getEmail()) : existingUser.getEmail();
+
+		String newEmail = newUserInfo.getEmail() != null ? CryptographyService.getCiphertext(newUserInfo.getEmail())
+				: existingUser.getEmail();
 		String newPassword = newUserInfo.getPassword() != null ? newUserInfo.getPassword() : existingUser.getPassword();
 
 		// apply the new attributes
@@ -82,10 +83,11 @@ public class UserService {
 	}
 
 	/**
-	 * Check if a user exists with a given username and is active
+	 * Check if a user exists with a given user name and is active.
 	 * 
-	 * @param username a user's userName
-	 * @return true if userName is in use, else false
+	 * @param username User's user name.
+	 * 
+	 * @return <code>true</code> if user name is in use, else <code>false</code>.
 	 */
 	public Boolean userExistsAndActive(String username) {
 		User user = this.userRepository.findByUsername(username);
@@ -96,10 +98,12 @@ public class UserService {
 	}
 
 	/**
-	 * check if the username is available
+	 * Check if the user name is available.
 	 * 
-	 * @param username
-	 * @return
+	 * @param username User's user name.
+	 * 
+	 * @return <code>true</code> if the user name is taken / in use, otherwise
+	 *         <code>false</code>.
 	 */
 	public Boolean usernameTaken(String username) {
 		User user = this.userRepository.findByUsername(username);
@@ -109,9 +113,10 @@ public class UserService {
 	/**
 	 * save a user, used to apply updates
 	 * 
-	 * NOTE: email of user is assumed to be encrypted.
+	 * NOTE: email of user is assumed to be encrypted. (or is it?)
 	 * 
 	 * @param user the user to be updated
+	 * 
 	 * @return
 	 */
 	public User saveUser(User user) {
@@ -122,9 +127,10 @@ public class UserService {
 	/**
 	 * create a a user
 	 * 
-	 * NOTE: assumes email of <code>newUser<code> is encrypted.
+	 * NOTE: assumes email of <code>newUser</code> is encrypted.
 	 * 
 	 * @param newUser
+	 * 
 	 * @return the new user
 	 * @throws BadRequestException if username is taken
 	 */
@@ -142,8 +148,9 @@ public class UserService {
 	 * returns a user if the username is in use else, returns and error message
 	 * 
 	 * @param username
+	 * 
 	 * @return the user
-	 * @throws exception if userName doesn't belong to any user
+	 * @throws NotFoundException if userName doesn't belong to any user
 	 */
 	@Transactional(readOnly = true)
 	public User findByUsername(String username) throws NotFoundException {
@@ -177,8 +184,9 @@ public class UserService {
 	 * Add a friend: sends a friend request, or creates a friend relation if
 	 * requestee has already sent a friend request
 	 * 
-	 * @param           requestor: user sending the request
+	 * @param requestor: user sending the request
 	 * @param requestee user receiving the request
+	 * 
 	 * @throws BadRequestException
 	 */
 	@Transactional(readOnly = false)
@@ -192,7 +200,7 @@ public class UserService {
 			throw new BadRequestException("A friend request is already pending.");
 		}
 		// check if they are already friends
-		if(areFriends(requestor, requestee)) {
+		if (areFriends(requestor, requestee)) {
 			throw new BadRequestException("You are already friends");
 		}
 		// check if a friend requet has been sent in the other direction already
@@ -232,7 +240,7 @@ public class UserService {
 	/**
 	 * Delete a friend relation between 2 users
 	 * 
-	 * @param use1
+	 * @param user1
 	 * @param user2
 	 */
 	@Transactional(readOnly = false)
@@ -257,7 +265,7 @@ public class UserService {
 	 * 
 	 * @param user1
 	 * @param user2
-	 * @return: true if they are friends, else returns false
+	 * @return true if they are friends, else returns false
 	 */
 	@Transactional(readOnly = false)
 	public Boolean areFriends(User user1, User user2) {
@@ -273,7 +281,7 @@ public class UserService {
 	/**
 	 * Checks requestor has sent requestee a friend request
 	 * 
-	 * @param           requestor: user sending the request
+	 * @param requestor: user sending the request
 	 * @param requestee user receiving the request
 	 * @return true if a friend request is pending, else returns false
 	 */
@@ -291,7 +299,7 @@ public class UserService {
 	/**
 	 * Send a friend request
 	 * 
-	 * @param           requestor: user sending the request
+	 * @param requestor: user sending the request
 	 * @param requestee user receiving the request
 	 * @throws BadRequestException if a request is already pending
 	 */
