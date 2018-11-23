@@ -79,12 +79,13 @@ Please note this setup is for windows sorry mac people :(
 
 ## Cloning the repo and running the server
 1. clone this repo on to your desktop
-2. open the project in your preffered IDE
-3. navigate to src/main/resources and find the application.properties.example
-4. remove the .example ending from the file and fill in the following constants
+2. Please note this is a Maven project
+3. open the project in your preffered IDE
+4. navigate to src/main/resources and find the application.properties.example
+5. remove the .example ending from the file and fill in the following constants
    - spring.data.neo4j.password=   (the password you choose when you created the graph)
-5. if you used all the default settings this is the only thing you should configure
-6. run application.java and you will be fine !!!
+6. if you used all the default settings this is the only thing you should configure
+7. run application.java and you will be fine !!!
 
 ## Creating Test data
 1. if you have POSTMAN or Curl you can create data in the data base
