@@ -15,29 +15,29 @@ import project.persistance.entities.JwtUserDetails;
 
 import java.util.List;
 
-/* THis is where the so called authentication happens */
+/* This is where the so called authentication happens */
 @Component
 public class JwtAuthenticationProvider extends AbstractUserDetailsAuthenticationProvider {
 
 	@Autowired
-	private JwtValidator validator;
+	private JwtValidator validator; // used for validating the JTW Token
 
 	@Override
 	protected void additionalAuthenticationChecks(UserDetails userDetails,
-			UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken) throws AuthenticationException {
-
+		UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken) throws AuthenticationException {
 	}
 
-	/* method that we call when a token arrives */
+	/* method that we call when a jwt token arrives */
 	@Override
 	protected UserDetails retrieveUser(String username,
 			UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken) throws AuthenticationException {
-		// convert it into our implementation of the token
+		// convert it into our implementation of the token 
 		JwtAuthenticationToken jwtAuthenticationToken = (JwtAuthenticationToken) usernamePasswordAuthenticationToken;
 		String token = jwtAuthenticationToken.getToken(); // get the token in string form
 
-		JwtUser jwtUser = validator.validate(token);
-		// if no token was recived then the user was not created we need to handle that
+		JwtUser jwtUser = validator.validate(token);// use the validator to confirm the token authenticity
+		
+		// if no token was recived then the token was not sent or its not define correcly in the header
 		if (jwtUser == null) {
 			throw new RuntimeException("JWT Token is incorrect");
 		}
@@ -49,7 +49,7 @@ public class JwtAuthenticationProvider extends AbstractUserDetailsAuthentication
 		 */
 		List<GrantedAuthority> grantedAuthorities = AuthorityUtils
 				.commaSeparatedStringToAuthorityList(jwtUser.getRole());
-		// return the details
+		// return the details of the token
 		return new JwtUserDetails(jwtUser.getUserName(), token, grantedAuthorities);
 	}
 

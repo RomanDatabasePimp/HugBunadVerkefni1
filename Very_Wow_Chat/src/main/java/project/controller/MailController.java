@@ -16,27 +16,25 @@ import java.util.Map;
  * hosted on our Heroku server, https://hugbomailserver.herokuapp.com/.
  * It will send the email to the user with the specified content.
  * 
- * NOTE: Heroku web apps, i.e our webserver, go to sleep in 30 min. after no use 
+ * NOTE: Heroku web apps, i.e our webserver, goes to sleep ater 30 min of no use 
  * (since its free version) so you might want to just open the link above in 
  * your browser just to tell Heroku to wake up this app or else you might get 
  * sometimes weird cases where the request was sent but nothing happen thats 
- * because the server was still sleeping.
- */
+ * because the server was still sleeping and heroku allowed the request go through
+ * but the request was missed because the server as waking up  */
 public class MailController {
 
 	private final String email; // Recipients email
-	private final String content;
+	private final String content; // content of the email
 
 	public MailController(String email, String key) {
 		this.email = email;
 		this.content = "Welcome to VeryWowChat!!! \nbefore you can login please validate your account here : "
 				+ "https://verywowchat.herokuapp.com/validation/" + key;
 	}
-
-	/*
-	 * Usage : send() For : ekkert After : tries to call the tryToSend method to
-	 * send the email
-	 */
+    
+	/**
+	 * try to send the email to the email server */
 	public void send() {
 		try {
 			this.tryToSend();
@@ -45,10 +43,6 @@ public class MailController {
 		}
 	}
 
-	/*
-	 * Usage : tryToSend() For : nothing After : create a json obj with parameters
-	 * toMail,content,seckey that will be sent to the webserver
-	 */
 	public void tryToSend() throws Exception {
 		URL url = new URL("https://hugbomailserver.herokuapp.com/"); // url to preform the http request on
 		// data that will be sent to the email
