@@ -12,6 +12,13 @@ import project.errors.NotFoundException;
 import project.persistance.entities.User;
 import project.persistance.repositories.UserRepository;
 
+/**
+ * This servies handles functionality relating to users and the users' relations
+ * with other users.
+ * 
+ * @author Vilhelml
+ *
+ */
 @Service
 public class UserService {
 
@@ -29,25 +36,23 @@ public class UserService {
 	 * 
 	 * @throws NotFoundException
 	 */
-	public void updateUser(String username, String displayName, String email, String password)
+	public void updateUser(User user, String newDisplayName, String newEmail, String newPassword)
 			throws NotFoundException {
 
-		User user = findByUsername(username);
 		BCryptPasswordEncoder bcpe = new BCryptPasswordEncoder();
 
-		if (displayName != null) {
-			user.setDisplayName(displayName);
+		if (newDisplayName != null) {
+			user.setDisplayName(newDisplayName);
 		}
 
-		if (email != null) {
+		if (newEmail != null) {
 			// NOTE: encrypt email here.
-			String emailEncrypted = CryptographyService.getCiphertext(email);
+			String emailEncrypted = CryptographyService.getCiphertext(newEmail);
 			user.setEmail(emailEncrypted);
 		}
 
-		if (password != null) {
-			// NOTE: hash password here.
-			String passwordDigest = bcpe.encode(password);
+		if (newPassword != null) {
+			String passwordDigest = bcpe.encode(newPassword);
 			user.setPassword(passwordDigest);
 		}
 
@@ -55,35 +60,7 @@ public class UserService {
 	}
 
 	/**
-	 * Updates user `existingUser` with information/attributes/properties from user
-	 * `newUserInfo`.
-	 * 
-	 * NOTE: email of <code>existingUser</code> is assumed to be encrypted, BUT
-	 * email of <code>newUserInfo</code> is assumed to be unencrypted.
-	 * 
-	 * @param existingUser
-	 * @param newUserInfo
-	 */
-	public void updateUser(User existingUser, User newUserInfo) {
-
-		String newDisplayName = newUserInfo.getDisplayName() != null ? newUserInfo.getDisplayName()
-				: existingUser.getDisplayName();
-
-		String newEmail = newUserInfo.getEmail() != null ? CryptographyService.getCiphertext(newUserInfo.getEmail())
-				: existingUser.getEmail();
-		String newPassword = newUserInfo.getPassword() != null ? newUserInfo.getPassword() : existingUser.getPassword();
-
-		// apply the new attributes
-		existingUser.setDisplayName(newDisplayName);
-		existingUser.setPassword(newPassword);
-		existingUser.setEmail(newEmail);
-
-		// save the changes
-		saveUser(existingUser);
-	}
-
-	/**
-	 * Check if a user exists with a given user name and is active.
+	 * Check if a user exists with a given username and is active
 	 * 
 	 * @param username User's user name.
 	 * 

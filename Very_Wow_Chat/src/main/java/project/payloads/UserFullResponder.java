@@ -23,7 +23,7 @@ public class UserFullResponder {
 		this.email = user.getEmail();
 		this.created = user.getCreated();
 	}
-	
+
 	/**
 	 * constructor notað af spring controller til að vinna með json objects
 	 * 

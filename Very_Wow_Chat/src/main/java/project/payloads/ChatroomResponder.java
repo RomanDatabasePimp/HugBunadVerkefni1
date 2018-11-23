@@ -6,9 +6,13 @@ import java.util.stream.Collectors;
 import project.persistance.entities.Chatroom;
 
 /**
- * This class is for wrapping chat room data in JSON objects.
+ * This class is for wrapping chatrooms in a way that can be replicated in a
+ * json object. This is used by controllers to receive json objects to convert
+ * to jva class and to convert java classes to json objects when returning
+ * resources.
  * 
- * @author Vilhelm
+ * @author Vilhelml
+ *
  */
 public class ChatroomResponder {
 	// unique name serving as an identifier
@@ -48,7 +52,7 @@ public class ChatroomResponder {
 		this.lastMessageReceived = chatroom.getLastMessageReceived();
 		this.tags = chatroom.getTags().stream().map(x -> x.getName()).collect(Collectors.toList());
 	}
-	
+
 	/**
 	 * Constructed used by Spring controller to use JSON objects.
 	 * 

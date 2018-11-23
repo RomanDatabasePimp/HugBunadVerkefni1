@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 /* this class has to validate user jtw tokens that is has been passed */
 @Component
 public class JwtValidator {
-
 	// get our secret key from the environmental variables
 	@Value("${cryptography.security.password}")
 	private String secretKey;

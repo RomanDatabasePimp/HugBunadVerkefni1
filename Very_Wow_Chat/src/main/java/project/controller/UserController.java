@@ -29,8 +29,8 @@ import project.persistance.entities.Chatroom;
 import project.persistance.entities.Membership;
 
 /**
- * Controller responsible for user/friend management.
- * 
+ * This controller is responsible for receiving requests related to chatrooms, and the chatrooms'
+ * relations with other entities.
  * @author Vilhelml
  */
 @RestController
@@ -70,9 +70,9 @@ public class UserController {
 			user.setPassword(newPassword);
 			user.setEmail(newEmail);
 			// save the changes
-			userService.saveUser(user);
-			// wrap the user and return it
-			UserResponder body = new UserResponder(user);
+			userService.updateUser(user, newDisplayName, newEmail, newPassword);
+			// wrap the data to send in json format
+			UserFullResponder body = new UserFullResponder(user);
 			return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
 		} catch (HttpException e) {
 			return e.getErrorResponseEntity();

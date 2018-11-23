@@ -81,9 +81,10 @@ public class PasswordResetController {
 				return new ResponseEntity<>("not found", HttpStatus.NOT_FOUND);
 			}
 			String username = redisService.getAndDestroyString(key);
+			User user = userService.findByUsername(username);
 			String password = CryptographyService.getStrongRandomPassword(20);
 			// Update existing user.
-			userService.updateUser(username, null, null, password);
+			userService.updateUser(user, null, null, password);
 			// Create response.
 			JSONObject obj = new JSONObject();
 			obj.put("password", password);

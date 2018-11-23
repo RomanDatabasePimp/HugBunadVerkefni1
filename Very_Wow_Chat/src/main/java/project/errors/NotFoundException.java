@@ -3,7 +3,7 @@ package project.errors;
 import org.springframework.http.HttpStatus;
 
 /**
- * A custom exception class for throwing and catching errors
+ * A custom exception class for throwing and catching not found errors and returning 404 status
  * 
  * @author Vilhelml
  */

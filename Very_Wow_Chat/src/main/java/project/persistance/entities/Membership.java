@@ -24,26 +24,6 @@ public class Membership {
 	@StartNode
 	private User user;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	public void setChatroom(Chatroom chatroom) {
-		this.chatroom = chatroom;
-	}
-
-	public void setLastRead(long lastRead) {
-		this.lastRead = lastRead;
-	}
-
-	public void setWhenJoined(long whenJoined) {
-		this.whenJoined = whenJoined;
-	}
-
 	@EndNode
 	private Chatroom chatroom;
 
@@ -96,5 +76,25 @@ public class Membership {
 
 	public Long getWhenJoined() {
 		return whenJoined;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public void setChatroom(Chatroom chatroom) {
+		this.chatroom = chatroom;
+	}
+
+	public void setLastRead(long lastRead) {
+		this.lastRead = lastRead;
+	}
+
+	public void setWhenJoined(long whenJoined) {
+		this.whenJoined = whenJoined;
 	}
 }

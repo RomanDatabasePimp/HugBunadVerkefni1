@@ -367,7 +367,7 @@ public class ChatroomController {
 			return e.getErrorResponseEntity();
 		}
 	}
-	
+
 	/**
 	 * Join an open chatrom or accept n invite
 	 * 

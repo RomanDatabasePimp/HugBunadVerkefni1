@@ -19,7 +19,7 @@ public class UserUpdateReceiver {
 		this.displayName = user.getDisplayName();
 		this.email = user.getEmail();
 	}
-	
+
 	/**
 	 * constructor notað af spring controller til að vinna með json objects
 	 * 

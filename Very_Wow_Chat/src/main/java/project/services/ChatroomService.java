@@ -17,6 +17,13 @@ import project.persistance.repositories.ChatroomRepository;
 // import project.persistance.repositories.TagRepository;
 import project.persistance.repositories.UserRepository;
 
+/**
+ * This service handles functionality relating to chatrooms, and the chatrooms'
+ * relations with other entities.
+ * 
+ * @author Vilhelml
+ *
+ */
 @Service
 public class ChatroomService {
 
@@ -31,6 +38,9 @@ public class ChatroomService {
 
 	@Autowired
 	private MessageService messageService;
+
+	@Autowired
+	private AuthenticationService authenticationService;
 
 	public void updateLastMessageReceived(String chatroomName) {
 		try {
@@ -156,6 +166,10 @@ public class ChatroomService {
 		// throw error if username is taken
 		if (chatroomExists(newChatroom.getChatroomName())) {
 			throw new BadRequestException("Chatoom name is already in use.");
+		}
+		// check if chatroomName is valid
+		if (!authenticationService.NoSymbolsCheck(newChatroom.getChatroomName())) {
+			throw new BadRequestException("Chatoom name contains invalid characters.");
 		}
 		// create a owner relation
 		newChatroom.setOwner(user);
