@@ -18,17 +18,22 @@ public interface UserRepository extends Neo4jRepository<User, Long> {
 	 * user name <code>userName</code> exists.
 	 * 
 	 * @param username Name of user.
+	 * 
 	 * @return Returns a User NodeEntity if user with user name userName exists.
 	 */
 	User findByUsername(@Param("username") String username);
 
 	/**
 	 * Save a user in database, for creates and updates.
+	 * 
+	 * @param user
 	 */
 	User save(User user);
 
 	/**
 	 * Delete a user.
+	 * 
+	 * @param user
 	 */
 	void delete(User user);
 

@@ -41,16 +41,12 @@ public class RegisterController {
 	 * or validate data recived from user */
 	@Autowired
 	private AuthenticationService authenticator;
-	
 
-
-	/*--------------------------------------------CONTROLLERS START---------------------------------------------------------*/
-
-	
 	/**
 	 * Usage: url/regiseter
 	 * 
 	 * NOTE: POST request should contain a JSON object of the form
+	 * 
 	 * <pre>
 	 * {
 	 * 	   "userName": "john",
@@ -61,8 +57,8 @@ public class RegisterController {
 	 * }
 	 * </pre>
 	 * 
-	 * Validates the client's POST request and responds with an appropriate 
-	 * status code along with the data.
+	 * Validates the client's POST request and responds with an appropriate status
+	 * code along with the data.
 	 * 
 	 * 
 	 * @param payload
@@ -158,7 +154,7 @@ public class RegisterController {
 		this.redisService.insertUser(payload.getUserName(), newUser);
 		
 		// the mailMan who will call the webServer to send a validation email
-		MailController mailMan = new MailController(payload.getEmail(), payload.getUserName()); // create the mail																								
+		MailController mailMan = new MailController(payload.getEmail(), payload.getUserName()); // create the mail
 		mailMan.send(); // send the email to the user
 
 		// we responde with that the register was successful and dont send any content back
@@ -185,7 +181,8 @@ public class RegisterController {
 		
 		/* We check if the key exists in our short term storage */
 		if (!this.redisService.userNameExists(key)) {
-			clientResponse.addSingleError("error", "User not found or validation period has expired please register again");
+			clientResponse.addSingleError("error",
+					"User not found or validation period has expired please register again");
 			return new ResponseEntity<>(clientResponse.getErrorResponse(), HttpStatus.NOT_FOUND);
 		}
 		
@@ -196,7 +193,7 @@ public class RegisterController {
 
 		// create a new User that will be insert into our long term storage
 		User newuser = new User(tempUrs.getString("userName"), tempUrs.getString("password"),
-				                tempUrs.getString("displayName"), tempUrs.getString("email"));
+				tempUrs.getString("displayName"), tempUrs.getString("email"));
 
 		// create the user in our long term database
 	    try {

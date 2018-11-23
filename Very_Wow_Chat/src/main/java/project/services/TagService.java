@@ -164,7 +164,7 @@ public class TagService {
 	/**
 	 * remove all the tags a chatroom has
 	 * 
-	 * @param chatroom
+	 * @param readOnly
 	 */
 	@Transactional(readOnly = false)
 	public void removeAllTagsFromChatroom(Chatroom chatroom) {

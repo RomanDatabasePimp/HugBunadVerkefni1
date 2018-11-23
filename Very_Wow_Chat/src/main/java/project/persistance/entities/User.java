@@ -9,6 +9,9 @@ import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
+/**
+ * Class which maps the user to a node in a neo4j database.
+ */
 @NodeEntity
 public class User {
 

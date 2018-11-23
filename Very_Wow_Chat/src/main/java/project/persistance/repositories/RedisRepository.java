@@ -8,6 +8,9 @@ import org.springframework.stereotype.Repository;
 /**
  * Class creates a connection to the Redis server and oversees all the of the 
  * sending and receiving of data between the Spring Server and Redis server.
+ * 
+ * TODO: rename this repository to something like to something like temporary
+ * storage repository something-something...
  */
 @Repository
 public class RedisRepository {
@@ -16,6 +19,7 @@ public class RedisRepository {
 
 	public RedisRepository() {
 		this.redisConn = new JedisConnectionFactory();
+		// TODO: put host name and port in application.properties file.
 		this.redisConn.setHostName("localhost");
 		this.redisConn.setPort(6379);
 	}
@@ -33,23 +37,24 @@ public class RedisRepository {
 	}
 	
 	/**
-	  * Usage : red.getString(key) 
-	 *    For : red is a RedisServices class 
-	 *          key is pointer to the data in redis 
-	 *   After: returns the data that is assosiated to the key */
+	 * 
+	 * @param key
+	 * @return the data that is assosiated to the key
+	 */
 	public String getString(String key) {
 		RedisConnection con = this.redisConn.getConnection();
 		String string = new String(con.get(key.getBytes()));
 		con.close();
 		return string;
 	}
-
+	
 	/**
-	 * Usage : red.insertData(key,data)
-	 *   For : red is a RedisServices class 
-	 *         key is the key to the data  in our case the username of the new user 
-	 *         data is the data of the client - in our case stringified json 
-	 * After: Insert the user into redis for 30 min */
+	 * Inserts <code>data</code>, which is a stringified JSON object, with
+	 * key <code>key</code>.
+	 * 
+	 * @param key access key
+	 * @param data JSON object stringified.
+	 */
 	public void insertData(String key, String data) {
 		/*
 		 * insert the data in redis for 30 min if the data is not validated it is lost
@@ -63,20 +68,28 @@ public class RedisRepository {
 	}
 
 	/**
-	 * Usage : red.checkIfKeyExists(key) 
-	 *   For : red is a RedisServices class key is point to the data in redis 
-	 *  After: returns true if the key is associated with data in redis */
+	 * Checks if entry with key <code>key</code> exists in Redis database.
+	 * 
+	 * @param key The key
+	 * 
+	 * @return <code>true</code> if an entry with key <code>key</code> exists
+	 * in the database, otherwise <code>false</code>.
+	 */
 	public boolean checkIfKeyExists(String key) {
 		RedisConnection con = this.redisConn.getConnection();
 		boolean exists = con.exists(key.getBytes());
 		con.close();
 		return exists;
 	}
-
+	
 	/**
-	 * Usage : red.checkIfKeyExists(key) 
-	 *   For : red is a RedisServices class key is point to the data in redis 
-	 *  After: returns a json object of a form {username:, password: , email: } */
+	 * Retrieves entry with key <code>key</code>.  The object that is received
+	 * is assumed to be a stringified JSON object.
+	 * 
+	 * @param key Access key
+	 * 
+	 * @return JSON object of form {username:, password: , email: }.
+	 */
 	public JSONObject getData(String key) {
 		RedisConnection con = this.redisConn.getConnection();
 		/*
@@ -93,10 +106,12 @@ public class RedisRepository {
 	}
 
 	/**
-	 * Usage : red.destroyData(key) 
-	 *   For : red is a RedisServices class 
-	 *         key is point  to the data in redis 
-	 *  After: Remove all the data that the key is pointing to (!CONFIRM IF DATA EXISTS FIRST !!!) */
+	 * Deletes entry with key <code>key</code> in Redis database.
+	 * 
+	 * NOTE: CONFIRM IF DATA EXISTS FIRST!
+	 * 
+	 * @param key The key.
+	 */
 	public void destroyData(String key) {
 		RedisConnection con = this.redisConn.getConnection();
 		con.del(key.getBytes());

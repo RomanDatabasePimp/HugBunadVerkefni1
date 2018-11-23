@@ -55,32 +55,23 @@ public class PasswordResetController {
 	 */
 	@RequestMapping(value = "/password_reset", method = RequestMethod.POST, headers = "Accept=application/json")
 	public ResponseEntity<String> passwordReset(@RequestBody PasswordResetRequest prr) {
-		
 		try {
-			
 			String username = prr.getUsername();
 			User user = userService.findByUsername(username);
 			// NOTE: email of user is assumed to be encrypted so it needs to be decrypted.
 			String recipientEmail = CryptographyService.getPlaintext(user.getEmail());
 			String randomKey = CryptographyService.getRandomHexString(64);
-			
 			redisService.insertString(randomKey, username);
-			
 			String resetUrl = emailServerUrl + "password_reset/" + randomKey;
-			
 			if (DEBUG) {
 				System.out.println("http://localhost" + ":9090" + "/"+ "password_reset/" + randomKey);
 			}
-			
 			String emailContent = "Reset URL: " + resetUrl;
-			
 			Mailer mailer = new Mailer(recipientEmail, emailContent, emailServerUrl, emailServerSecretKey);
 			mailer.send();
-			
 			if (DEBUG) {
 				System.out.println(emailContent);
 			}
-
 			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
 		} catch (NotFoundException e) {
 			e.printStackTrace();
@@ -89,35 +80,31 @@ public class PasswordResetController {
 	}
 	
 	/**
-	 * Complete password reset. 
+	 * Complete password reset, returns a randomly generated password.
 	 * 
-	 * @param key
-	 * @return 
+	 * @param key path segment of URL.
+	 * 
+	 * @return Randomly generated password.
 	 */
 	@RequestMapping(value = "/password_reset/{key}", method = RequestMethod.POST, headers = "Accept=application/json")
-	public ResponseEntity<String> passwordResetComplete(@PathVariable String key) {
+	public ResponseEntity<Object> passwordResetComplete(@PathVariable String key) {
 		try {
-			if (!this.redisService.userNameExists(key)) {			
+			if (!redisService.userNameExists(key)) {			
 				return new ResponseEntity<>("not found", HttpStatus.NOT_FOUND);
 			}
-			
 			String username = redisService.getAndDestroyString(key);
 			String password = CryptographyService.getStrongRandomPassword(20);
-			
 			if (DEBUG) {
 				System.out.println("Password: " + password);
 			}
-			
-			
+			// Update existing user.
 			userService.updateUser(username, null, null, password);
-			
+			// Create response.
 			JSONObject obj = new JSONObject();
 			obj.put("password", password);
-			
 			return new ResponseEntity<>(obj.toString(), HttpStatus.OK);
 		} catch (NotFoundException e) {
-			e.printStackTrace();
-			return new ResponseEntity<>("not found", HttpStatus.INTERNAL_SERVER_ERROR);
+			return e.getErrorResponseEntity();
 		}
 	}
 }
