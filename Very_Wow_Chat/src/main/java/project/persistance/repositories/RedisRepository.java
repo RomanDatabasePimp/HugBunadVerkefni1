@@ -37,17 +37,10 @@ public class RedisRepository {
 	}
 	
 	/**
-<<<<<<< HEAD
 	 * 
 	 * @param key
-	 * @return
+	 * @return the data that is assosiated to the key
 	 */
-=======
-	  * Usage : red.getString(key) 
-	 *    For : red is a RedisServices class 
-	 *          key is pointer to the data in redis 
-	 *   After: returns the data that is assosiated to the key */
->>>>>>> 2d24c96e32ae5aefc810382eda3691667c017ae8
 	public String getString(String key) {
 		RedisConnection con = this.redisConn.getConnection();
 		String string = new String(con.get(key.getBytes()));
@@ -56,20 +49,12 @@ public class RedisRepository {
 	}
 	
 	/**
-<<<<<<< HEAD
 	 * Inserts <code>data</code>, which is a stringified JSON object, with
 	 * key <code>key</code>.
 	 * 
 	 * @param key access key
 	 * @param data JSON object stringified.
 	 */
-=======
-	 * Usage : red.insertData(key,data)
-	 *   For : red is a RedisServices class 
-	 *         key is the key to the data  in our case the username of the new user 
-	 *         data is the data of the client - in our case stringified json 
-	 * After: Insert the user into redis for 30 min */
->>>>>>> 2d24c96e32ae5aefc810382eda3691667c017ae8
 	public void insertData(String key, String data) {
 		/*
 		 * insert the data in redis for 30 min if the data is not validated it is lost
@@ -83,7 +68,6 @@ public class RedisRepository {
 	}
 
 	/**
-<<<<<<< HEAD
 	 * Checks if entry with key <code>key</code> exists in Redis database.
 	 * 
 	 * @param key The key
@@ -91,11 +75,6 @@ public class RedisRepository {
 	 * @return <code>true</code> if an entry with key <code>key</code> exists
 	 * in the database, otherwise <code>false</code>.
 	 */
-=======
-	 * Usage : red.checkIfKeyExists(key) 
-	 *   For : red is a RedisServices class key is point to the data in redis 
-	 *  After: returns true if the key is associated with data in redis */
->>>>>>> 2d24c96e32ae5aefc810382eda3691667c017ae8
 	public boolean checkIfKeyExists(String key) {
 		RedisConnection con = this.redisConn.getConnection();
 		boolean exists = con.exists(key.getBytes());
@@ -104,19 +83,13 @@ public class RedisRepository {
 	}
 	
 	/**
-<<<<<<< HEAD
 	 * Retrieves entry with key <code>key</code>.  The object that is received
 	 * is assumed to be a stringified JSON object.
 	 * 
 	 * @param key Access key
 	 * 
-	 * @return JSON object.
+	 * @return JSON object of form {username:, password: , email: }.
 	 */
-=======
-	 * Usage : red.checkIfKeyExists(key) 
-	 *   For : red is a RedisServices class key is point to the data in redis 
-	 *  After: returns a json object of a form {username:, password: , email: } */
->>>>>>> 2d24c96e32ae5aefc810382eda3691667c017ae8
 	public JSONObject getData(String key) {
 		RedisConnection con = this.redisConn.getConnection();
 		/*
@@ -133,17 +106,12 @@ public class RedisRepository {
 	}
 
 	/**
-<<<<<<< HEAD
 	 * Deletes entry with key <code>key</code> in Redis database.
+	 * 
+	 * NOTE: CONFIRM IF DATA EXISTS FIRST!
 	 * 
 	 * @param key The key.
 	 */
-=======
-	 * Usage : red.destroyData(key) 
-	 *   For : red is a RedisServices class 
-	 *         key is point  to the data in redis 
-	 *  After: Remove all the data that the key is pointing to (!CONFIRM IF DATA EXISTS FIRST !!!) */
->>>>>>> 2d24c96e32ae5aefc810382eda3691667c017ae8
 	public void destroyData(String key) {
 		RedisConnection con = this.redisConn.getConnection();
 		con.del(key.getBytes());

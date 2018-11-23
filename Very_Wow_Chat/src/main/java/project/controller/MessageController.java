@@ -100,7 +100,7 @@ public class MessageController {
 				return new ResponseEntity<>(ResponseWrapper.badWrap("You don't have access to this chat room."), HttpStatus.UNAUTHORIZED);
 			}
 		} catch (NotFoundException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 			return e.getErrorResponseEntity();
 		}
 	}

@@ -24,14 +24,6 @@ import project.services.UserService;
 @RestController
 public class RegisterController {
 
-<<<<<<< HEAD
-	@Autowired
-	private RedisService redisService;
-
-	@Autowired
-	private UserService userService;
-
-=======
 	/**
 	 * Temporary storage database, holds the users that still have
 	 * to be validated, before beeing added into the long term storage */
@@ -47,7 +39,6 @@ public class RegisterController {
 	/**
 	 * This class holds over all the basic functions needed to authenticate
 	 * or validate data recived from user */
->>>>>>> 2d24c96e32ae5aefc810382eda3691667c017ae8
 	@Autowired
 	private AuthenticationService authenticator;
 
@@ -76,31 +67,16 @@ public class RegisterController {
 	 */
 	@RequestMapping(value = "/register", method = RequestMethod.POST, headers = "Accept=application/json")
 	public ResponseEntity<String> register(@RequestBody UserRegistrationFormReceiver payload) throws Exception {
-<<<<<<< HEAD
-
-		HttpResponseBody clientResponse = new HttpResponseBody(); // create a instance of the response body
-		// AuthenticationService authenticator = new
-		// AuthenticationService(this.userService);// authenticator
-
-		// this is not for the api more of for debuggin.
-=======
 		/* Since this is a restfull controller, we have our own custom way to respond to the user
 		 *  so our responses would be uniformed, this will make it easier to work with in the client side */
 		HttpResponseBody clientResponse = new HttpResponseBody();
 																						
 		/* This is for debuggin, i had problems sometimes when i used Postman where it would not send the 
 		 * correct json to the server resulting in wierd errors. Its fine now but we might as well keep it */
->>>>>>> 2d24c96e32ae5aefc810382eda3691667c017ae8
 		if (!payload.allInfoExists()) {
 			/* reason why this is a single Error not a list of errors is cuz this should
 			 * never happen heroku should catch this and stop it from sending an empty
-<<<<<<< HEAD
-			 * resource this is more for catching with testing proposes like postman and
-			 * stuff
-			 */
-=======
 			 * resource this is more for catching with testing proposes like postman and  stuff  */
->>>>>>> 2d24c96e32ae5aefc810382eda3691667c017ae8
 			clientResponse.addSingleError("error", "All information must be filled");
 			return new ResponseEntity<>(clientResponse.getErrorResponse(), HttpStatus.BAD_REQUEST);
 		}
@@ -112,16 +88,8 @@ public class RegisterController {
 			return new ResponseEntity<>(clientResponse.getErrorResponse(), HttpStatus.BAD_REQUEST);
 		}
 
-<<<<<<< HEAD
-		/*
-		 * before starting authenticating we check if the client can have this username
-		 * i decided if the username is taken there is no reason to validate rest of the
-		 * data
-		 */
-=======
 		/*  before starting authenticating we check if the client can have this username
 		 *  i decided if the username is taken there is no reason to validate rest of the  data  */
->>>>>>> 2d24c96e32ae5aefc810382eda3691667c017ae8
 		if (authenticator.userNameExists(payload.getUserName())) {
 			clientResponse.addErrorForForm("Username", "Username already exists");
 			return new ResponseEntity<>(clientResponse.getErrorResponse(), HttpStatus.BAD_REQUEST);
@@ -133,17 +101,9 @@ public class RegisterController {
 			clientResponse.addErrorForForm("DisplayName", "Cannot contain spaces or special characters");
 		}
 
-<<<<<<< HEAD
-		/*
-		 * now that we know we have all the data we need and we know the username is
-		 * legit we can start validating the data We start calling out validator to
-		 * validate the information and if there is a problem we take note of it
-		 */
-=======
 		/* now that we know we have all the data we need and we know the username is
 		 * legit we can start validating the data  We start by calling the validator to 
 		 * validate the information and if there is a  problem we take note of it */
->>>>>>> 2d24c96e32ae5aefc810382eda3691667c017ae8
 		if (!authenticator.passwordsMach(payload.getPassword(), payload.getPasswordReap())) {
 			clientResponse.addErrorForForm("Password", "Both passwords must match");
 		}
@@ -166,17 +126,9 @@ public class RegisterController {
 			return new ResponseEntity<>(clientResponse.getErrorResponse(), HttpStatus.BAD_REQUEST);
 		}
 
-<<<<<<< HEAD
-		/*
-		 * At this point we know that the user data is valid so we proceede creating him
-		 * in redis and sending him a validation link our. Bcryptor for encrypting
-		 * sensitive data
-		 */
-=======
 		/* At this point we know that the user data is valid so we proceed creating the user
 		 * in our short term storage and sending him a validation link.
 		 * Bcryptor for hashing sensitive data */
->>>>>>> 2d24c96e32ae5aefc810382eda3691667c017ae8
 		BCryptPasswordEncoder privateInfoEncoder = new BCryptPasswordEncoder();
 
 		/* create a json obj that we can store in the short term database 
@@ -186,17 +138,6 @@ public class RegisterController {
 		newUser.put("displayName", payload.getDisplayName());
 		// NOTE: password is hashed here.
 		newUser.put("password", privateInfoEncoder.encode(payload.getPassword()));
-<<<<<<< HEAD
-		// reason why we encode email is cuz of the new privacy policies any data that
-		// can lead to the user(as a person) has to be secured
-
-		// NOTE: email is encrypted here.
-		newUser.put("email", CryptographyService.getCiphertext(payload.getEmail()));
-
-		// insert the data into Redis for 30 min
-		this.redisService.insertUser(payload.getUserName(), newUser);
-
-=======
 		/* the reason why we encode email is cuz of the new privacy policies any data that
 		   can lead to the user(as a person) has to be secured */
 		
@@ -212,26 +153,10 @@ public class RegisterController {
 		 * how long is the period of time its stored until its deleted */
 		this.redisService.insertUser(payload.getUserName(), newUser);
 		
->>>>>>> 2d24c96e32ae5aefc810382eda3691667c017ae8
 		// the mailMan who will call the webServer to send a validation email
 		MailController mailMan = new MailController(payload.getEmail(), payload.getUserName()); // create the mail
 		mailMan.send(); // send the email to the user
 
-<<<<<<< HEAD
-		/*
-		 * we responde with that the register was successful and dont send any content
-		 * back
-		 */
-		return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
-
-	}
-
-	/**
-	 * Usage : url/validation/{key} For : PUT request key is a String pointer to the
-	 * data that needs to be validated dosent need to contain any type of json
-	 * After: checks if the key is points to a unvalidated user, if so it stores the
-	 * user in neo4j and sets its status as validated
-=======
 		// we responde with that the register was successful and dont send any content back
 		return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
 	}
@@ -248,7 +173,6 @@ public class RegisterController {
 	 * @param payload
 	 * @return
 	 * @throws Exception
->>>>>>> 2d24c96e32ae5aefc810382eda3691667c017ae8
 	 */
 	@RequestMapping(path = "/validation/{key}", method = RequestMethod.PUT, headers = "Accept=application/json")
 	public ResponseEntity<String> validateUser(@PathVariable String key) {
@@ -261,37 +185,16 @@ public class RegisterController {
 					"User not found or validation period has expired please register again");
 			return new ResponseEntity<>(clientResponse.getErrorResponse(), HttpStatus.NOT_FOUND);
 		}
-<<<<<<< HEAD
-
-		// now that we know the data exists we fetch it and move it into long term
-		// NOTE: we assume the email of this JSON object is encrypted.
-		JSONObject tempUrs = this.redisService.getAndDestroyData(key); // fetch the data and remove it from json
-=======
 		
 		// NOTE that we know the data exists we fetch it and move it into long term
 		/* NOTE: we assume the email of this JSON object is encrypted 
 		   (from registration everything that needs to be hashed/encrypted should be hashed/encrypted).*/
 		JSONObject tempUrs = this.redisService.getAndDestroyData(key); // fetch the data and remove the data from shortterm storage
->>>>>>> 2d24c96e32ae5aefc810382eda3691667c017ae8
 
 		// create a new User that will be insert into our long term storage
 		User newuser = new User(tempUrs.getString("userName"), tempUrs.getString("password"),
 				tempUrs.getString("displayName"), tempUrs.getString("email"));
 
-<<<<<<< HEAD
-		// create the user in our neo4j database
-		try {
-			this.userService.createUser(newuser);
-		} catch (HttpException e) {
-			clientResponse.addSingleError("error", e.getMessage());
-			return new ResponseEntity<>(clientResponse.getErrorResponse(), HttpStatus.BAD_REQUEST);
-		}
-
-		/*
-		 * we responde with that the validation was successful and dont send any content
-		 * back
-		 */
-=======
 		// create the user in our long term database
 	    try {
 	    		this.userService.createUser(newuser);    	
@@ -301,7 +204,6 @@ public class RegisterController {
 		}
 	    	
 		// we responde with that the validation was successful and dont send any content back
->>>>>>> 2d24c96e32ae5aefc810382eda3691667c017ae8
 		return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
 	}
 
