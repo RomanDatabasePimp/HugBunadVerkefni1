@@ -33,7 +33,6 @@ I recomend you follow these steps before cloning the repo, there is allot of stu
 before strarting the project.
 
 ### Neo4j
-
 1. open https://neo4j.com/
 2. on the top right corner there is a download button
 3. Choose the free Desktop version ( the default pop up should be it you just click download)
@@ -55,7 +54,7 @@ Please note this setup is for windows sorry mac people :(
 3. Download the latest stable version of redis (its a rar file)
 4. I recomend you extract your .rar file on your root my pc's root is c:\
 5. open the command promp in the file you extracted
-6. type : redis-service.exe
+6. type : redis-server.exe
 7. you should see the server boot and running on PORT 6379 keep it this way
 ( PLEASE NOTE : there are more settings that need to be added for long term usage <br>
   the default setting will do for testing, you might be greeted with that redis dosent want to save <br>
@@ -75,16 +74,25 @@ Please note this setup is for windows sorry mac people :(
 10. if you installed MongoDb with all the default paths you can navigate to C:\Program Files\MongoDB\Server\4.1\bin
 11. run "mongod" as administrator it will open and close right away<br>
     if you open your task manager you will see it running
-
-
+    
 ## Cloning the repo and running the server
 1. clone this repo on to your desktop
 2. Please note this is a Maven project
 3. open the project in your preffered IDE
 4. navigate to src/main/resources and find the application.properties.example
-5. remove the .example ending from the file and fill in the following constants
-   - spring.data.neo4j.password=   (the password you choose when you created the graph)
-6. if you used all the default settings this is the only thing you should configure
+5. remove the .example ending from the file and fill in the following constants (recomend also just use these)
+   - server.port=9090  (keep at 9090 unless u change the .env file in the web app)
+   - spring.data.neo4j.uri=bolt://localhost (keep it like this)
+   - spring.data.neo4j.username=neo4j       (default user is neo4j unless u change it)
+   - spring.data.neo4j.password=            (this is the password you created in the neo4j phase)
+   - spring.data.mongodb.uri=mongodb://localhost  (keep it like this)
+   - spring.data.mongodb.database=very_wow_chat (it dosent matter if u havent created it in mongodb it will be create automaticly)
+   - cryptography.security.password=            (up to you)
+   - cryptography.storage.password=?wp^]JKi`j?=zUKr[q&-TR:L@?\5A_#:)QEsV9ksTX$v`jl@]bB;S-hiIQOoCE,s
+   - cryptography.storage.salt=340b27a1041abff9
+   - email.server.url=https://hugbomailserver.herokuapp.com/  (dont change unless u deploy the email server localy also)
+   - email.server.secretkey=VeryStrongPassword                ( dont change)
+   - logging.level.org.neo4j.ogm.drivers.bolt.request.BoltRequest=WARN  (keep it like this unless you want bebugg on)
 7. run application.java and you will be fine !!!
 
 ## Creating Test data
