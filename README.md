@@ -1,109 +1,66 @@
-# Hugbúnaðarverkefni 1
+# Hugbúnaðarverkefni 1: Very Wow Chat
 
-Application: Very Wow Chat
+A chat room application.
 
-## Setup
+Members: 
 
-Prerequisites
+* Róman (ror9@hi.is)
+* Vilhelm (vilhelml@hi.is)
+* Davíð (dah38@hi.is)
 
-* neo4j: <https://neo4j.com>
-* mongodb
-* redis
+## Introduction
 
-## RESET
+The project is split into two parts: the server part (this repository), and client (server) part (another repository).
 
-MONGO
-```js
-use very_wow_chat
-db.dropDatabase()
-```
+Dependencies for this repository are,
 
-NEO4j
-```
-match (n)-[r]-(m) delete n,r,m;
-match (n) delete n;
-```
+* [Maven](https://maven.apache.org/)
 
+"External" dependencies for this repository are,
 
+* [git](https://git-scm.com/)
+	* Version 2.17.2 or higher.
+* [Neo4j](https://neo4j.com/)
+	* Desktop version 1.1.10 or higher.
+* [MongoDB](https://www.mongodb.com/)
+	* Version 4.0.3 or higher.
+* [Redis](https://redis.io/)
+	* Version 5.0.0 or higher.
 
+## Setup of external services
 
-## Git
+### Neo4j
 
-### Initial setup
+Run `Neo4j Desktop`.
 
-Configure your user name and email.
+In Neo4j Desktop create a project with name `Very_Wow_Chat` (this name doesn't really matter), and in that project create a graph with the name `Very_Wow_Chat`  (this name matters).
 
-```bash
-git config user.name "John Doe"
-git config user.email johndoe@example.com
-```
+## Run external services
 
-If you have staged your file, e.g. `git add A B C`, with an incorrect username/email, you can run,  
+Run `Neo4j Desktop`.  Start graph `Very_Wow_Chat`.
 
-```bash
-git commit --amend --reset-author
-```
+### Neo4j
 
-### Create branch locally and push it upstream (GitHub)
+Run `Neo4j Desktop`.
 
-To create a new branch (locally)
+### MongoDB
 
-```bash
-git branch NAME_OF_BRANCH
-```
+Simply run `mongod` in your CLI application.
 
-and to switch to that branch
+### Redis
 
-```bash
-git checkout NAME_OF_BRANCH
-```
+Simply run `redis-server` in your CLI application.
 
-To create the branch upstream and push the local changes,
+## Architecture
 
-```bash
-git push --set-upstream origin dh1
-```
+This server exposes a REST interface.  The request and responses are generally JSON objects.
 
-### Pull changes off of main branch
+Redis is used to store temporary data.  Neo4j is used to store chat rooms, users and tags.  MongoDB is used to store chat messages.
 
-On your local machine
+Chat messages and use email are encrypted.
 
-```bash
-git pull origin master
-```
+## Other
 
-TODO: figure out how to merge local branches
+### Roman's public server
 
-## Info
-
-### Roman's server
-
-* 85.220.46.169:8443
-* http://85.220.46.169:8443/hello
-
-Hello world!
-
-## Hlekkir
-# Fyrir Skilaverkfni 4 CODE REVIEW
-  - clonið branchið
-  - git clone -b skilaverk4 https://github.com/RomanDatabasePimp/HugBunadVerkefni1.git
-  - viola :)
-
-## 
-
-```
-# Delete nodes
-match (n)-[r]-(m) delete n,r,m;
-match (n) delete n;
-
-# Show nodes
-match (n) return n;
-
-use very_wow_chat
-db.chatMessage.drop()
-```
-
-## Hlekkir
-
-Google Drive mappa: <https://drive.google.com/drive/folders/1LK9SQP_2fKv09Pbfxk-JckEw37gyObZT>
-
+* <http://85.220.46.169:8443>
