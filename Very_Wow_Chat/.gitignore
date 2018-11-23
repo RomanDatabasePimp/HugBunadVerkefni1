@@ -1,6 +1,9 @@
 /target/
 
 
+# Don't want git to track new application properties
+src/main/resources/application.properties
+
 
 # Created by https://www.gitignore.io/api/eclipse
 

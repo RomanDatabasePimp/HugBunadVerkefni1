@@ -1,0 +1,25 @@
+# Remove the .example extension and input your information here.
+
+# Disable logging   
+logging.level.org.neo4j.ogm.drivers.bolt.request.BoltRequest=WARN   
+
+# Server port  
+server.port=9090    
+
+# neo4j    
+spring.data.neo4j.uri=bolt://localhost  
+spring.data.neo4j.username=neo4juser    
+spring.data.neo4j.password=neo4jpassword    
+
+# MongoDB  
+spring.data.mongodb.uri=mongodb://localhost 
+spring.data.mongodb.database=your_database_name_here    
+
+# Cryptography services    
+cryptography.security.password=your signing key here    
+cryptography.storage.password=data encryption key here  
+cryptography.storage.salt=data encryption key salt  
+ 
+ # Email server 
+email.server.url=https://yoururl.com/   
+email.server.secretkey=emailsecretkey   
