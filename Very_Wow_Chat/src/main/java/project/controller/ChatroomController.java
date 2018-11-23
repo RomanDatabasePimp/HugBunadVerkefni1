@@ -465,16 +465,6 @@ public class ChatroomController {
 		}
 	}
 
-	// add/replace tags (?)
-	// search for chatrroms with a tag
-
-	// ban user, unban user (need to add banned user list)
-	// a used banned from a chatroom cannot request to join it, cannot receive
-	// invites to it
-
-	// ------------------------------------------ tag related requests
-	// ---------------------------------
-
 	@RequestMapping(path = "/{chatroomName}/tags", method = RequestMethod.GET, headers = "Accept=application/json")
 	public ResponseEntity<Object> getChatroomTags(@PathVariable String chatroomName) {
 		try {

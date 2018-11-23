@@ -77,11 +77,11 @@ public class AuthenticationService {
 		return password.matches(pattern);
 	}
 	/**
-	 * Usage : auth.checkUserNameOrDisplayValidForm(name) 
+	 * Usage : auth.NoSymbolsCheck(name) 
 	 *   For : auth is AuthenticationService
 	 *         name is a String 
 	 *  After: returns true if name fulfills the regex requirements */
-	public boolean checkUserNameOrDisplayValidForm(String name) {
+	public boolean NoSymbolsCheck(String name) {
 		/* I know there is a package for this but i fck love writing regex its so fun.
 		 * its much harder to define what is not allowed rathen then what is allowed
 		 * so we do just that we define what is allowed */

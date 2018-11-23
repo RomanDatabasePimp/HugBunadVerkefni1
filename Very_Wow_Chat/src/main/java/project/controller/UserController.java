@@ -67,9 +67,9 @@ public class UserController {
 			user.setPassword(newPassword);
 			user.setEmail(newEmail);
 			// save the changes
-			userService.saveUser(user);
-			// wrap the user and return it
-			UserResponder body = new UserResponder(user);
+			userService.updateUser(user, newDisplayName, newEmail, newPassword);
+			// wrap the data to send in json format
+			UserFullResponder body = new UserFullResponder(user);
 			return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
 		}catch(HttpException e) {
 			return e.getErrorResponseEntity();

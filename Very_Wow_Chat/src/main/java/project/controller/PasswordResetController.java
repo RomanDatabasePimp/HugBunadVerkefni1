@@ -102,6 +102,7 @@ public class PasswordResetController {
 			}
 			
 			String username = redisService.getAndDestroyString(key);
+			User user = userService.findByUsername(username);
 			String password = CryptographyService.getStrongRandomPassword(20);
 			
 			if (DEBUG) {
@@ -109,7 +110,7 @@ public class PasswordResetController {
 			}
 			
 			
-			userService.updateUser(username, null, null, password);
+			userService.updateUser(user, null, null, password);
 			
 			JSONObject obj = new JSONObject();
 			obj.put("password", password);

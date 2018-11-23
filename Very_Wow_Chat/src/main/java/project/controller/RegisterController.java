@@ -87,7 +87,7 @@ public class RegisterController {
 		
 		/* After debuggin the project we found out u can have spaces and other things in your name 
 		 * we dont want that so we prevent spaces in username and Displayname and special characters */
-		if(!authenticator.checkUserNameOrDisplayValidForm(payload.getUserName())) {
+		if(!authenticator.NoSymbolsCheck(payload.getUserName())) {
 			clientResponse.addErrorForForm("Username", "Cannot contain spaces or special characters");
 			return new ResponseEntity<>(clientResponse.getErrorResponse(), HttpStatus.BAD_REQUEST);
 		}
@@ -101,7 +101,7 @@ public class RegisterController {
 		
 		/* After debuggin the project we found out u can have spaces and other things in your name 
 		 * we dont want that so we prevent spaces in username and Displayname and special characters */
-		if(!authenticator.checkUserNameOrDisplayValidForm(payload.getDisplayName())) {
+		if(!authenticator.NoSymbolsCheck(payload.getDisplayName())) {
 			clientResponse.addErrorForForm("DisplayName", "Cannot contain spaces or special characters");
 		}
 
