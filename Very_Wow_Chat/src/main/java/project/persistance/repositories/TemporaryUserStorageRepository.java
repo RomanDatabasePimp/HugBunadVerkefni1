@@ -13,11 +13,11 @@ import org.springframework.stereotype.Repository;
  * storage repository something-something...
  */
 @Repository
-public class RedisRepository {
+public class TemporaryUserStorageRepository {
 
 	private final JedisConnectionFactory redisConn; // define our connection
 
-	public RedisRepository() {
+	public TemporaryUserStorageRepository() {
 		this.redisConn = new JedisConnectionFactory();
 		// TODO: put host name and port in application.properties file.
 		this.redisConn.setHostName("localhost");

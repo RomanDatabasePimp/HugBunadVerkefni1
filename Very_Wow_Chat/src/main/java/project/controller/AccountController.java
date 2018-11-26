@@ -2,6 +2,7 @@ package project.controller;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -12,27 +13,34 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import project.errors.HttpException;
+import project.errors.NotFoundException;
 import project.payloads.HttpResponseBody;
+import project.payloads.JwtUser;
+import project.payloads.PasswordResetRequest;
 import project.payloads.UserRegistrationFormReceiver;
 import project.persistance.entities.User;
+import project.pojo.Mailer;
+import project.security.JwtGenerator;
 import project.services.AuthenticationService;
 import project.services.CryptographyService;
-import project.services.RedisService;
+import project.services.TemporaryUserStorageService;
 import project.services.UserService;
 
 /**
- * This class handles HTTP POST, PUT for registration and validation of a new
- * user.
+ * This controller handles requests for registration, login, and the reset of
+ * password
+ * 
+ * @author Róman and Davíð
  */
 @RestController
-public class RegisterController {
+public class AccountController {
 
 	/**
 	 * Temporary storage database, holds the users that still have to be validated,
 	 * before being added into the long term storage
 	 */
 	@Autowired
-	private RedisService redisService;
+	private TemporaryUserStorageService temporaryUserStorageService;
 
 	/**
 	 * Our long term storage database used to store our user after he has been
@@ -47,6 +55,18 @@ public class RegisterController {
 	 */
 	@Autowired
 	private AuthenticationService authenticator;
+
+	// Used for creating JTW if the authentication is successful.
+	@Autowired
+	private JwtGenerator jwtGenerator;
+
+	@Value("${email.server.url}")
+	private String emailServerUrl;
+
+	@Value("${email.server.secretkey}")
+	private String emailServerSecretKey;
+
+	// -------------- Register --------------
 
 	/**
 	 * Usage: url/register
@@ -191,11 +211,15 @@ public class RegisterController {
 		 * Store the data in the short term storage, in the short term storage its
 		 * defined how long is the period of time its stored until its deleted
 		 */
-		this.redisService.insertUser(payload.getUserName(), newUser);
+		this.temporaryUserStorageService.insertUser(payload.getUserName(), newUser);
 
-		// the mailMan who will call the webServer to send a validation email
-		MailController mailMan = new MailController(payload.getEmail(), payload.getUserName()); // create the mail
-		mailMan.send(); // send the email to the user
+		String key = payload.getUserName();
+		String recipientEmail = payload.getEmail();
+		String emailContent = "Welcome to VeryWowChat!!! \nbefore you can login please validate your account here : "
+				+ "https://verywowchat.herokuapp.com/validation/" + key;
+		// the mailer who will call the webServer to send a validation email
+		Mailer mailer = new Mailer(recipientEmail, emailContent, emailServerUrl, emailServerSecretKey);
+		mailer.send(); // send the email to the user
 
 		// we responde with that the register was successful and dont send any content
 		// back
@@ -221,7 +245,7 @@ public class RegisterController {
 		HttpResponseBody clientResponse = new HttpResponseBody();
 
 		/* We check if the key exists in our short term storage */
-		if (!this.redisService.userNameExists(key)) {
+		if (!this.temporaryUserStorageService.userNameExists(key)) {
 			clientResponse.addSingleError("error",
 					"User not found or validation period has expired please register again");
 			return new ResponseEntity<>(clientResponse.getErrorResponse(), HttpStatus.NOT_FOUND);
@@ -232,7 +256,7 @@ public class RegisterController {
 		 * NOTE: we assume the email of this JSON object is encrypted (from registration
 		 * everything that needs to be hashed/encrypted should be hashed/encrypted).
 		 */
-		JSONObject tempUrs = this.redisService.getAndDestroyData(key); // fetch the data and remove the data from
+		JSONObject tempUrs = this.temporaryUserStorageService.getAndDestroyData(key); // fetch the data and remove the data from
 																		// shortterm storage
 
 		// create a new User that will be insert into our long term storage
@@ -250,6 +274,143 @@ public class RegisterController {
 		// we responde with that the validation was successful and dont send any content
 		// back
 		return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+	}
+
+	// -------------- Login --------------
+
+	/**
+	 * POST login request on host/login.
+	 * 
+	 * <pre>
+	 * { "userName": "yourNameHere", "password": "yourPasswordHere" }
+	 * </pre>
+	 * 
+	 * @param payload JWT user
+	 * 
+	 * @return JSON object with user details and token.
+	 * 
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/login", method = RequestMethod.POST, headers = "Accept=application/json")
+	public ResponseEntity<String> login(@RequestBody JwtUser payload) throws Exception {
+		/*
+		 * Since this is a restfull controller, we have our own custom way to respond to
+		 * the user so our responses would be uniformed, this will make it easier to
+		 * work with in the client side
+		 */
+		HttpResponseBody clientResponse = new HttpResponseBody();
+
+		/*
+		 * The initial idea was, when the controllers are called, they call different
+		 * services to Fulfill the request that was asked of them, the services return
+		 * either errors or data that was requested the controller collects these errors
+		 * from all the services and makes a response out of them or sends the data if
+		 * the request was successful
+		 */
+
+		/*
+		 * check if the user exists in the database if dosen't exists then we respond
+		 * with error along with 404(not found) HTTP response
+		 */
+		if (!this.userService.userExistsAndActive(payload.getUserName())) {
+			// create a error
+			clientResponse.addErrorForForm("Username", "Username not found");
+			// return the error
+			return new ResponseEntity<>(clientResponse.getErrorResponse(), HttpStatus.NOT_FOUND);
+		}
+
+		// at this point we know the user exists we fetch him and then we need to
+		// validate the password
+		User fetchedUsr = this.userService.findByUsername(payload.getUserName());
+		/*
+		 * the password is hashed in the database so we need a way to authenticate and
+		 * confirmed that the given password from the client is correct.
+		 */
+		BCryptPasswordEncoder privateInfoEncoder = new BCryptPasswordEncoder();
+		// fetch the raw password from the client input
+		CharSequence raw_password = payload.getPassword();
+
+		/*
+		 * check if password matches the requested login, if the password dosent match
+		 * we create an error and responde with it
+		 */
+		if (!privateInfoEncoder.matches(raw_password, fetchedUsr.getPassword())) {
+			clientResponse.addErrorForForm("Password", "Password does not match the username");
+			return new ResponseEntity<>(clientResponse.getErrorResponse(), HttpStatus.UNAUTHORIZED);
+		}
+
+		/*
+		 * create user and jtw to store in session storage This is the obj that will be
+		 * stored in the users session storage for now we only need to store his
+		 * displayname, username and the JTW for authentication, but later if we need to
+		 * store something more its just a couple of adds here and it will work the same
+		 */
+		JSONObject sessionUsr = new JSONObject();
+		sessionUsr.put("username", fetchedUsr.getUsername());
+		sessionUsr.put("displayname", fetchedUsr.getDisplayName());
+		sessionUsr.put("token", "Token " + this.jwtGenerator.generate(payload));
+
+		clientResponse.addSingleSucc(sessionUsr);// ad the json obj to the response body
+		// send user and JTW token back as a succesful response
+		return new ResponseEntity<>(clientResponse.getSuccessResponse(), HttpStatus.OK);
+	}
+
+	// -------------- Password Reset--------------
+
+	/**
+	 * Resets password. Sends email to the username.
+	 * 
+	 * JSON body: { "username": "harold" }
+	 * 
+	 * @param prr JSON mapped to PasswordResetRequest.
+	 * 
+	 * @return NO CONTENT HTTP response
+	 */
+	@RequestMapping(value = "/password_reset", method = RequestMethod.POST, headers = "Accept=application/json")
+	public ResponseEntity<String> passwordReset(@RequestBody PasswordResetRequest prr) {
+		try {
+			String username = prr.getUsername();
+			User user = userService.findByUsername(username);
+			// NOTE: email of user is assumed to be encrypted so it needs to be decrypted.
+			String recipientEmail = CryptographyService.getPlaintext(user.getEmail());
+			String randomKey = CryptographyService.getRandomHexString(64);
+			temporaryUserStorageService.insertString(randomKey, username);
+			String resetUrl = emailServerUrl + "password_reset/" + randomKey;
+			String emailContent = "Reset URL: " + resetUrl;
+			Mailer mailer = new Mailer(recipientEmail, emailContent, emailServerUrl, emailServerSecretKey);
+			mailer.send();
+			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+		} catch (NotFoundException e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	/**
+	 * Complete password reset, returns a randomly generated password.
+	 * 
+	 * @param key path segment of URL.
+	 * 
+	 * @return Randomly generated password.
+	 */
+	@RequestMapping(value = "/password_reset/{key}", method = RequestMethod.POST, headers = "Accept=application/json")
+	public ResponseEntity<Object> passwordResetComplete(@PathVariable String key) {
+		try {
+			if (!temporaryUserStorageService.userNameExists(key)) {
+				return new ResponseEntity<>("not found", HttpStatus.NOT_FOUND);
+			}
+			String username = temporaryUserStorageService.getAndDestroyString(key);
+			User user = userService.findByUsername(username);
+			String password = CryptographyService.getStrongRandomPassword(20);
+			// Update existing user.
+			userService.updateUser(user, null, null, password);
+			// Create response.
+			JSONObject obj = new JSONObject();
+			obj.put("password", password);
+			return new ResponseEntity<>(obj.toString(), HttpStatus.OK);
+		} catch (NotFoundException e) {
+			return e.getErrorResponseEntity();
+		}
 	}
 
 }

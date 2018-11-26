@@ -12,7 +12,7 @@ public class AuthenticationService {
 
 	// Our short term storage
 	@Autowired
-	private RedisService redisService;
+	private TemporaryUserStorageService redisService;
 
 	// Our long term storage
 	@Autowired

@@ -1,5 +1,8 @@
 package project.pojo;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -41,6 +44,7 @@ public class Mailer {
 		try {
 			this.tryToSend();
 		} catch (Exception e) {
+			System.out.println("send error");
 			e.printStackTrace();
 		}
 	}
@@ -51,6 +55,7 @@ public class Mailer {
 	 * @throws Exception
 	 */
 	public void tryToSend() throws Exception {
+		System.out.println("try to send");
 		URL url = new URL(serverUrl);
 
 		LinkedHashMap<String, String> params = new LinkedHashMap<>();
@@ -78,6 +83,14 @@ public class Mailer {
 		conn.setRequestProperty("Content-Length", String.valueOf(postDataBytes.length));
 		conn.setDoOutput(true);
 		conn.getOutputStream().write(postDataBytes);
+		
+		Reader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+		StringBuilder sb = new StringBuilder();
+		for (int c; (c = in.read()) >= 0;) {
+			sb.append((char) c);
+		}
+		String response = sb.toString();
+		System.out.println(response);
 	}
 
 }
