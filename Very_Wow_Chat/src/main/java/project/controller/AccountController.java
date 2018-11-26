@@ -56,16 +56,39 @@ public class AccountController {
 	@Autowired
 	private AuthenticationService authenticator;
 
-	// Used for creating JTW if the authentication is successful.
+	/**
+	 * Used for creating JTW if the authentication is successful.
+	 * */
 	@Autowired
 	private JwtGenerator jwtGenerator;
-
+    
+	/**
+	 * Fetch environmental constants from application.properties
+	 * the Value annotation sets the variable with the desired constant from 
+	 * application.properties file 
+	 * */
+	/**
+	 * Fetch the email server url
+	 * */
 	@Value("${email.server.url}")
 	private String emailServerUrl;
 
+	/**
+	 * Since our email server is live to everyone, we add a secret key
+	 * to authenticate ourself so only people who have the key can send emails
+	 * we dont want random people using our server to spamm others in our name
+	 *  */
 	@Value("${email.server.secretkey}")
 	private String emailServerSecretKey;
 
+	/**
+	 * just a link that will be displayed inside the email when you open the link.
+	 * We have 3 different servers all running locally and on different ports 
+	 * this is just to prevent those annoying times when u register a new user open 
+	 * a link and its a different port from what you are using */
+	@Value("${email.server.serverRunningOn}")
+	private String serverRunningOn;
+	
 	// -------------- Register --------------
 
 	/**
@@ -216,7 +239,7 @@ public class AccountController {
 		String key = payload.getUserName();
 		String recipientEmail = payload.getEmail();
 		String emailContent = "Welcome to VeryWowChat!!! \nbefore you can login please validate your account here : "
-				+ "https://verywowchat.herokuapp.com/validation/" + key;
+				+ this.serverRunningOn+"validation/" + key;
 		// the mailer who will call the webServer to send a validation email
 		Mailer mailer = new Mailer(recipientEmail, emailContent, emailServerUrl, emailServerSecretKey);
 		mailer.send(); // send the email to the user
