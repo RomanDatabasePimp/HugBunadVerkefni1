@@ -218,8 +218,6 @@ public class AccountController {
 		String emailContent = "Welcome to VeryWowChat!!! \nbefore you can login please validate your account here : "
 				+ "https://verywowchat.herokuapp.com/validation/" + key;
 		// the mailer who will call the webServer to send a validation email
-		System.out.println("emailServerUrl: " + this.emailServerUrl);
-		System.out.println("emailServerSecretKey: " + this.emailServerSecretKey);
 		Mailer mailer = new Mailer(recipientEmail, emailContent, emailServerUrl, emailServerSecretKey);
 		mailer.send(); // send the email to the user
 

@@ -1,5 +1,8 @@
 package project.pojo;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -80,8 +83,14 @@ public class Mailer {
 		conn.setRequestProperty("Content-Length", String.valueOf(postDataBytes.length));
 		conn.setDoOutput(true);
 		conn.getOutputStream().write(postDataBytes);
-
-		System.out.println("try to send end");
+		
+		Reader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+		StringBuilder sb = new StringBuilder();
+		for (int c; (c = in.read()) >= 0;) {
+			sb.append((char) c);
+		}
+		String response = sb.toString();
+		System.out.println(response);
 	}
 
 }
