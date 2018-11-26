@@ -90,6 +90,7 @@ Please note this setup is for windows sorry mac people :(
    - cryptography.security.password=            (up to you)
    - cryptography.storage.password=?wp^]JKi`j?=zUKr[q&-TR:L@?\5A_#:)QEsV9ksTX$v`jl@]bB;S-hiIQOoCE,s
    - cryptography.storage.salt=340b27a1041abff9
+   - email.server.serverRunningOn=http://localhost:3000/ (tells you on what is the frontend running on)
    - email.server.url=https://hugbomailserver.herokuapp.com/  (dont change unless u deploy the email server localy also)
    - email.server.secretkey=VeryStrongPassword                ( dont change)
    - logging.level.org.neo4j.ogm.drivers.bolt.request.BoltRequest=WARN  (keep it like this unless you want bebugg on)
