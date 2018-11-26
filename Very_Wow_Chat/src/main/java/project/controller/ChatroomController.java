@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import Library.ResponderLister;
+import Library.ResponseWrapper;
 import project.errors.HttpException;
 import project.payloads.ChatroomResponder;
 import project.payloads.ErrorResponder;
 import project.payloads.MembershipResponder;
-import project.payloads.ResponderLibrary;
-import project.payloads.ResponseWrapper;
 import project.payloads.UserResponder;
 import project.persistance.entities.Chatroom;
 import project.persistance.entities.Membership;
@@ -535,7 +535,7 @@ public class ChatroomController {
 		List<Chatroom> chatrooms = this.tagService.findListedChatroomsWithTag(tagName);
 
 		// create a list of ChatroomResponders for json return
-		List<ChatroomResponder> body = ResponderLibrary.toChatroomResponderList(chatrooms);
+		List<ChatroomResponder> body = ResponderLister.toChatroomResponderList(chatrooms);
 
 		return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
 	}

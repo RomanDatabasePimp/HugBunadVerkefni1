@@ -1,13 +1,16 @@
-package project.payloads;
+package Library;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+import project.payloads.ChatroomResponder;
+import project.payloads.MembershipResponder;
+import project.payloads.UserResponder;
 import project.persistance.entities.Chatroom;
 import project.persistance.entities.Membership;
 import project.persistance.entities.User;
 
-public class ResponderLibrary {
+public class ResponderLister {
 
 	/**
 	 * converts a list of Users to a list of UserResponders
