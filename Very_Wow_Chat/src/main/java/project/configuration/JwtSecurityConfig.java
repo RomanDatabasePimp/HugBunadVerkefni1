@@ -28,6 +28,8 @@ import java.util.Collections;
 /**
  * This is our authentication flow, i.e how the server should react to a request
  * from client.
+ * 
+ * @author Róman(ror9@hi.is)
  */
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableWebSecurity

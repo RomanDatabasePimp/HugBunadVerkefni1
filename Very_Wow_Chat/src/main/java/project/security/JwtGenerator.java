@@ -8,7 +8,9 @@ import project.payloads.JwtUser;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
+/**
+ * @author Róman(ror9@hi.is)
+ * */
 @Component
 public class JwtGenerator {
 	// get our secret key from the environmental variables

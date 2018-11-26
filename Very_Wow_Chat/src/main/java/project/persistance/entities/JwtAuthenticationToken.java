@@ -4,6 +4,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 
 /**
  * This is a container for our JWT tokens.
+ * @author Róman(ror9@hi.is)
  */
 public class JwtAuthenticationToken extends UsernamePasswordAuthenticationToken {
 

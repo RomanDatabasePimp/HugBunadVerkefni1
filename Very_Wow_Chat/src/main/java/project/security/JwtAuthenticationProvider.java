@@ -15,7 +15,9 @@ import project.persistance.entities.JwtUserDetails;
 
 import java.util.List;
 
-/* This is where the so called authentication happens */
+/** This is where the so called authentication happens 
+ *  @author Róman(ror9@hi.is)
+ */
 @Component
 public class JwtAuthenticationProvider extends AbstractUserDetailsAuthenticationProvider {
 

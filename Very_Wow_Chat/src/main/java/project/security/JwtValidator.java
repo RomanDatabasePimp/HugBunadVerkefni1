@@ -8,7 +8,9 @@ import project.payloads.JwtUser;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-/* this class has to validate user jtw tokens that is has been passed */
+/** this class has to validate user jtw tokens that is has been passed 
+ * @author Róman(ror9@hi.is)
+ * */
 @Component
 public class JwtValidator {
 	// get our secret key from the environmental variables
