@@ -11,9 +11,21 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Class to send email.
- * 
- * "Generalization" of MessageController.java.
+ * This class is responsible for sending POST request to the email server
+ * that we implemented in js running on Heroku, the link to the email server 
+ * can be found in application.properties.
+ * This class will send the POST request with a json body of
+ *    { toMail: <- who recives the email
+ *      content: <- the content of the email
+ *      secretKey: <- validation key that you are allowed to send emails from the server
+ *    } 
+ *    
+ * NOTE: Heroku web apps, i.e our webserver, goes to sleep ater 30 min of no use
+ * (since its free version) so you might want to just open the link in
+ * your browser just to tell Heroku to wake up this app or else you might get
+ * sometimes weird cases where the request was sent but nothing happen thats
+ * because the server was still sleeping and heroku allowed the request go
+ * through but the request was missed because the server as waking up
  */
 public class Mailer {
 
