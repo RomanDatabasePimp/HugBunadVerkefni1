@@ -2,6 +2,10 @@ package project.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import Library.ResponderLister;
+import Library.ResponseWrapper;
+
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,8 +24,6 @@ import project.errors.HttpException;
 import project.payloads.ChatroomResponder;
 import project.payloads.MembershipResponder;
 import project.payloads.RelationsResponder;
-import project.payloads.ResponderLibrary;
-import project.payloads.ResponseWrapper;
 import project.payloads.UserFullResponder;
 import project.payloads.UserResponder;
 import project.payloads.UserUpdateReceiver;
@@ -240,16 +242,16 @@ public class UserController {
 																	// ownedChatrooms are combined into this list
 
 			// convert the users and chatrooms lists to responder lists
-			List<UserResponder> friendsResponderList = ResponderLibrary.toUserResponderList(friends);
-			List<UserResponder> friendRequestorsResponderList = ResponderLibrary.toUserResponderList(friendRequestors);
-			List<UserResponder> friendRequesteesResponderList = ResponderLibrary.toUserResponderList(friendRequestees);
-			List<ChatroomResponder> chatroomAdminInvitesResponderList = ResponderLibrary
+			List<UserResponder> friendsResponderList = ResponderLister.toUserResponderList(friends);
+			List<UserResponder> friendRequestorsResponderList = ResponderLister.toUserResponderList(friendRequestors);
+			List<UserResponder> friendRequesteesResponderList = ResponderLister.toUserResponderList(friendRequestees);
+			List<ChatroomResponder> chatroomAdminInvitesResponderList = ResponderLister
 					.toChatroomResponderList(chatroomAdminInvites);
-			List<ChatroomResponder> chatroomInvitesResponderList = ResponderLibrary
+			List<ChatroomResponder> chatroomInvitesResponderList = ResponderLister
 					.toChatroomResponderList(chatroomInvites);
-			List<ChatroomResponder> chatroomRequestsResponderList = ResponderLibrary
+			List<ChatroomResponder> chatroomRequestsResponderList = ResponderLister
 					.toChatroomResponderList(chatroomRequests);
-			List<MembershipResponder> membershipsResponderList = ResponderLibrary
+			List<MembershipResponder> membershipsResponderList = ResponderLister
 					.toMembershipResponderList(memberships);
 
 			// wrap the responders in a container responder
@@ -282,7 +284,7 @@ public class UserController {
 			List<User> friends = user.getFriends();
 
 			// create a list of UserResponders for json return
-			List<UserResponder> body = ResponderLibrary.toUserResponderList(friends);
+			List<UserResponder> body = ResponderLister.toUserResponderList(friends);
 
 			return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
 		} catch (HttpException e) {
@@ -303,7 +305,7 @@ public class UserController {
 			List<User> requestees = user.getFriendRequestees();
 
 			// create a list of UserResponders for json return
-			List<UserResponder> body = ResponderLibrary.toUserResponderList(requestees);
+			List<UserResponder> body = ResponderLister.toUserResponderList(requestees);
 
 			return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
 		} catch (HttpException e) {
@@ -325,7 +327,7 @@ public class UserController {
 			List<User> requestors = user.getFriendRequestors();
 
 			// create a list of UserResponders for json return
-			List<UserResponder> body = ResponderLibrary.toUserResponderList(requestors);
+			List<UserResponder> body = ResponderLister.toUserResponderList(requestors);
 
 			return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
 		} catch (HttpException e) {
@@ -347,7 +349,7 @@ public class UserController {
 			List<Chatroom> chatrooms = user.getMemberOfChatrooms();
 
 			// create a list of UserResponders for json return
-			List<ChatroomResponder> body = ResponderLibrary.toChatroomResponderList(chatrooms);
+			List<ChatroomResponder> body = ResponderLister.toChatroomResponderList(chatrooms);
 
 			return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
 		} catch (HttpException e) {
@@ -367,7 +369,7 @@ public class UserController {
 			List<Chatroom> chatrooms = user.getAdminOfChatrooms();
 
 			// create a list of UserResponders for json return
-			List<ChatroomResponder> body = ResponderLibrary.toChatroomResponderList(chatrooms);
+			List<ChatroomResponder> body = ResponderLister.toChatroomResponderList(chatrooms);
 
 			return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
 		} catch (HttpException e) {
@@ -387,7 +389,7 @@ public class UserController {
 			List<Chatroom> chatrooms = user.getOwnedChatrooms();
 
 			// create a list of UserResponders for json return
-			List<ChatroomResponder> body = ResponderLibrary.toChatroomResponderList(chatrooms);
+			List<ChatroomResponder> body = ResponderLister.toChatroomResponderList(chatrooms);
 
 			return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
 		} catch (HttpException e) {
@@ -407,7 +409,7 @@ public class UserController {
 			List<Chatroom> chatrooms = user.getChatroomInvites();
 
 			// create a list of UserResponders for json return
-			List<ChatroomResponder> body = ResponderLibrary.toChatroomResponderList(chatrooms);
+			List<ChatroomResponder> body = ResponderLister.toChatroomResponderList(chatrooms);
 
 			return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
 		} catch (HttpException e) {
@@ -427,7 +429,7 @@ public class UserController {
 			List<Chatroom> chatrooms = user.getChatroomAdminInvites();
 
 			// create a list of UserResponders for json return
-			List<ChatroomResponder> body = ResponderLibrary.toChatroomResponderList(chatrooms);
+			List<ChatroomResponder> body = ResponderLister.toChatroomResponderList(chatrooms);
 
 			return new ResponseEntity<>(ResponseWrapper.wrap(body), HttpStatus.OK);
 		} catch (HttpException e) {

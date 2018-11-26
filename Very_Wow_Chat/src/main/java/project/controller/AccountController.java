@@ -360,16 +360,13 @@ public class AccountController {
 	/**
 	 * Resets password. Sends email to the username.
 	 * 
-	 * JSON body: { "username": "harold" }
-	 * 
 	 * @param prr JSON mapped to PasswordResetRequest.
 	 * 
 	 * @return NO CONTENT HTTP response
 	 */
-	@RequestMapping(value = "/password_reset", method = RequestMethod.POST, headers = "Accept=application/json")
-	public ResponseEntity<String> passwordReset(@RequestBody PasswordResetRequest prr) {
+	@RequestMapping(value = "/password_reset_request/{username}", method = RequestMethod.POST, headers = "Accept=application/json")
+	public ResponseEntity<Object> passwordReset(@PathVariable String username) {
 		try {
-			String username = prr.getUsername();
 			User user = userService.findByUsername(username);
 			// NOTE: email of user is assumed to be encrypted so it needs to be decrypted.
 			String recipientEmail = CryptographyService.getPlaintext(user.getEmail());
@@ -381,8 +378,7 @@ public class AccountController {
 			mailer.send();
 			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
 		} catch (NotFoundException e) {
-			e.printStackTrace();
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+			return e.getErrorResponseEntity();
 		}
 	}
 
