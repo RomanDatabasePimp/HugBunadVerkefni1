@@ -4,7 +4,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import project.persistance.repositories.RedisRepository;
+import project.persistance.repositories.TemporaryUserStorageRepository;
 
 /**
  * This class uses the Redis repository to fulfill all Redis based requests by
@@ -14,10 +14,10 @@ import project.persistance.repositories.RedisRepository;
  * corresponding repository to TemporaryRepository, or something like that...
  */
 @Service
-public class RedisService {
+public class TemporaryUserStorageService {
 
 	@Autowired
-	private RedisRepository redisRepository;
+	private TemporaryUserStorageRepository redisRepository;
 
 	/**
 	 * Checks if user name <code>username</code> exists in Redis database.

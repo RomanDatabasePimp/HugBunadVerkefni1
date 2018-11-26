@@ -41,6 +41,7 @@ public class Mailer {
 		try {
 			this.tryToSend();
 		} catch (Exception e) {
+			System.out.println("send error");
 			e.printStackTrace();
 		}
 	}
@@ -51,6 +52,7 @@ public class Mailer {
 	 * @throws Exception
 	 */
 	public void tryToSend() throws Exception {
+		System.out.println("try to send");
 		URL url = new URL(serverUrl);
 
 		LinkedHashMap<String, String> params = new LinkedHashMap<>();
@@ -78,6 +80,8 @@ public class Mailer {
 		conn.setRequestProperty("Content-Length", String.valueOf(postDataBytes.length));
 		conn.setDoOutput(true);
 		conn.getOutputStream().write(postDataBytes);
+
+		System.out.println("try to send end");
 	}
 
 }
