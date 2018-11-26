@@ -5,7 +5,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
-
+/**
+ * @author Róman(ror9@hi.is)
+ * */
 public class JwtUserDetails implements UserDetails {
 
 	private static final long serialVersionUID = -1523995785727657098L;

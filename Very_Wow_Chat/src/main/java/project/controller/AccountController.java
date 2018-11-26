@@ -30,7 +30,7 @@ import project.services.UserService;
  * This controller handles requests for registration, login, and the reset of
  * password
  * 
- * @author Róman and Davíð
+ * @author Róman(ror9@hi.is) and Davíð
  */
 @RestController
 public class AccountController {

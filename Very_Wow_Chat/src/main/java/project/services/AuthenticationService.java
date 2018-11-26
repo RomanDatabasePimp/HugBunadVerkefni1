@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * class that handles Authentication and encryption of different types of data
+ * @author Róman(ror9@hi.is)
  */
 @Service
 public class AuthenticationService {

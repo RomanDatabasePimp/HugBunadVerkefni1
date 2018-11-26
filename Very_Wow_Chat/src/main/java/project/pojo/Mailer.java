@@ -15,7 +15,8 @@ import java.util.Map;
  * that we implemented in js running on Heroku, the link to the email server 
  * can be found in application.properties.
  * This class will send the POST request with a json body of
- *    { toMail: <- who recives the email
+ *    { 
+ *      toMail: <- who recives the email
  *      content: <- the content of the email
  *      secretKey: <- validation key that you are allowed to send emails from the server
  *    } 
@@ -26,6 +27,7 @@ import java.util.Map;
  * sometimes weird cases where the request was sent but nothing happen thats
  * because the server was still sleeping and heroku allowed the request go
  * through but the request was missed because the server as waking up
+ * @author Róman(ror9@hi.is)
  */
 public class Mailer {
 

@@ -10,8 +10,7 @@ import project.persistance.repositories.TemporaryUserStorageRepository;
  * This class uses the Redis repository to fulfill all Redis based requests by
  * our application
  * 
- * TODO: rename this class to something like TemporaryStorageService and the
- * corresponding repository to TemporaryRepository, or something like that...
+ * @author Róman(ror9@hi.is)
  */
 @Service
 public class TemporaryUserStorageService {

@@ -14,6 +14,7 @@ import java.io.IOException;
  * a middleware type of thing that it will just squeze itself between if it
  * dosent work then it will stop the chain here and the requested controller is
  * not called
+ * @author Róman(ror9@hi.is)
  */
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {

@@ -6,6 +6,7 @@ package project.payloads;
  * reason i am not using Users.js is because we only need 2 variables and
  * User.js has so much that we would have to implement ALLOT OF LAZY loading and
  * i think its just to much so we have this class to make it more simple
+ * @author Róman(ror9@hi.is)
  */
 public class JwtUser {
 

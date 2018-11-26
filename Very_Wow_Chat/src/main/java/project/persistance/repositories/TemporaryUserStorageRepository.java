@@ -9,8 +9,7 @@ import org.springframework.stereotype.Repository;
  * Class creates a connection to the Redis server and oversees all the of the
  * sending and receiving of data between the Spring Server and Redis server.
  * 
- * TODO: rename this repository to something like to something like temporary
- * storage repository something-something...
+ * @author Róman(ror9@hi.is)
  */
 @Repository
 public class TemporaryUserStorageRepository {
@@ -25,9 +24,11 @@ public class TemporaryUserStorageRepository {
 	}
 
 	/**
-	 * Usage : red.insertString(key,string) For : red is a RedisServices class key
-	 * is pointer to the data that will be stored in redis string is the data you
-	 * want to store After: stores the string for 30 min
+	 * Usage : red.insertString(key,string) 
+	 *   For : red is a RedisServices class 
+	 *         key is pointer to the data that will be 
+	 *             stored in redis string is the data you want to store 
+	 *  After: stores the string for 30 min
 	 */
 	public void insertString(String key, String string) {
 		RedisConnection con = this.redisConn.getConnection();
